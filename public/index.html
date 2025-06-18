@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Flow API - 布局和动效调整</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables for easier management */
+        :root {
+            --primary-gradient: linear-gradient(45deg, #8e44ad, #5d34a8); /* 紫色系渐变 */
+            --secondary-gradient: linear-gradient(45deg, #448ead, #345da8); /* 蓝色系渐变 */
+            --bg-light: #ffffff;
+            --bg-card: #ffffff;
+            --text-color-dark: #2c2c2c;
+            --text-color-medium: #666;
+            --text-color-light: #777;
+            --border-radius-large: 16px;
+            --border-radius-medium: 12px;
+            --transition-speed: 0.3s;
+            --shadow-light: 0 5px 15px rgba(0,0,0,0.03);
+            --shadow-medium: 0 8px 20px rgba(0,0,0,0.06);
+            --shadow-bold: 0 10px 25px rgba(0,0,0,0.08);
+            --border-color-subtle: rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            margin: 0;
+            background-color: var(--bg-light);
+            color: var(--text-color-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeInScaleUp {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes fadeInBottom {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Re-purpose and rename shine for general use */
+        @keyframes subtleShine {
+            0% { transform: translateX(-100%) skewX(-30deg); }
+            100% { transform: translateX(200%) skewX(-30deg); }
+        }
+
+        /* Utility for fade-in effect on elements */
+        .animated-element {
+            animation: fadeInBottom var(--transition-speed) ease-out forwards;
+            animation-delay: var(--delay);
+            opacity: 0; /* Start hidden */
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background-color: var(--bg-card);
+            box-shadow: var(--shadow-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.9);
+            border-bottom-left-radius: var(--border-radius-large);
+            border-bottom-right-radius: var(--border-radius-large);
+            animation: fadeInBottom 0.6s ease-out;
+        }
+
+        .header .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .header .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .header .nav a {
+            margin-left: 35px;
+            color: var(--text-color-medium);
+            text-decoration: none;
+            font-size: 17px;
+            position: relative;
+            transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+            padding: 5px 0;
+        }
+
+        .header .nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: var(--primary-gradient);
+            transition: width var(--transition-speed) ease-out;
+            border-radius: 2px;
+        }
+
+        .header .nav a:hover {
+            color: var(--text-color-dark);
+            transform: translateY(-2px);
+        }
+
+        .header .nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 120px 20px;
+            background: var(--bg-light);
+            margin-bottom: 20px;
+            border-bottom-left-radius: var(--border-radius-large);
+            border-bottom-right-radius: var(--border-radius-large);
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+
+        .hero-section h1 {
+            font-size: 60px;
+            font-weight: 900;
+            margin-bottom: 25px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            animation: fadeInScaleUp 0.8s ease-out;
+        }
+
+        .hero-section p {
+            font-size: 20px;
+            color: var(--text-color-medium);
+            margin-bottom: 50px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInBottom 0.8s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            animation: fadeInBottom 0.8s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+
+        .hero-buttons button {
+            padding: 18px 35px;
+            border: none;
+            border-radius: var(--border-radius-medium);
+            font-size: 19px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        /* Primary button (Apply the common shine effect) */
+        .hero-buttons .primary {
+            color: white;
+            box-shadow: var(--shadow-bold);
+            background: var(--primary-gradient); /* Set initial background */
+        }
+        .hero-buttons .primary::before { /* Used for the shine effect */
+            content: '';
+            position: absolute;
+            inset: 0; /* Overlap the entire button */
+            background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.0)); /* Shine gradient */
+            transform: translateX(-100%) skewX(-30deg); /* Start off-left and skewed */
+            transition: none; /* Disable default transform transition */
+            z-index: 0; /* Place behind button text, above main background */
+            pointer-events: none; /* Ensure clicks pass through */
+        }
+
+        .hero-buttons .primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(93, 52, 168, 0.2);
+            filter: brightness(1.1); /* Subtle brightness increase on hover */
+        }
+        .hero-buttons .primary:hover::before {
+            animation: subtleShine 0.7s forwards; /* Apply the shine animation on hover */
+        }
+
+        /* Secondary button */
+        .hero-buttons .secondary {
+            background-color: var(--bg-card);
+            color: var(--text-color-medium);
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color-subtle);
+        }
+        .hero-buttons .secondary:hover {
+            background-color: #f6f6f6;
+            color: var(--text-color-dark);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+            border-color: rgba(93, 52, 168, 0.2);
+        }
+        .hero-buttons .secondary::before { /* Used for background hover fill */
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--secondary-gradient);
+            z-index: -1;
+            transition: transform var(--transition-speed) ease-out;
+            transform: scaleX(0);
+            transform-origin: left;
+        }
+        .hero-buttons .secondary:hover::before {
+            transform: scaleX(1);
+        }
+        .hero-buttons .secondary:hover {
+            color: white;
+            z-index: 1;
+        }
+
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            padding: 80px 20px 20px;
+            font-size: 44px;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            animation: fadeInBottom 0.8s ease-out;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 19px;
+            color: var(--text-color-medium);
+            margin-bottom: 60px;
+            animation: fadeInBottom 0.8s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+        
+        /* Grids */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* Fixed 4 columns */
+            gap: 40px;
+            padding: 0 50px;
+            max-width: 1200px;
+            margin: 0 auto 100px auto;
+        }
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Fixed 3 columns for "getting started" */
+            gap: 40px;
+            padding: 0 50px;
+            max-width: 1200px;
+            margin: 0 auto 100px auto;
+        }
+
+        .feature-card, .step-card {
+            background-color: var(--bg-card);
+            border-radius: var(--border-radius-large);
+            padding: 40px;
+            text-align: center;
+            box-shadow: var(--shadow-light);
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease, background-color var(--transition-speed) ease;
+            animation: fadeInScaleUp 0.6s ease-out forwards;
+            opacity: 0;
+            border: 1px solid var(--border-color-subtle);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .feature-card:nth-child(1) { --delay: 0.1s; }
+        .feature-card:nth-child(2) { --delay: 0.15s; }
+        .feature-card:nth-child(3) { --delay: 0.2s; }
+        .feature-card:nth-child(4) { --delay: 0.25s; }
+        .feature-card:nth-child(5) { --delay: 0.3s; }
+        .feature-card:nth-child(6) { --delay: 0.35s; }
+        .feature-card:nth-child(7) { --delay: 0.4s; }
+        .feature-card:nth-child(8) { --delay: 0.45s; }
+
+        .step-card:nth-child(1) { --delay: 0.1s; }
+        .step-card:nth-child(2) { --delay: 0.2s; }
+        .step-card:nth-child(3) { --delay: 0.3s; }
+
+        .feature-card::before, .step-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(142, 68, 173, 0.03), rgba(93, 52, 168, 0.03));
+            border-radius: var(--border-radius-large);
+            opacity: 0;
+            transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
+            transform: scale(0.98);
+            z-index: -1;
+        }
+
+        .feature-card:hover, .step-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-bold);
+            border-color: rgba(93, 52, 168, 0.15);
+        }
+        .feature-card:hover::before, .step-card:hover::before {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .feature-card .icon, .step-card .icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, #e6f0ff, #d9e6ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5d34a8;
+            font-size: 36px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            transition: all var(--transition-speed) ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Icon color scheme */
+        .feature-card:nth-child(1) .icon { background: linear-gradient(135deg, hsl(270, 90%, 96%), hsl(270, 80%, 93%)); color: hsl(270, 70%, 50%); }
+        .feature-card:nth-child(2) .icon { background: linear-gradient(135deg, hsl(210, 90%, 96%), hsl(210, 80%, 93%)); color: hsl(210, 70%, 50%); }
+        .feature-card:nth-child(3) .icon { background: linear-gradient(135deg, hsl(30, 90%, 96%), hsl(30, 80%, 93%)); color: hsl(30, 70%, 50%); }
+        .feature-card:nth-child(4) .icon { background: linear-gradient(135deg, hsl(300, 90%, 96%), hsl(300, 80%, 93%)); color: hsl(300, 70%, 50%); }
+        .feature-card:nth-child(5) .icon { background: linear-gradient(135deg, hsl(120, 90%, 96%), hsl(120, 80%, 93%)); color: hsl(120, 70%, 40%); }
+        .feature-card:nth-child(6) .icon { background: linear-gradient(135deg, hsl(0, 90%, 96%), hsl(0, 80%, 93%)); color: hsl(0, 70%, 50%); }
+        .feature-card:nth-child(7) .icon { background: linear-gradient(135deg, hsl(60, 90%, 96%), hsl(60, 80%, 93%)); color: hsl(60, 70%, 40%); }
+        .feature-card:nth-child(8) .icon { background: linear-gradient(135deg, hsl(180, 90%, 96%), hsl(180, 80%, 93%)); color: hsl(180, 70%, 50%); }
+
+        .feature-card:hover .icon, .step-card:hover .icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .feature-card h3, .step-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-color-dark);
+        }
+
+        .feature-card p, .step-card p {
+            font-size: 16px;
+            color: var(--text-color-light);
+            min-height: 80px;
+            line-height: 1.7;
+        }
+
+        .step-card .step-title {
+            font-size: 25px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-color-dark);
+        }
+
+        .step-card .step-description {
+            font-size: 16px;
+            color: var(--text-color-light);
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+
+        .step-card .action-button {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: var(--border-radius-medium);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all var(--transition-speed) ease;
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        /* Common style for secondary buttons in steps */
+        .step-card .action-button[href="#"] { /* targeting default secondary buttons */
+            background-color: var(--bg-card);
+            color: var(--text-color-medium);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color-subtle);
+        }
+        .step-card .action-button[href="#"]::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--secondary-gradient);
+            z-index: -1;
+            transition: transform var(--transition-speed) ease-out;
+            transform: scaleX(0);
+            transform-origin: left;
+        }
+        .step-card .action-button[href="#"]:hover {
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            border-color: rgba(93, 52, 168, 0.2);
+        }
+        .step-card .action-button[href="#"]:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* Primary button for steps (and now hero as well) */
+        .primary-button-style { /* A reusable class for the primary button look & shine */
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: var(--shadow-bold);
+        }
+        .primary-button-style::before { /* Common shine effect */
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.0));
+            transform: translateX(-100%) skewX(-30deg);
+            transition: none; /* Initial state, will be animated by hover */
+            z-index: 0;
+            pointer-events: none;
+        }
+        .primary-button-style:hover {
+            transform: translateY(-3px); /* Slightly less float for step buttons, more for hero */
+            box-shadow: 0 8px 20px rgba(93, 52, 168, 0.3);
+            filter: brightness(1.1);
+        }
+        .primary-button-style:hover::before {
+            animation: subtleShine 0.7s forwards;
+        }
+
+        /* Apply primary-button-style to both where needed */
+        .hero-buttons .primary {
+            /* Inherits primary-button-style properties */
+            /* Overrides for specific hero button float */
+            transform: translateY(0); /* Reset for later anim */
+        }
+        .hero-buttons .primary:hover {
+            transform: translateY(-5px); /* Hero button floats more */
+             box-shadow: 0 15px 30px rgba(93, 52, 168, 0.2); /* Hero button shadow */
+        }
+
+        .step-card-primary .action-button {
+            /* Inherits primary-button-style properties */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr); /* 3 columns for slightly smaller screens */
+            }
+            .steps-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Allow steps to flow or wrap if needed */
+            }
+        }
+        @media (max-width: 992px) { /* Tablet landscape */
+            /* Features grid still 3 from above */
+            /* Steps grid defaults to auto-fit, which might become 2 or 1 */
+        }
+        @media (max-width: 768px) { /* Tablet portrait and closer */
+            .header {
+                flex-direction: column;
+                padding: 15px;
+            }
+            .header .logo {
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+            .header .nav {
+                margin-top: 15px;
+            }
+            .header .nav a {
+                margin: 0 10px;
+                font-size: 15px;
+            }
+            .hero-section {
+                padding: 80px 20px;
+            }
+            .hero-section h1 {
+                font-size: 38px;
+            }
+            .hero-section p {
+                font-size: 16px;
+            }
+            .hero-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .hero-buttons button {
+                width: 90%;
+                margin: 0 auto;
+                padding: 15px 25px;
+            }
+            .section-title {
+                font-size: 32px;
+                padding-top: 60px;
+            }
+            .section-subtitle {
+                font-size: 16px;
+                margin-bottom: 40px;
+            }
+            .features-grid, .steps-grid {
+                grid-template-columns: 1fr; /* Single column on smaller screens */
+                padding: 0 20px;
+                margin-bottom: 60px;
+            }
+            .feature-card, .step-card {
+                padding: 30px;
+                min-height: auto;
+            }
+            .feature-card p, .step-card p {
+                min-height: auto;
+            }
+            .feature-card .icon, .step-card .icon {
+                width: 60px;
+                height: 60px;
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="header-component"></div>
+        <script src="/components/header.js" type="module"></script>
+
+    <section class="hero-section">
+        <h1>Mock Flow API</h1>
+        <p>一个简单、高效、可靠的API服务，支持HTTP和SSE协议，提供实时数据流和高效的数据传输。</p>
+        <div class="hero-buttons">
+            <!-- Apply new reusable primary style class -->
+            <button class="primary animated-element primary-button-style" style="--delay: 0.6s;">开始使用</button>
+            <button class="secondary animated-element" style="--delay: 0.7s;">查看文档</button>
+        </div>
+    </section>
+
+    <section class="core-features">
+        <h2 class="section-title">核心功能概览</h2>
+        <p class="section-subtitle">我们致力于提供全面且易用的模拟数据API服务。</p>
+        <div class="features-grid">
+            <div class="feature-card animated-element" style="--delay: 0.1s;">
+                <div class="icon">⚡</div> <!-- Placeholder icon -->
+                <h3>多种HTTP方法</h3>
+                <p>全面支持GET、POST、PUT、DELETE、PATCH等，满足各种API交互需求。</p>
+            </div>
+            <div class="feature-card animated-element" style="--delay: 0.15s;">
+                <div class="icon">🌐</div> <!-- Placeholder icon -->
+                <h3>CORS和SSE支持</h3>
+                <p>通过特定请求头轻松实现跨域请求，并启用服务器发送事件（SSE）实时数据流。</p>
+            </div>
+            <div class="feature-card animated-element" style="--delay: 0.2s;">
+                <div class="icon">&lt;&gt;</div> <!-- Placeholder icon -->
+                <h3>多语言代码示例</h3>
+                <p>为每个API接口提供多种编程语言的示例，助您快速集成。</p>
+            </div>
+            <div class="feature-card animated-element" style="--delay: 0.25s;">
+                <div class="icon">☁️</div> <!-- Placeholder icon -->
+                <h3>在线API测试</h3>
+                <p>无需编码，直接在网页上测试API接口，并实时查看请求和响应详情。</p>
+            </div>
+            <div class="feature-card animated-element" style="--delay: 0.3s;">
+                <div class="icon">⬆️</div> <!-- Placeholder icon -->
+                <h3>文件上传</h3>
+                <p>支持文件上传接口，成功后返回基本文本文件信息，方便快捷。</p>
+            </div>
+            <div class="feature-card animated-element" style="--delay: 0.35s;">
+                <div class="icon">⬇️</div> <!-- Placeholder icon -->
+                <h3>文件下载</h3>
+                <p>提供多种格式文件下载支持，满足不同数据获取需求。</p>
+            </div>
+            <div class="feature-card animated-element" style="--delay: 0.4s;">
+                <div class="icon">⚙️</div> <!-- Placeholder icon -->
+                <h3>灵活的参数配置</h3>
+                <p>支持路径、查询、请求头和请求体等多种参数位置，高度定制。</p>
+            </div>
+            <div class="feature-card animated-element" style="--delay: 0.45s;">
+                <div class="icon">🔄</div> <!-- Placeholder icon -->
+                <h3>持续更新与维护</h3>
+                <p>API文档和功能持续迭代，确保用户获得最新、最稳定的服务体验。</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="getting-started">
+        <h2 class="section-title">轻松上手，三步搞定</h2>
+        <p class="section-subtitle">快速开始使用 Mock Flow API 服务。</p>
+        <div class="steps-grid">
+            <div class="step-card animated-element" style="--delay: 0.1s;">
+                <div class="icon">🔍</div> <!-- Placeholder icon -->
+                <h3 class="step-title">1. 浏览API文档</h3>
+                <p class="step-description">详细了解各接口的功能、参数及返回格式。</p>
+                <a href="#" class="action-button">查看文档</a>
+            </div>
+            <div class="step-card animated-element" style="--delay: 0.2s;">
+                <div class="icon">▶️</div> <!-- Placeholder icon -->
+                <h3 class="step-title">2. 在线测试API</h3>
+                <p class="step-description">使用我们的在线工具，无需编码即可快速测试API调用。</p>
+                <!-- Apply new reusable primary style class -->
+                <a href="#" class="action-button primary-button-style" style="color:  #ffffff;">开始测试</a>
+            </div>
+            <div class="step-card animated-element" style="--delay: 0.3s;">
+                <div class="icon">📚</div> <!-- Placeholder icon -->
+                <h3 class="step-title">3. 复制并集成代码</h3>
+                <p class="step-description">复制我们提供的多语言代码示例，轻松集成到您的项目中。</p>
+                <a href="#" class="action-button">获取代码</a>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-component"></div>
+    <script src="/components/footer.js" type="module"></script>
+
+</body>
+</html>
