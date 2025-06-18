@@ -4,7 +4,7 @@
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "d1-starter-sessions-api",
+  "name": "mocking-bird",
   "main": "src/index.ts",
   "compatibility_date": "2025-03-17",
   "observability": {
@@ -22,8 +22,8 @@
   "d1_databases": [
     {
       "binding": "DB01",
-      "database_name": "d1-starter-sessions-api",
-      "database_id": "3690f364-3425-4fab-8eb7-c74c5717578a"
+      "database_name": "mocking-bird",
+      "database_id": "81927374-9d07-411b-8512-94b46a84b9ff"
     }
   ]
 }

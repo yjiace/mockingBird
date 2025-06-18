@@ -1,5 +1,5 @@
 {
-  "name": "d1-starter-sessions-api",
+  "name": "mocking-bird",
   "description": "D1 starter template using the Sessions API for read replication.",
   "version": "0.0.0",
   "cloudflare": {

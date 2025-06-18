@@ -12,7 +12,7 @@ import worker from "../src/index";
 // `Request` to pass to `worker.fetch()`.
 const IncomingRequest = Request<unknown, IncomingRequestCfProperties>;
 
-describe("d1-starter-sessions-api worker", () => {
+describe("mocking-bird worker", () => {
   it("list empty orders", async () => {
     const request = new IncomingRequest("http://example.com/api/orders");
     const ctx = createExecutionContext();
