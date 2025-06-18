@@ -9,7 +9,7 @@
     <link href="css/css2.css" rel="stylesheet">
     <!-- Highlight.js CSS for code highlighting -->
     <link rel="stylesheet" href="css/atom-one-dark.min.css">
-    
+
     <style>
         /* CSS Variables - Unified for both pages */
         :root {
@@ -23,9 +23,9 @@
             --border-radius-large: 16px; /* Homepage large radius */
             --border-radius-medium: 12px; /* Homepage medium radius */
             --transition-speed: 0.3s;
-            --shadow-light: 0 5px 15px rgba(0,0,0,0.03); /* Homepage light shadow */
-            --shadow-medium: 0 8px 20px rgba(0,0,0,0.06); /* Homepage medium shadow */
-            --shadow-bold: 0 10px 25px rgba(0,0,0,0.08); /* Homepage bold shadow */
+            --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.03); /* Homepage light shadow */
+            --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.06); /* Homepage medium shadow */
+            --shadow-bold: 0 10px 25px rgba(0, 0, 0, 0.08); /* Homepage bold shadow */
             --border-color-subtle: rgba(0, 0, 0, 0.05); /* Homepage subtle border */
 
             /* Specific API Doc related color/shadow adjustment if needed, but trying to unify */
@@ -50,21 +50,46 @@
 
         /* Keyframe Animations (from Homepage CSS) */
         @keyframes fadeInScaleUp {
-            from { opacity: 0; transform: scale(0.95) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
+
         @keyframes fadeInBottom {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         @keyframes subtleShine { /* For button hover effect */
-            0% { transform: translateX(-100%) skewX(-30deg); }
-            100% { transform: translateX(200%) skewX(-30deg); }
+            0% {
+                transform: translateX(-100%) skewX(-30deg);
+            }
+            100% {
+                transform: translateX(200%) skewX(-30deg);
+            }
         }
+
         @keyframes pulseShadow { /* For highlighted elements */
-            0% { box-shadow: var(--shadow-medium); }
-            50% { box-shadow: 0 0 0 4px rgba(93, 52, 168, 0.2); }
-            100% { box-shadow: var(--shadow-medium); }
+            0% {
+                box-shadow: var(--shadow-medium);
+            }
+            50% {
+                box-shadow: 0 0 0 4px rgba(93, 52, 168, 0.2);
+            }
+            100% {
+                box-shadow: var(--shadow-medium);
+            }
         }
 
         /* Utility for initial animation */
@@ -148,12 +173,14 @@
         .header .nav a:hover::after {
             width: 100%;
         }
+
         /* Active link style for this API Doc page */
         .header .nav a.active {
             color: var(--text-color-dark);
             font-weight: 600; /* Match homepage active state slightly */
             transform: translateY(-2px);
         }
+
         .header .nav a.active::after {
             width: 100%;
         }
@@ -185,7 +212,7 @@
             animation: fadeInBottom 0.6s ease-out 0.2s forwards;
             display: flex; /* Make sidebar a flex container for its content */
             flex-direction: column;
-            
+
             /* To make a sticky sidebar within flex container,
                its parent must have a defined height.
                Here, main-content-area has height, so sticky works. */
@@ -195,7 +222,10 @@
             height: calc(100% - 0px); /* 100% of parent's (main-content-area) height minus its own vertical padding */
             box-sizing: border-box;
         }
-        .sidebar::-webkit-scrollbar { display: none; }
+
+        .sidebar::-webkit-scrollbar {
+            display: none;
+        }
 
         .sidebar h2 {
             font-size: 20px;
@@ -253,13 +283,28 @@
             margin-right: 12px;
             text-transform: uppercase;
             color: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        .method-get { background-color: var(--method-get-bg); }
-        .method-post { background-color: var(--method-post-bg); }
-        .method-put { background-color: var(--method-put-bg); }
-        .method-patch { background-color: var(--method-patch-bg); }
-        .method-delete { background-color: var(--method-delete-bg); }
+
+        .method-get {
+            background-color: var(--method-get-bg);
+        }
+
+        .method-post {
+            background-color: var(--method-post-bg);
+        }
+
+        .method-put {
+            background-color: var(--method-put-bg);
+        }
+
+        .method-patch {
+            background-color: var(--method-patch-bg);
+        }
+
+        .method-delete {
+            background-color: var(--method-delete-bg);
+        }
 
         /* --- Content Area (右侧文档部分) --- */
         .content {
@@ -272,7 +317,10 @@
             position: relative;
             border-radius: var(--border-radius-large);
         }
-        .content::-webkit-scrollbar { display: none; }
+
+        .content::-webkit-scrollbar {
+            display: none;
+        }
 
         .api-detail {
             background-color: var(--bg-card);
@@ -282,9 +330,10 @@
             margin-bottom: 40px;
             transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
         }
+
         .api-detail:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
         }
 
         .api-detail h1 {
@@ -302,7 +351,7 @@
             padding: 8px 15px;
             margin-right: 20px;
             border-radius: 10px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
         }
 
         .api-description {
@@ -347,7 +396,10 @@
             color: var(--text-color-dark);
             text-transform: capitalize;
         }
-        .params-table tbody tr:last-child td { border-bottom: none; }
+
+        .params-table tbody tr:last-child td {
+            border-bottom: none;
+        }
 
         .param-name {
             font-weight: 600;
@@ -396,7 +448,10 @@
             border-right: 1px solid #323842;
             transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
         }
-        .code-tab:last-child { border-right: none; }
+
+        .code-tab:last-child {
+            border-right: none;
+        }
 
         .code-tab.active {
             background-color: #3d4a66;
@@ -417,19 +472,51 @@
         /* --- Responsive adjustments (from Homepage CSS, adjust as needed) --- */
         @media (max-width: 1200px) {
             /* General padding adjust */
-            .header { padding: 15px 30px; }
-            .main-content-area { padding: 15px; }
-            .sidebar { width: 250px; margin-right: 15px; }
-            .content { padding: 20px 25px; }
+            .header {
+                padding: 15px 30px;
+            }
+
+            .main-content-area {
+                padding: 15px;
+            }
+
+            .sidebar {
+                width: 250px;
+                margin-right: 15px;
+            }
+
+            .content {
+                padding: 20px 25px;
+            }
         }
-        @media (max-width: 992px) { /* Tablet landscape */
+
+        @media (max-width: 992px) {
+            /* Tablet landscape */
             /* Header becomes more compact */
-            .header { flex-direction: column; align-items: flex-start; padding: 15px; height: auto; }
-            .header .nav { margin-top: 10px; display: flex; flex-wrap: wrap; justify-content: flex-start; }
-            .header .nav a { margin: 5px 15px 5px 0; }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px;
+                height: auto;
+            }
+
+            .header .nav {
+                margin-top: 10px;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+            }
+
+            .header .nav a {
+                margin: 5px 15px 5px 0;
+            }
 
             /* Sidebar and content stack */
-            .main-content-area { flex-direction: column; padding: 15px; }
+            .main-content-area {
+                flex-direction: column;
+                padding: 15px;
+            }
+
             .sidebar {
                 width: auto; /* Full width */
                 margin-right: 0;
@@ -438,136 +525,148 @@
                 height: auto; /* Allow height to be determined by content */
             }
         }
-        @media (max-width: 768px) { /* Mobile portrait */
-            .header .logo { font-size: 24px; }
-            .header .nav a { font-size: 15px; margin: 5px 10px 5px 0; }
-            .api-detail h1 { font-size: 28px; flex-direction: column; align-items: flex-start;}
-            .api-detail h1 .method-tag { margin-bottom: 10px; margin-right: 0;}
-            .section-title { font-size: 20px; }
-            .params-table th, .params-table td { padding: 10px 15px; font-size: 14px;}
-            .code-block { font-size: 13px; padding: 15px; }
-            .right-fixed-button { width: 45px; height: 45px; font-size: 20px; }
+
+        @media (max-width: 768px) {
+            /* Mobile portrait */
+            .header .logo {
+                font-size: 24px;
+            }
+
+            .header .nav a {
+                font-size: 15px;
+                margin: 5px 10px 5px 0;
+            }
+
+            .api-detail h1 {
+                font-size: 28px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .api-detail h1 .method-tag {
+                margin-bottom: 10px;
+                margin-right: 0;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .params-table th, .params-table td {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+
+            .code-block {
+                font-size: 13px;
+                padding: 15px;
+            }
+
+            .right-fixed-button {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="app-layout">
-        <!-- HEADER from Homepage -->
-        <div id="header-component"></div>
-        <script src="/components/header.js" type="module"></script>
+<div class="app-layout">
+    <!-- HEADER from Homepage -->
+    <div id="header-component"></div>
+    <script src="/components/header.js" type="module"></script>
 
-        <div class="main-content-area">
-            <aside class="sidebar">
-                <h2>API 列表</h2>
-                <ul class="api-list">
-                    <li class="api-item selected animated-on-load" style="--delay: 0.3s;">
-                        <span class="method-tag method-get">GET</span>
-                        /users
-                    </li>
-                    <li class="api-item animated-on-load" style="--delay: 0.35s;">
-                        <span class="method-tag method-post">POST</span>
-                        /users
-                    </li>
-                    <li class="api-item animated-on-load" style="--delay: 0.4s;">
-                        <span class="method-tag method-put">PUT</span>
-                        /users/{id}
-                    </li>
-                    <li class="api-item animated-on-load" style="--delay: 0.45s;">
-                        <span class="method-tag method-patch">PATCH</span>
-                        /users/{id}
-                    </li>
-                    <li class="api-item animated-on-load" style="--delay: 0.5s;">
-                        <span class="method-tag method-delete">DELETE</span>
-                        /users/{id}
-                    </li>
-                    <li class="api-item animated-on-load" style="--delay: 0.55s;">
-                        <span class="method-tag method-post">POST</span>
-                        /files
-                    </li>
-                    <li class="api-item animated-on-load" style="--delay: 0.6s;">
-                        <span class="method-tag method-get">GET</span>
-                        /files/{id}/download
-                    </li>
-                    <!-- Add more dummy items to make sidebar scrollable -->
-                    <li class="api-item animated-on-load" style="--delay: 0.65s;"><span class="method-tag method-get">GET</span>/products</li>
-                    <li class="api-item animated-on-load" style="--delay: 0.7s;"><span class="method-tag method-post">POST</span>/products</li>
-                    <li class="api-item animated-on-load" style="--delay: 0.75s;"><span class="method-tag method-get">GET</span>/orders</li>
-                    <li class="api-item animated-on-load" style="--delay: 0.8s;"><span class="method-tag method-post">POST</span>/orders</li>
-                    <li class="api-item animated-on-load" style="--delay: 0.85s;"><span class="method-tag method-get">GET</span>/customers</li>
-                    <li class="api-item animated-on-load" style="--delay: 0.9s;"><span class="method-tag method-put">PUT</span>/products/{id}</li>
-                    <li class="api-item animated-on-load" style="--delay: 0.95s;"><span class="method-tag method-delete">DELETE</span>/orders/{id}</li>
-                     <li class="api-item animated-on-load" style="--delay: 1.0s;"><span class="method-tag method-get">GET</span>/categories</li>
-                    <li class="api-item animated-on-load" style="--delay: 1.05s;"><span class="method-tag method-get">GET</span>/reviews</li>
-                    <li class="api-item animated-on-load" style="--delay: 1.1s;"><span class="method-tag method-post">POST</span>/reviews</li>
-                    <li class="api-item animated-on-load" style="--delay: 1.15s;"><span class="method-tag method-get">GET</span>/settings</li>
-                    <li class="api-item animated-on-load" style="--delay: 1.2s;"><span class="method-tag method-put">PUT</span>/settings</li>
-                    <li class="api-item animated-on-load" style="--delay: 1.25s;"><span class="method-tag method-get">GET</span>/notifications</li>
-                    <li class="api-item animated-on-load" style="--delay: 1.3s;"><span class="method-tag method-post">POST</span>/notifications</li>
-                    <li class="api-item animated-on-load" style="--delay: 1.35s;"><span class="method-tag method-get">GET</span>/users/profile</li>
-                    <li class="api-item animated-on-load" style="--delay: 1.4s;"><span class="method-tag method-put">PUT</span>/users/profile</li>
-                    <li class="api-item animated-on-load" style="--delay: 1.45s;"><span class="method-tag method-get">GET</span>/reports</li>
-                    <li class="api-item animated-on-load" style="--delay: 1.5s;"><span class="method-tag method-post">POST</span>/reports</li>
-                    <li class="api-item animated-on-load" style="--delay: 1.55s;"><span class="method-tag method-get">GET</span>/logs</li>
-                    <li class="api-item animated-on-load" style="--delay: 1.6s;"><span class="method-tag method-delete">DELETE</span>/logs</li>
-                </ul>
-            </aside>
+    <div class="main-content-area">
+        <aside class="sidebar">
+            <h2>API 列表</h2>
+            <ul class="api-list">
+                <li class="api-item selected animated-on-load" style="--delay: 0.3s;">
+                    <span class="method-tag method-get">GET</span>
+                    /users
+                </li>
+                <li class="api-item animated-on-load" style="--delay: 0.35s;">
+                    <span class="method-tag method-post">POST</span>
+                    /users
+                </li>
+                <li class="api-item animated-on-load" style="--delay: 0.4s;">
+                    <span class="method-tag method-put">PUT</span>
+                    /users/{id}
+                </li>
+                <li class="api-item animated-on-load" style="--delay: 0.45s;">
+                    <span class="method-tag method-patch">PATCH</span>
+                    /users/{id}
+                </li>
+                <li class="api-item animated-on-load" style="--delay: 0.5s;">
+                    <span class="method-tag method-delete">DELETE</span>
+                    /users/{id}
+                </li>
+                <li class="api-item animated-on-load" style="--delay: 0.55s;">
+                    <span class="method-tag method-post">POST</span>
+                    /files
+                </li>
+                <li class="api-item animated-on-load" style="--delay: 0.6s;">
+                    <span class="method-tag method-get">GET</span>
+                    /files/{id}/download
+                </li>
+            </ul>
+        </aside>
 
-            <main class="content">
-                <div class="api-detail animated-on-load" style="--delay: 0.4s;">
-                    <h1><span class="method-tag method-get">GET</span> /users</h1>
-                    <p class="api-description">
-                        检索系统中的用户列表。<br>
-                        此端点用于获取所有已注册用户的列表，可以支持分页和基本筛选。
-                    </p>
+        <main class="content">
+            <div class="api-detail animated-on-load" style="--delay: 0.4s;">
+                <h1><span class="method-tag method-get">GET</span> /users</h1>
+                <p class="api-description">
+                    检索系统中的用户列表。<br>
+                    此端点用于获取所有已注册用户的列表，可以支持分页和基本筛选。
+                </p>
 
-                    <h2 class="section-title">参数</h2>
-                    <table class="params-table">
-                        <thead>
-                            <tr>
-                                <th>参数</th>
-                                <th>类型</th>
-                                <th>描述</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="param-name">page</span><span class="param-query-tag">query</span></td>
-                                <td>integer</td>
-                                <td>请求的页码，用于分页。(默认值: 1) 例如: 1</td>
-                            </tr>
-                            <tr>
-                                <td><span class="param-name">limit</span><span class="param-query-tag">query</span></td>
-                                <td>integer</td>
-                                <td>每页返回的用户数量。(默认值: 10) 例如: 10</td>
-                            </tr>
-                            <tr>
-                                <td><span class="param-name">sortBy</span><span class="param-query-tag">query</span></td>
-                                <td>string</td>
-                                <td>用于排序的字段名称。例如: "创建时间"</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <h2 class="section-title">参数</h2>
+                <table class="params-table">
+                    <thead>
+                    <tr>
+                        <th>参数</th>
+                        <th>类型</th>
+                        <th>描述</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><span class="param-name">page</span><span class="param-query-tag">query</span></td>
+                        <td>integer</td>
+                        <td>请求的页码，用于分页。(默认值: 1) 例如: 1</td>
+                    </tr>
+                    <tr>
+                        <td><span class="param-name">limit</span><span class="param-query-tag">query</span></td>
+                        <td>integer</td>
+                        <td>每页返回的用户数量。(默认值: 10) 例如: 10</td>
+                    </tr>
+                    <tr>
+                        <td><span class="param-name">sortBy</span><span class="param-query-tag">query</span></td>
+                        <td>string</td>
+                        <td>用于排序的字段名称。例如: "创建时间"</td>
+                    </tr>
+                    </tbody>
+                </table>
 
-                    <h2 class="section-title">请求示例</h2>
-                    <div class="code-example">
-                        <div class="code-tabs">
-                            <div class="code-tab active" data-lang="http">HTTP</div>
-                            <div class="code-tab" data-lang="json">SSE</div>
-                        </div>
-                        <pre class="code-block"><code class="language-http">GET /users?page=1&limit=10 HTTP/1.1
+                <h2 class="section-title">请求示例</h2>
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <div class="code-tab active" data-lang="http">HTTP</div>
+                        <div class="code-tab" data-lang="json">SSE</div>
+                    </div>
+                    <pre class="code-block"><code class="language-http">GET /users?page=1&limit=10 HTTP/1.1
 Host: YOUR_API_BASE_URL
 User-Agent: Your-App/1.0
 Accept: application/json</code></pre>
-                    </div>
+                </div>
 
-                    <h2 class="section-title">响应示例</h2>
-                    <div class="code-example">
-                        <div class="code-tabs">
-                            <div class="code-tab active" data-lang="json">HTTP</div>
-                            <div class="code-tab" data-lang="json">SSE</div>
-                        </div>
-                        <pre class="code-block"><code class="language-json">{
+                <h2 class="section-title">响应示例</h2>
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <div class="code-tab active" data-lang="json">HTTP</div>
+                        <div class="code-tab" data-lang="json">SSE</div>
+                    </div>
+                    <pre class="code-block"><code class="language-json">{
   "data": [
     {
       "id": "user_1",
@@ -624,15 +723,15 @@ Accept: application/json</code></pre>
     "total": 8
   }
 }</code></pre>
-                    </div>
+                </div>
 
-                     <h2 class="section-title">额外示例：带请求体的POST</h2>
-                    <div class="code-example">
-                        <div class="code-tabs">
-                            <div class="code-tab active" data-lang="http">HTTP</div>
-                            <div class="code-tab" data-lang="json">JSON</div>
-                        </div>
-                        <pre class="code-block"><code class="language-http">POST /users HTTP/1.1
+                <h2 class="section-title">额外示例：带请求体的POST</h2>
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <div class="code-tab active" data-lang="http">HTTP</div>
+                        <div class="code-tab" data-lang="json">JSON</div>
+                    </div>
+                    <pre class="code-block"><code class="language-http">POST /users HTTP/1.1
 Host: YOUR_API_BASE_URL
 Content-Type: application/json
 
@@ -641,98 +740,73 @@ Content-Type: application/json
   "email": "new.user@example.com",
   "password": "secure_password"
 }</code></pre>
-                    </div>
-
-                    <h2 class="section-title">关于API文档</h2>
-                    <p class="api-description">
-                        我们致力于提供最全面、最易懂的API文档，确保开发者可以快速集成我们的服务。
-                        每一个接口都附带了详细的参数说明、类型限制以及丰富的使用示例，
-                        涵盖了各种场景，帮助您轻松上手，即便您是API开发的新手。
-                        文档内容会持续更新，以反映我们最新的功能和改进。
-                    </p>
-                    <p class="api-description">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.
-                    </p>
-                     <p class="api-description">
-                        Aliquam erat volutpat. Nulla facilisi. Aenean nec sem quis orci suscipit varius. Vivamus a est vitae elit varius congue. Donec in quam ut lectus lacinia accumsan. Nullam ultricies dolor in lectus. Curabitur sit amet erat. Nulla facilisi. Sed non arcu quis ante posuere dignissim. Mauris at urna. Suspendisse potenti. Integer fermentum leo nulla, non rhoncus enim egestas non. Vestibulum in pellentesque felis, eget fermentum lorem.
-                    </p>
-                     <p class="api-description">
-                        Cras sollicitudin leo nulla, in euismod sapien mollis a. Curabitur ultrices augue nec ipsum lacinia, a dictum mi feugiat. Sed euismod, mi sit amet euismod tristique, libero ipsum auctor turpis, in ultricies neque elit id lacus. Etiam id turpis nec ipsum aliquet vestibulum. Fusce tristique nunc nec sapien tincidunt, vel interdum metus placerat. Maecenas a sem sit amet turpis pulvinar convallis.
-                    </p>
-                     <p class="api-description">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.
-                    </p>
-                     <p class="api-description">
-                        Aliquam erat volutpat. Nulla facilisi. Aenean nec sem quis orci suscipit varius. Vivamus a est vitae elit varius congue. Donec in quam ut lectus lacinia accumsan. Nullam ultricies dolor in lectus. Curabitur sit amet erat. Nulla facilisi. Sed non arcu quis ante posuere dignissim. Mauris at urna. Suspendisse potenti. Integer fermentum leo nulla, non rhoncus enim egestas non. Vestibulum in pellentesque felis, eget fermentum lorem.
-                    </p>
-                     <p class="api-description">
-                        Cras sollicitudin leo nulla, in euismod sapien mollis a. Curabitur ultrices augue nec ipsum lacinia, a dictum mi feugiat. Sed euismod, mi sit amet euismod tristique, libero ipsum auctor turpis, in ultricies neque elit id lacus. Etiam id turpis nec ipsum aliquet vestibulum. Fusce tristique nunc nec sapien tincidunt, vel interdum metus placerat. Maecenas a sem sit amet turpis pulvinar convallis.
-                    </p>
-
                 </div>
-                <!-- Adding some extra space at the bottom to ensure content ends cleanly -->
-                <div style="height: 50px;"></div>
-                
-                <!-- FOOTER from Homepage -->
-                <div id="footer-component"></div>
-                <script src="/components/footer.js" type="module"></script>
-            </main>
-        </div>
 
+
+            </div>
+            <!-- Adding some extra space at the bottom to ensure content ends cleanly -->
+            <div style="height: 50px;"></div>
+
+            <!-- FOOTER from Homepage -->
+            <div id="footer-component"></div>
+            <script src="/components/footer.js" type="module"></script>
+        </main>
     </div>
 
-    <!-- Highlight.js CDN links -->
-    <script src="js/highlight.min.js"></script>
-    <script src="js/http.min.js"></script>
-    <script src="js/json.min.js"></script>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            hljs.highlightAll();
+<!-- Highlight.js CDN links -->
+<script src="js/highlight.min.js"></script>
+<script src="js/http.min.js"></script>
+<script src="js/json.min.js"></script>
 
-            document.querySelectorAll('.header .nav a').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    // Prevent actual navigation for demo purposes
-                    e.preventDefault(); 
-                    
-                    // Optional: remove active from others and add to clicked.
-                    // For a multi-page app, this would be handled by the router.
-                    document.querySelectorAll('.header .nav a').forEach(navLink => {
-                        navLink.classList.remove('active');
-                    });
-                    this.classList.add('active');
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        hljs.highlightAll();
 
-                    // If it's the "API文档" link, scroll content to top.
-                    if (this.textContent.includes('API文档')) {
-                        document.querySelector('.content').scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                        });
-                    }
+        document.querySelectorAll('.header .nav a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                // Prevent actual navigation for demo purposes
+                e.preventDefault();
+
+                // Optional: remove active from others and add to clicked.
+                // For a multi-page app, this would be handled by the router.
+                document.querySelectorAll('.header .nav a').forEach(navLink => {
+                    navLink.classList.remove('active');
                 });
-            });
-        });
+                this.classList.add('active');
 
-        // Tab switching logic for code examples
-        document.querySelectorAll('.code-tabs').forEach(tabsContainer => {
-            tabsContainer.addEventListener('click', (event) => {
-                const clickedTab = event.target;
-                if (clickedTab.classList.contains('code-tab') && !clickedTab.classList.contains('active')) {
-                    Array.from(tabsContainer.children).forEach(tab => tab.classList.remove('active'));
-                    clickedTab.classList.add('active');
-
-                    const codeExampleDiv = tabsContainer.closest('.code-example');
-                    if (codeExampleDiv) {
-                        const codeBlock = codeExampleDiv.querySelector('.code-block code');
-                        if (codeBlock) {
-                            const lang = clickedTab.getAttribute('data-lang');
-                            codeBlock.className = `language-${lang}`;
-                            hljs.highlightElement(codeBlock);
-                        }
-                    }
+                // If it's the "API文档" link, scroll content to top.
+                if (this.textContent.includes('API文档')) {
+                    document.querySelector('.content').scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
                 }
             });
         });
-    </script>
+    });
+
+    // Tab switching logic for code examples
+    document.querySelectorAll('.code-tabs').forEach(tabsContainer => {
+        tabsContainer.addEventListener('click', (event) => {
+            const clickedTab = event.target;
+            if (clickedTab.classList.contains('code-tab') && !clickedTab.classList.contains('active')) {
+                Array.from(tabsContainer.children).forEach(tab => tab.classList.remove('active'));
+                clickedTab.classList.add('active');
+
+                const codeExampleDiv = tabsContainer.closest('.code-example');
+                if (codeExampleDiv) {
+                    const codeBlock = codeExampleDiv.querySelector('.code-block code');
+                    if (codeBlock) {
+                        const lang = clickedTab.getAttribute('data-lang');
+                        codeBlock.className = `language-${lang}`;
+                        hljs.highlightElement(codeBlock);
+                    }
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>
