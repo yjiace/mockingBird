@@ -50,6 +50,18 @@ type User = {
     is_active: number;
 };
 
+// Helper function to create standardized JSON responses
+function createJsonResponse(data: any, statusCode: number = 200, message: string = "success"): Response {
+    return Response.json(
+        {
+            code: statusCode,
+            message: message,
+            data: data,
+        },
+        { status: statusCode }
+    );
+}
+
 async function handleRequest(request: Request, session: D1DatabaseSession) {
     const {pathname} = new URL(request.url);
     const { searchParams } = new URL(request.url);
@@ -77,13 +89,17 @@ async function handleRequest(request: Request, session: D1DatabaseSession) {
         const offset = (Number(page) - 1) * Number(size);
         // C. Session read query.
         return await Retries.tryWhile(async () => {
-            const resp = await session.prepare(`select * from t_user ${whereClause} order by id limit ${size} offset ${offset}`).all();
-            return Response.json(buildResponse(session, resp, tsStart));
+            const resp = await session
+                .prepare(`select * from t_user ${whereClause} order by id limit ${size} offset ${offset}`).all();
+            return createJsonResponse(buildResponse(session, resp, tsStart));
         }, shouldRetry);
     } else if (request.method === "POST" && pathname === "/api/user") {
-        return Response.json(await request.json<User>());
+        const requestData = await request.json<User>();
+        // Here you would typically insert the user data into the database
+        // For now, just returning the received data as an example
+        return createJsonResponse(requestData);
     }
-    return new Response("Not found", {status: 404});
+    return createJsonResponse(null, 404, "Not found");
 }
 
 function buildResponse(
