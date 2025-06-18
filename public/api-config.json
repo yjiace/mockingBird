@@ -1,0 +1,325 @@
+{
+  "apis": [
+    {
+      "id": "get-users",
+      "method": "GET",
+      "path": "/users",
+      "title": "获取用户列表",
+      "description": "检索系统中的用户列表。此端点用于获取所有已注册用户的列表，可以支持分页和基本筛选。",
+      "parameters": [
+        {
+          "name": "page (query, 可选)",
+          "type": "integer",
+          "default": "1",
+          "description": "请求的页码，用于分页。",
+          "example": "1"
+        },
+        {
+          "name": "limit (query, 可选)",
+          "type": "integer",
+          "default": "10",
+          "description": "每页返回的用户数量。",
+          "example": "10"
+        },
+        {
+          "name": "sortBy (query, 可选)",
+          "type": "string",
+          "description": "用于排序的字段名称。",
+          "example": "createdAt"
+        }
+      ],
+      "requestExample": {
+        "http": "GET /users?page=1&limit=10 HTTP/1.1\nHost: YOUR_API_BASE_URL\nUser-Agent: Your-App/1.0\nAccept: application/json",
+        "curl": "curl -X GET \"YOUR_API_BASE_URL/users?page=1&limit=10\" \\\n  -H \"Accept: application/json\" \\\n  -H \"User-Agent: Your-App/1.0\""
+      },
+      "responseExample": {
+        "success": {
+          "data": [
+            {
+              "id": "user_1",
+              "name": "John Doe",
+              "email": "john.doe@example.com",
+              "createdAt": "2023-10-26T10:00:00Z"
+            },
+            {
+              "id": "user_2",
+              "name": "Jane Smith",
+              "email": "jane.smith@example.com",
+              "createdAt": "2023-10-26T10:15:00Z"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "limit": 10,
+            "total": 8
+          }
+        },
+        "error": {
+          "error": {
+            "code": "INVALID_PARAMETER",
+            "message": "Invalid page parameter",
+            "details": {
+              "page": "must be a positive integer"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "create-user",
+      "method": "POST",
+      "path": "/users",
+      "title": "创建用户",
+      "description": "创建新的用户账户。此端点用于注册新用户，需要提供必要的用户信息。",
+      "parameters": [
+        {
+          "name": "name (body, 必填)",
+          "type": "string",
+          "description": "用户姓名",
+          "example": "John Doe"
+        },
+        {
+          "name": "email (body, 必填)",
+          "type": "string",
+          "description": "用户邮箱地址",
+          "example": "john.doe@example.com"
+        },
+        {
+          "name": "password (body, 必填)",
+          "type": "string",
+          "description": "用户密码（至少8位字符）",
+          "example": "secure_password"
+        }
+      ],
+      "requestExample": {
+        "http": "POST /users HTTP/1.1\nHost: YOUR_API_BASE_URL\nContent-Type: application/json\n\n{\n  \"name\": \"New User\",\n  \"email\": \"new.user@example.com\",\n  \"password\": \"secure_password\"\n}",
+        "curl": "curl -X POST \"YOUR_API_BASE_URL/users\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"New User\",\n    \"email\": \"new.user@example.com\",\n    \"password\": \"secure_password\"\n  }'"
+      },
+      "responseExample": {
+        "success": {
+          "data": {
+            "id": "user_123",
+            "name": "New User",
+            "email": "new.user@example.com",
+            "createdAt": "2023-12-01T10:00:00Z"
+          },
+          "message": "User created successfully"
+        },
+        "error": {
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "message": "Invalid input data",
+            "details": {
+              "email": "must be a valid email address",
+              "password": "must be at least 8 characters long"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "update-user",
+      "method": "PUT",
+      "path": "/users/{id}",
+      "title": "更新用户信息",
+      "description": "完全更新指定用户的信息。此操作会替换所有现有字段。",
+      "parameters": [
+        {
+          "name": "id (path, 必填)",
+          "type": "string",
+          "description": "用户ID",
+          "example": "user_123"
+        },
+        {
+          "name": "name (body, 必填)",
+          "type": "string",
+          "description": "用户姓名",
+          "example": "Updated Name"
+        },
+        {
+          "name": "email (body, 必填)",
+          "type": "string",
+          "description": "用户邮箱地址",
+          "example": "updated.email@example.com"
+        }
+      ],
+      "requestExample": {
+        "http": "PUT /users/user_123 HTTP/1.1\nHost: YOUR_API_BASE_URL\nContent-Type: application/json\n\n{\n  \"name\": \"Updated Name\",\n  \"email\": \"updated.email@example.com\"\n}",
+        "curl": "curl -X PUT \"YOUR_API_BASE_URL/users/user_123\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"Updated Name\",\n    \"email\": \"updated.email@example.com\"\n  }'"
+      },
+      "responseExample": {
+        "success": {
+          "data": {
+            "id": "user_123",
+            "name": "Updated Name",
+            "email": "updated.email@example.com",
+            "updatedAt": "2023-12-01T11:00:00Z"
+          },
+          "message": "User updated successfully"
+        },
+        "error": {
+          "error": {
+            "code": "USER_NOT_FOUND",
+            "message": "User with id 'user_123' not found"
+          }
+        }
+      }
+    },
+    {
+      "id": "patch-user",
+      "method": "PATCH",
+      "path": "/users/{id}",
+      "title": "部分更新用户信息",
+      "description": "部分更新指定用户的信息。只更新提供的字段，其他字段保持不变。",
+      "parameters": [
+        {
+          "name": "id (path, 必填)",
+          "type": "string",
+          "description": "用户ID",
+          "example": "user_123"
+        },
+        {
+          "name": "name (body, 可选)",
+          "type": "string",
+          "description": "用户姓名",
+          "example": "New Name"
+        },
+        {
+          "name": "email (body, 可选)",
+          "type": "string",
+          "description": "用户邮箱地址",
+          "example": "new.email@example.com"
+        }
+      ],
+      "requestExample": {
+        "http": "PATCH /users/user_123 HTTP/1.1\nHost: YOUR_API_BASE_URL\nContent-Type: application/json\n\n{\n  \"name\": \"New Name\"\n}",
+        "curl": "curl -X PATCH \"YOUR_API_BASE_URL/users/user_123\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"New Name\"\n  }'"
+      },
+      "responseExample": {
+        "success": {
+          "data": {
+            "id": "user_123",
+            "name": "New Name",
+            "email": "original.email@example.com",
+            "updatedAt": "2023-12-01T12:00:00Z"
+          },
+          "message": "User partially updated successfully"
+        },
+        "error": {
+          "error": {
+            "code": "USER_NOT_FOUND",
+            "message": "User with id 'user_123' not found"
+          }
+        }
+      }
+    },
+    {
+      "id": "delete-user",
+      "method": "DELETE",
+      "path": "/users/{id}",
+      "title": "删除用户",
+      "description": "删除指定的用户账户。此操作不可逆，请谨慎使用。",
+      "parameters": [
+        {
+          "name": "id (path, 必填)",
+          "type": "string",
+          "description": "要删除的用户ID",
+          "example": "user_123"
+        }
+      ],
+      "requestExample": {
+        "http": "DELETE /users/user_123 HTTP/1.1\nHost: YOUR_API_BASE_URL\nAuthorization: Bearer YOUR_ACCESS_TOKEN",
+        "curl": "curl -X DELETE \"YOUR_API_BASE_URL/users/user_123\" \\\n  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\""
+      },
+      "responseExample": {
+        "success": {
+          "message": "User deleted successfully"
+        },
+        "error": {
+          "error": {
+            "code": "USER_NOT_FOUND",
+            "message": "User with id 'user_123' not found"
+          }
+        }
+      }
+    },
+    {
+      "id": "upload-file",
+      "method": "POST",
+      "path": "/files",
+      "title": "上传文件",
+      "description": "上传文件到服务器。支持多种文件格式，文件大小限制为10MB。",
+      "parameters": [
+        {
+          "name": "file (body, 必填)",
+          "type": "file",
+          "description": "要上传的文件",
+          "example": "document.pdf"
+        },
+        {
+          "name": "description (body, 可选)",
+          "type": "string",
+          "description": "文件描述",
+          "example": "Important document"
+        }
+      ],
+      "requestExample": {
+        "http": "POST /files HTTP/1.1\nHost: YOUR_API_BASE_URL\nContent-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW\n\n------WebKitFormBoundary7MA4YWxkTrZu0gW\nContent-Disposition: form-data; name=\"file\"; filename=\"document.pdf\"\nContent-Type: application/pdf\n\n[Binary file content]\n------WebKitFormBoundary7MA4YWxkTrZu0gW\nContent-Disposition: form-data; name=\"description\"\n\nImportant document\n------WebKitFormBoundary7MA4YWxkTrZu0gW--",
+        "curl": "curl -X POST \"YOUR_API_BASE_URL/files\" \\\n  -F \"file=@document.pdf\" \\\n  -F \"description=Important document\""
+      },
+      "responseExample": {
+        "success": {
+          "data": {
+            "id": "file_456",
+            "filename": "document.pdf",
+            "size": 1024000,
+            "mimeType": "application/pdf",
+            "uploadedAt": "2023-12-01T13:00:00Z",
+            "downloadUrl": "/files/file_456/download"
+          },
+          "message": "File uploaded successfully"
+        },
+        "error": {
+          "error": {
+            "code": "FILE_TOO_LARGE",
+            "message": "File size exceeds maximum limit of 10MB"
+          }
+        }
+      }
+    },
+    {
+      "id": "download-file",
+      "method": "GET",
+      "path": "/files/{id}/download",
+      "title": "下载文件",
+      "description": "下载指定ID的文件。文件将以二进制流的形式返回。",
+      "parameters": [
+        {
+          "name": "id (path, 必填)",
+          "type": "string",
+          "description": "文件ID",
+          "example": "file_456"
+        }
+      ],
+      "requestExample": {
+        "http": "GET /files/file_456/download HTTP/1.1\nHost: YOUR_API_BASE_URL\nAuthorization: Bearer YOUR_ACCESS_TOKEN",
+        "curl": "curl -X GET \"YOUR_API_BASE_URL/files/file_456/download\" \\\n  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\\n  --output downloaded_file.pdf"
+      },
+      "responseExample": {
+        "success": {
+          "data": {
+            "filename": "document.pdf",
+            "size": 1024000,
+            "downloadUrl": "/files/file_456/download"
+          }
+        },
+        "error": {
+          "error": {
+            "code": "FILE_NOT_FOUND",
+            "message": "File with id 'file_456' not found"
+          }
+        }
+      }
+    }
+  ]
+} 

@@ -252,7 +252,7 @@
             margin-bottom: 10px;
             display: flex;
             align-items: center;
-            font-size: 15px;
+            font-size: 17px;
             padding: 12px 15px;
             border-radius: var(--border-radius-medium);
             transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
@@ -275,35 +275,72 @@
         }
 
         .method-tag {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 50px;
+            height: 24px;
+            padding: 0 8px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
             margin-right: 12px;
             text-transform: uppercase;
             color: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .method-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            pointer-events: none;
         }
 
         .method-get {
-            background-color: var(--method-get-bg);
+            background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%);
+            border-color: #52c41a;
         }
 
         .method-post {
-            background-color: var(--method-post-bg);
+            background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
+            border-color: #1890ff;
         }
 
         .method-put {
-            background-color: var(--method-put-bg);
+            background: linear-gradient(135deg, #faad14 0%, #ffc53d 100%);
+            border-color: #faad14;
         }
 
         .method-patch {
-            background-color: var(--method-patch-bg);
+            background: linear-gradient(135deg, #722ed1 0%, #9254de 100%);
+            border-color: #722ed1;
         }
 
         .method-delete {
-            background-color: var(--method-delete-bg);
+            background: linear-gradient(135deg, #ff4d4f 0%, #ff7875 100%);
+            border-color: #ff4d4f;
+        }
+
+        /* 悬停效果 */
+        .api-item:hover .method-tag {
+            transform: scale(1.05);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        /* 选中状态下的方法标签 */
+        .api-item.selected .method-tag {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transform: scale(1.02);
         }
 
         /* --- Content Area (右侧文档部分) --- */
@@ -406,19 +443,26 @@
             color: var(--text-color-dark);
             display: flex;
             align-items: center;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            font-size: 14px;
         }
 
-        .param-query-tag {
-            display: inline-block;
-            background-color: #e8e8e8;
-            color: #666;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 12px;
-            margin-left: 10px;
-            font-family: monospace;
+        .param-name .param-type {
+            color: var(--text-color-medium);
             font-weight: 400;
-            letter-spacing: 0.5px;
+            margin-left: 8px;
+        }
+
+        .param-name .param-required {
+            color: #ff4d4f;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .param-name .param-optional {
+            color: #52c41a;
+            font-weight: 600;
+            margin-left: 8px;
         }
 
         /* --- Code Example (Highlight.js集成) --- */
@@ -467,6 +511,32 @@
             white-space: pre-wrap;
             word-break: break-all;
             overflow-x: auto;
+        }
+
+        /* Loading state */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: var(--text-color-medium);
+            font-size: 16px;
+        }
+
+        .loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color-subtle);
+            border-top: 2px solid var(--primary-gradient);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* --- Responsive adjustments (from Homepage CSS, adjust as needed) --- */
@@ -580,169 +650,14 @@
     <div class="main-content-area">
         <aside class="sidebar">
             <h2>API 列表</h2>
-            <ul class="api-list">
-                <li class="api-item selected animated-on-load" style="--delay: 0.3s;">
-                    <span class="method-tag method-get">GET</span>
-                    /users
-                </li>
-                <li class="api-item animated-on-load" style="--delay: 0.35s;">
-                    <span class="method-tag method-post">POST</span>
-                    /users
-                </li>
-                <li class="api-item animated-on-load" style="--delay: 0.4s;">
-                    <span class="method-tag method-put">PUT</span>
-                    /users/{id}
-                </li>
-                <li class="api-item animated-on-load" style="--delay: 0.45s;">
-                    <span class="method-tag method-patch">PATCH</span>
-                    /users/{id}
-                </li>
-                <li class="api-item animated-on-load" style="--delay: 0.5s;">
-                    <span class="method-tag method-delete">DELETE</span>
-                    /users/{id}
-                </li>
-                <li class="api-item animated-on-load" style="--delay: 0.55s;">
-                    <span class="method-tag method-post">POST</span>
-                    /files
-                </li>
-                <li class="api-item animated-on-load" style="--delay: 0.6s;">
-                    <span class="method-tag method-get">GET</span>
-                    /files/{id}/download
-                </li>
+            <ul class="api-list" id="api-list">
+                <li class="loading">加载中...</li>
             </ul>
         </aside>
 
         <main class="content">
-            <div class="api-detail animated-on-load" style="--delay: 0.4s;">
-                <h1><span class="method-tag method-get">GET</span> /users</h1>
-                <p class="api-description">
-                    检索系统中的用户列表。<br>
-                    此端点用于获取所有已注册用户的列表，可以支持分页和基本筛选。
-                </p>
-
-                <h2 class="section-title">参数</h2>
-                <table class="params-table">
-                    <thead>
-                    <tr>
-                        <th>参数</th>
-                        <th>类型</th>
-                        <th>描述</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td><span class="param-name">page</span><span class="param-query-tag">query</span></td>
-                        <td>integer</td>
-                        <td>请求的页码，用于分页。(默认值: 1) 例如: 1</td>
-                    </tr>
-                    <tr>
-                        <td><span class="param-name">limit</span><span class="param-query-tag">query</span></td>
-                        <td>integer</td>
-                        <td>每页返回的用户数量。(默认值: 10) 例如: 10</td>
-                    </tr>
-                    <tr>
-                        <td><span class="param-name">sortBy</span><span class="param-query-tag">query</span></td>
-                        <td>string</td>
-                        <td>用于排序的字段名称。例如: "创建时间"</td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <h2 class="section-title">请求示例</h2>
-                <div class="code-example">
-                    <div class="code-tabs">
-                        <div class="code-tab active" data-lang="http">HTTP</div>
-                        <div class="code-tab" data-lang="json">SSE</div>
-                    </div>
-                    <pre class="code-block"><code class="language-http">GET /users?page=1&limit=10 HTTP/1.1
-Host: YOUR_API_BASE_URL
-User-Agent: Your-App/1.0
-Accept: application/json</code></pre>
-                </div>
-
-                <h2 class="section-title">响应示例</h2>
-                <div class="code-example">
-                    <div class="code-tabs">
-                        <div class="code-tab active" data-lang="json">HTTP</div>
-                        <div class="code-tab" data-lang="json">SSE</div>
-                    </div>
-                    <pre class="code-block"><code class="language-json">{
-  "data": [
-    {
-      "id": "user_1",
-      "name": "John Doe",
-      "email": "john.doe@example.com",
-      "createdAt": "2023-10-26T10:00:00Z"
-    },
-    {
-      "id": "user_2",
-      "name": "Jane Smith",
-      "email": "jane.smith@example.com",
-      "createdAt": "2023-10-26T10:15:00Z"
-    },
-    {
-      "id": "user_3",
-      "name": "Alice Johnson",
-      "email": "alice.j@example.com",
-      "createdAt": "2023-10-27T11:20:00Z"
-    },
-    {
-      "id": "user_4",
-      "name": "Bob Brown",
-      "email": "bob.b@example.com",
-      "createdAt": "2023-10-28T12:30:00Z"
-    },
-    {
-      "id": "user_5",
-      "name": "Charlie Davis",
-      "email": "charlie.d@example.com",
-      "createdAt": "2023-10-29T13:45:00Z"
-    },
-    {
-      "id": "user_6",
-      "name": "Diana Miller",
-      "email": "diana.m@example.com",
-      "createdAt": "2023-10-30T14:50:00Z"
-    },
-    {
-      "id": "user_7",
-      "name": "Eve Wilson",
-      "email": "eve.w@example.com",
-      "createdAt": "2023-10-31T15:05:00Z"
-    },
-    {
-      "id": "user_8",
-      "name": "Frank White",
-      "email": "frank.w@example.com",
-      "createdAt": "2023-11-01T16:10:00Z"
-    }
-  ],
-  "pagination": {
-    "page": 1,
-    "limit": 10,
-    "total": 8
-  }
-}</code></pre>
-                </div>
-
-                <h2 class="section-title">额外示例：带请求体的POST</h2>
-                <div class="code-example">
-                    <div class="code-tabs">
-                        <div class="code-tab active" data-lang="http">HTTP</div>
-                        <div class="code-tab" data-lang="json">JSON</div>
-                    </div>
-                    <pre class="code-block"><code class="language-http">POST /users HTTP/1.1
-Host: YOUR_API_BASE_URL
-Content-Type: application/json
-
-{
-  "name": "New User",
-  "email": "new.user@example.com",
-  "password": "secure_password"
-}</code></pre>
-                </div>
-
-
+            <div class="api-detail" id="api-detail">
+                <div class="loading">请选择一个API查看详情</div>
             </div>
             <!-- Adding some extra space at the bottom to ensure content ends cleanly -->
             <div style="height: 50px;"></div>
@@ -761,52 +676,278 @@ Content-Type: application/json
 <script src="js/json.min.js"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        hljs.highlightAll();
+    class APIDocManager {
+        constructor() {
+            this.apiData = null;
+            this.currentApiId = null;
+            this.init();
+        }
 
-        document.querySelectorAll('.header .nav a').forEach(link => {
-            link.addEventListener('click', function (e) {
-                // Prevent actual navigation for demo purposes
-                e.preventDefault();
+        async init() {
+            try {
+                await this.loadAPIConfig();
+                this.renderAPIList();
+                this.bindEvents();
+                this.selectFirstAPI();
+            } catch (error) {
+                console.error('Failed to initialize API documentation:', error);
+                this.showError('加载API配置失败');
+            }
+        }
 
-                // Optional: remove active from others and add to clicked.
-                // For a multi-page app, this would be handled by the router.
-                document.querySelectorAll('.header .nav a').forEach(navLink => {
-                    navLink.classList.remove('active');
-                });
-                this.classList.add('active');
+        async loadAPIConfig() {
+            const response = await fetch('/api-config.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            this.apiData = await response.json();
+        }
 
-                // If it's the "API文档" link, scroll content to top.
-                if (this.textContent.includes('API文档')) {
-                    document.querySelector('.content').scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
+        renderAPIList() {
+            const apiList = document.getElementById('api-list');
+            apiList.innerHTML = '';
+
+            this.apiData.apis.forEach((api, index) => {
+                const li = document.createElement('li');
+                li.className = `api-item animated-on-load`;
+                li.style.setProperty('--delay', `${0.3 + index * 0.05}s`);
+                li.dataset.apiId = api.id;
+                
+                li.innerHTML = `
+                    <span class="method-tag method-${api.method.toLowerCase()}">${api.method}</span>
+                    ${api.path}
+                `;
+                
+                apiList.appendChild(li);
+            });
+        }
+
+        bindEvents() {
+            // API list click events
+            document.getElementById('api-list').addEventListener('click', (e) => {
+                const apiItem = e.target.closest('.api-item');
+                if (apiItem) {
+                    this.selectAPI(apiItem.dataset.apiId);
                 }
             });
-        });
-    });
 
-    // Tab switching logic for code examples
-    document.querySelectorAll('.code-tabs').forEach(tabsContainer => {
-        tabsContainer.addEventListener('click', (event) => {
-            const clickedTab = event.target;
-            if (clickedTab.classList.contains('code-tab') && !clickedTab.classList.contains('active')) {
-                Array.from(tabsContainer.children).forEach(tab => tab.classList.remove('active'));
-                clickedTab.classList.add('active');
-
-                const codeExampleDiv = tabsContainer.closest('.code-example');
-                if (codeExampleDiv) {
-                    const codeBlock = codeExampleDiv.querySelector('.code-block code');
-                    if (codeBlock) {
-                        const lang = clickedTab.getAttribute('data-lang');
-                        codeBlock.className = `language-${lang}`;
-                        hljs.highlightElement(codeBlock);
-                    }
+            // Code tab switching
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('code-tab')) {
+                    this.switchCodeTab(e.target);
                 }
+            });
+
+            // Header navigation
+            document.querySelectorAll('.header .nav a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelectorAll('.header .nav a').forEach(navLink => {
+                        navLink.classList.remove('active');
+                    });
+                    link.classList.add('active');
+                });
+            });
+        }
+
+        selectAPI(apiId) {
+            this.currentApiId = apiId;
+            
+            // Update sidebar selection
+            document.querySelectorAll('.api-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelector(`[data-api-id="${apiId}"]`).classList.add('selected');
+            
+            // Render API detail
+            this.renderAPIDetail(apiId);
+        }
+
+        selectFirstAPI() {
+            if (this.apiData.apis.length > 0) {
+                this.selectAPI(this.apiData.apis[0].id);
             }
-        });
+        }
+
+        renderAPIDetail(apiId) {
+            const api = this.apiData.apis.find(a => a.id === apiId);
+            if (!api) return;
+
+            const detailContainer = document.getElementById('api-detail');
+            detailContainer.innerHTML = `
+                <h1><span class="method-tag method-${api.method.toLowerCase()}">${api.method}</span> ${api.path}</h1>
+                <p class="api-description">${api.description}</p>
+                
+                ${this.renderParameters(api.parameters)}
+                ${this.renderRequestExample(api.requestExample)}
+                ${this.renderResponseExample(api.responseExample)}
+            `;
+
+            // Apply syntax highlighting
+            this.applySyntaxHighlighting();
+        }
+
+        renderParameters(parameters) {
+            if (!parameters || parameters.length === 0) return '';
+
+            const rows = parameters.map(param => {
+                // 解析参数名中的类型和必填/可选信息
+                const nameMatch = param.name.match(/^(.+?)\s*\((.+?),\s*(.+?)\)$/);
+                let paramName = param.name;
+                let paramType = '';
+                let paramRequired = '';
+                
+                if (nameMatch) {
+                    paramName = nameMatch[1];
+                    paramType = nameMatch[2];
+                    paramRequired = nameMatch[3];
+                }
+
+                return `
+                    <tr>
+                        <td>
+                            <span class="param-name">
+                                ${paramName}
+                                <span class="param-type">(${paramType})</span>
+                                <span class="${paramRequired === '必填' ? 'param-required' : 'param-optional'}">${paramRequired}</span>
+                            </span>
+                        </td>
+                        <td>${param.type}</td>
+                        <td>
+                            ${param.description}
+                            ${param.default ? `<br><small>默认值: ${param.default}</small>` : ''}
+                            ${param.example ? `<br><small>示例: ${param.example}</small>` : ''}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            return `
+                <h2 class="section-title">请求参数</h2>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>参数</th>
+                            <th>类型</th>
+                            <th>描述</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        getParamType(param) {
+            if (param.name.includes('{') && param.name.includes('}')) {
+                return 'path';
+            }
+            return 'body';
+        }
+
+        renderRequestExample(requestExample) {
+            if (!requestExample) return '';
+
+            const tabs = Object.keys(requestExample).map((key, index) => 
+                `<div class="code-tab ${index === 0 ? 'active' : ''}" data-lang="${key}">${key.toUpperCase()}</div>`
+            ).join('');
+
+            const firstLang = Object.keys(requestExample)[0];
+            const firstCode = requestExample[firstLang];
+
+            return `
+                <h2 class="section-title">请求示例</h2>
+                <div class="code-example">
+                    <div class="code-tabs">
+                        ${tabs}
+                    </div>
+                    <pre class="code-block"><code class="language-${firstLang}">${this.escapeHtml(firstCode)}</code></pre>
+                </div>
+            `;
+        }
+
+        renderResponseExample(responseExample) {
+            if (!responseExample) return '';
+
+            const tabs = Object.keys(responseExample).map((key, index) => 
+                `<div class="code-tab ${index === 0 ? 'active' : ''}" data-lang="${key}">${key === 'success' ? '成功' : '错误'}</div>`
+            ).join('');
+
+            const firstType = Object.keys(responseExample)[0];
+            const firstResponse = responseExample[firstType];
+            const responseText = JSON.stringify(firstResponse, null, 2);
+
+            return `
+                <h2 class="section-title">响应示例</h2>
+                <div class="code-example">
+                    <div class="code-tabs">
+                        ${tabs}
+                    </div>
+                    <pre class="code-block"><code class="language-json">${this.escapeHtml(responseText)}</code></pre>
+                </div>
+            `;
+        }
+
+        formatResponse(response) {
+            // 直接返回JSON格式，不包含HTTP状态行
+            return JSON.stringify(response, null, 2);
+        }
+
+        switchCodeTab(clickedTab) {
+            const tabsContainer = clickedTab.closest('.code-tabs');
+            const codeExample = tabsContainer.closest('.code-example');
+            
+            // Update active tab
+            tabsContainer.querySelectorAll('.code-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            clickedTab.classList.add('active');
+            
+            // Update code content
+            const codeBlock = codeExample.querySelector('.code-block code');
+            const lang = clickedTab.dataset.lang;
+            
+            if (codeExample.querySelector('.section-title').textContent.includes('请求')) {
+                // Request example
+                const api = this.apiData.apis.find(a => a.id === this.currentApiId);
+                const content = api.requestExample[lang];
+                codeBlock.className = `language-${lang}`;
+                codeBlock.textContent = content;
+            } else {
+                // Response example
+                const api = this.apiData.apis.find(a => a.id === this.currentApiId);
+                const response = api.responseExample[lang];
+                const content = JSON.stringify(response, null, 2);
+                codeBlock.className = 'language-json';
+                codeBlock.textContent = content;
+            }
+            
+            hljs.highlightElement(codeBlock);
+        }
+
+        applySyntaxHighlighting() {
+            document.querySelectorAll('pre code').forEach(block => {
+                hljs.highlightElement(block);
+            });
+        }
+
+        escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        showError(message) {
+            const detailContainer = document.getElementById('api-detail');
+            detailContainer.innerHTML = `<div class="loading">${message}</div>`;
+        }
+    }
+
+    // Initialize the API documentation when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        new APIDocManager();
     });
 </script>
 </body>
-</html>
+</html> 
