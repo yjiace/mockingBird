@@ -337,49 +337,35 @@ app.post('/api/upload', async (c) => {
 
 // 文件ID到文件路径和文件名的映射（实际可替换为数据库）
 const fileMap: Record<string, { path: string, name: string }> = {
-    "1": { path: "test.png", name: "测试图片.png" },
-    "2": { path: "demo.pdf", name: "演示文档.pdf" },
-    // 可继续添加
+    "1": { path: "https://pub.smallyoung.cn/mockingBird/files/picture_1.png", name: "picture_1.png" },
+    "2": { path: "https://pub.smallyoung.cn/mockingBird/files/picture_2.png", name: "picture_2.png" },
+    "3": { path: "https://pub.smallyoung.cn/mockingBird/files/picture_3.png", name: "picture_3.png" },
+    "4": { path: "https://pub.smallyoung.cn/mockingBird/files/picture_4.png", name: "picture_4.png" },
+    "5": { path: "https://pub.smallyoung.cn/mockingBird/files/video_1.mp4", name: "video_1.mp4" },
+    "6": { path: "https://pub.smallyoung.cn/mockingBird/files/video_2.mp4", name: "video_2.mp4" },
 };
 
 // 通过ID下载文件接口
-app.get('/api/download', async (c) => {
-    const id = c.req.query('id');
+app.get('/api/download/:id', async (c) => {
+    const id = c.req.param('id');
     if (!id || !fileMap[id]) {
         return smartResponse(c, null, 404, 'File not found');
     }
     const { path, name } = fileMap[id];
-    // 防止非法路径
-    if (!path || path.includes('..') || path.startsWith('/')) {
-        return smartResponse(c, null, 400, 'Invalid file path');
-    }
-    // 读取文件内容
-    // @ts-ignore
-    const file = await __STATIC_CONTENT.get(`files/${path}`);
-    if (!file) {
+    // 代理下载外部文件内容
+    const resp = await fetch(path);
+    if (!resp.ok) {
         return smartResponse(c, null, 404, 'File not found');
     }
-    // 设置 Content-Type
-    const ext = path.split('.').pop()?.toLowerCase();
-    const mimeTypes: Record<string, string> = {
-        'png': 'image/png',
-        'pdf': 'application/pdf',
-        'jpg': 'image/jpeg',
-        'jpeg': 'image/jpeg',
-        'ico': 'image/x-icon',
-        'js': 'application/javascript',
-        'css': 'text/css',
-        'woff2': 'font/woff2',
-        'json': 'application/json',
-        'html': 'text/html',
-        'svg': 'image/svg+xml',
-    };
-    const contentType = mimeTypes[ext || ''] || 'application/octet-stream';
-    const headers: Record<string, string> = {
-        'Content-Type': contentType,
-        'Content-Disposition': `attachment; filename="${encodeURIComponent(name)}"`
-    };
-    return new Response(file, { status: 200, headers });
+    // 复制响应体
+    const contentType = resp.headers.get('content-type') || 'application/octet-stream';
+    return new Response(resp.body, {
+        status: 200,
+        headers: {
+            'Content-Type': contentType,
+            'Content-Disposition': `attachment; filename=\"${encodeURIComponent(name)}\"`,
+        }
+    });
 });
 
 // 404 处理
