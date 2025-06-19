@@ -105,9 +105,9 @@ app.get('/api/user', async (c) => {
     // Build WHERE conditions based on provided parameters
     let whereClause = '';
     const conditions = [];
-    if (name) conditions.push(`name = '${name}'`);
-    if (email) conditions.push(`email = '${email}'`);
-    if (mobile) conditions.push(`mobile = '${mobile}'`);
+    if (name && name.trim() !== '') conditions.push(`name = '${name}'`);
+    if (email && email.trim() !== '') conditions.push(`email = '${email}'`);
+    if (mobile && mobile.trim() !== '') conditions.push(`mobile = '${mobile}'`);
     
     if (conditions.length > 0) {
         whereClause = `WHERE ${conditions.join(' AND ')}`;
@@ -206,8 +206,10 @@ app.put('/api/user/:id', async (c) => {
         if (!user) {
             return createJsonResponse(null, 404, "User not found");
         }
+        // 合并 user 和 requestData，以 requestData 为准
+        const mergedUser = { ...user, ...requestData };
         return createJsonResponse({
-            ...requestData,
+            ...mergedUser,
             message: 'User updated successfully'
         });
     });
@@ -226,8 +228,10 @@ app.patch('/api/user/:id', async (c) => {
         if (!user) {
             return createJsonResponse(null, 404, "User not found");
         }
+        // 合并 user 和 requestData，以 requestData 为准
+        const mergedUser = { ...user, ...requestData };
         return createJsonResponse({
-            ...requestData,
+            ...mergedUser,
             message: 'User updated successfully'
         });
     });
@@ -277,6 +281,53 @@ app.post('/api/upload', async (c) => {
         size,
         md5
     });
+});
+
+// 文件ID到文件路径和文件名的映射（实际可替换为数据库）
+const fileMap: Record<string, { path: string, name: string }> = {
+    "1": { path: "test.png", name: "测试图片.png" },
+    "2": { path: "demo.pdf", name: "演示文档.pdf" },
+    // 可继续添加
+};
+
+// 通过ID下载文件接口
+app.get('/api/download', async (c) => {
+    const id = c.req.query('id');
+    if (!id || !fileMap[id]) {
+        return createJsonResponse(null, 404, 'File not found');
+    }
+    const { path, name } = fileMap[id];
+    // 防止非法路径
+    if (!path || path.includes('..') || path.startsWith('/')) {
+        return createJsonResponse(null, 400, 'Invalid file path');
+    }
+    // 读取文件内容
+    // @ts-ignore
+    const file = await __STATIC_CONTENT.get(`files/${path}`);
+    if (!file) {
+        return createJsonResponse(null, 404, 'File not found');
+    }
+    // 设置 Content-Type
+    const ext = path.split('.').pop()?.toLowerCase();
+    const mimeTypes: Record<string, string> = {
+        'png': 'image/png',
+        'pdf': 'application/pdf',
+        'jpg': 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'ico': 'image/x-icon',
+        'js': 'application/javascript',
+        'css': 'text/css',
+        'woff2': 'font/woff2',
+        'json': 'application/json',
+        'html': 'text/html',
+        'svg': 'image/svg+xml',
+    };
+    const contentType = mimeTypes[ext || ''] || 'application/octet-stream';
+    const headers: Record<string, string> = {
+        'Content-Type': contentType,
+        'Content-Disposition': `attachment; filename="${encodeURIComponent(name)}"`
+    };
+    return new Response(file, { status: 200, headers });
 });
 
 // 404 处理
