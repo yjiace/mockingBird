@@ -5,12 +5,10 @@ export type Env = {
     DB01: D1Database;
 };
 
-// 定义自定义上下文类型
 type CustomContext = {
     session: D1DatabaseSession;
 };
 
-// 创建 Hono 应用实例
 const app = new Hono<{ Bindings: Env; Variables: CustomContext }>();
 
 type User = {
@@ -21,9 +19,18 @@ type User = {
     mobile: string;
     balance: number;
     is_active: number;
+    address: Address | null;
 };
 
-// Helper function to create standardized JSON responses
+type Address = {
+    id: number;
+    province: string;
+    city: string;
+    district: string;
+    street: string;
+    user_id: string;
+};
+
 function createJsonResponse(data: any, statusCode: number = 200, message: string = "success"): Response {
     return Response.json(
         {
@@ -39,12 +46,9 @@ function createJsonResponse(data: any, statusCode: number = 200, message: string
 app.use('*', async (c, next) => {
     const bookmark = c.req.header("x-d1-bookmark") ?? "first-unconstrained";
     const session = c.env.DB01.withSession(bookmark);
-    
     // 将会话添加到上下文中
     c.set('session', session);
-    
     await next();
-    
     // 设置响应头
     c.header("x-d1-bookmark", session.getBookmark() ?? "");
 });
@@ -108,7 +112,6 @@ app.get('/api/user', async (c) => {
     if (conditions.length > 0) {
         whereClause = `WHERE ${conditions.join(' AND ')}`;
     }
-    
     // 分页
     const offset = (pageNum - 1) * sizeNum;
     
@@ -128,9 +131,25 @@ app.get('/api/user', async (c) => {
             
             const resp = await session
                 .prepare(`select * from t_user ${whereClause} order by id limit ${sizeNum} offset ${offset}`).all();
-            
+
+            const  results = resp.results as User[];
+            const addressResults = await session
+                .prepare(`select * from t_address where user_id in (${results.map(result => result.id).join(',')})`).all();
+            const addresses = addressResults.results as Address[];
+
+            // 2. 构建 user_id 到 address 的映射
+            const addressMap: Record<string, Address> = {};
+            for (const addr of addresses) {
+                addressMap[addr.user_id] = addr;
+            }
+
+            // 3. 给每个用户加上 address 字段
+            for (const user of results) {
+                user.address = addressMap[user.id] ?? null;
+            }
+
             return createJsonResponse({
-                results: resp.results,
+                results: results,
                 total: total,
                 page: pageNum,
                 size: sizeNum,
@@ -139,15 +158,34 @@ app.get('/api/user', async (c) => {
     });
 });
 
+// GET /api/user/:id - 获取单个用户信息
+app.get('/api/user/:id', async (c) => {
+    const session = c.get('session');
+    const userId = c.req.param('id');
+
+    return await withTablesInitialized(session, async (session) => {
+        return await Retries.tryWhile(async () => {
+            // 查询用户
+            const user = await session.prepare(`SELECT * FROM t_user WHERE id = ? LIMIT 1`).bind(userId).first<User>();
+            if (!user) {
+                return createJsonResponse(null, 404, "User not found");
+            }
+            // 查询地址
+            const address = await session
+                .prepare(`SELECT * FROM t_address WHERE user_id = ? LIMIT 1`).bind(user.id).first<Address>();
+            user.address = address ?? null;
+            return createJsonResponse(user);
+        }, shouldRetry);
+    });
+});
+
 // POST /api/user - 创建用户
 app.post('/api/user', async (c) => {
     const session = c.get('session');
     const requestData = await c.req.json<User>();
-    
+
     return await withTablesInitialized(session, async (session) => {
-        // 这里可以添加实际的数据库插入逻辑
-        console.log('Creating new user:', requestData);
-        
+
         return createJsonResponse({
             ...requestData,
             id: Date.now(), // 模拟生成的ID
@@ -156,44 +194,41 @@ app.post('/api/user', async (c) => {
     });
 });
 
-// GET /api/user/:id - 获取单个用户
-app.get('/api/user/:id', async (c) => {
+// PUT /api/user - 更新用户资料
+app.put('/api/user/:id', async (c) => {
     const session = c.get('session');
+    const requestData = await c.req.json<User>();
     const userId = c.req.param('id');
-    
+    requestData.id = parseInt(userId ?? requestData.id);
     return await withTablesInitialized(session, async (session) => {
-        // 这里可以添加实际的数据库查询逻辑
-        console.log(`Getting user with ID: ${userId}`);
-        
-        // 模拟返回用户数据
-        const mockUser: User = {
-            id: parseInt(userId),
-            name: "John Doe",
-            age: 30,
-            email: "john@example.com",
-            mobile: "1234567890",
-            balance: 1000,
-            is_active: 1
-        };
-        
-        return createJsonResponse(mockUser);
+        // 查询用户
+        const user = await session.prepare(`SELECT * FROM t_user WHERE id = ? LIMIT 1`).bind(requestData.id).first<User>();
+        if (!user) {
+            return createJsonResponse(null, 404, "User not found");
+        }
+        return createJsonResponse({
+            ...requestData,
+            message: 'User updated successfully'
+        });
     });
 });
 
-// PUT /api/user/:id - 更新用户
-app.put('/api/user/:id', async (c) => {
+// PATCH /api/user - 部分更新指定用户的信息
+app.patch('/api/user/:id', async (c) => {
     const session = c.get('session');
-    const userId = c.req.param('id');
     const requestData = await c.req.json<User>();
-    
+    const userId = c.req.param('id');
+    requestData.id = parseInt(userId ?? requestData.id);
+
     return await withTablesInitialized(session, async (session) => {
-        // 这里可以添加实际的数据库更新逻辑
-        console.log(`Updating user with ID: ${userId}`, requestData);
-        
+        // 查询用户
+        const user = await session.prepare(`SELECT * FROM t_user WHERE id = ? LIMIT 1`).bind(requestData.id).first<User>();
+        if (!user) {
+            return createJsonResponse(null, 404, "User not found");
+        }
         return createJsonResponse({
             ...requestData,
-            id: userId,
-            message: `User ${userId} updated successfully`
+            message: 'User updated successfully'
         });
     });
 });
@@ -204,12 +239,43 @@ app.delete('/api/user/:id', async (c) => {
     const userId = c.req.param('id');
     
     return await withTablesInitialized(session, async (session) => {
-        // 这里可以添加实际的数据库删除逻辑
-        console.log(`Deleting user with ID: ${userId}`);
-        
+        // 查询用户
+        const user = await session.prepare(`SELECT * FROM t_user WHERE id = ? LIMIT 1`).bind(userId).first<User>();
+        if (!user) {
+            return createJsonResponse(null, 404, "User not found");
+        }
         return createJsonResponse({
             message: `User ${userId} deleted successfully`
         });
+    });
+});
+
+// 文件上传接口
+app.post('/api/upload', async (c) => {
+    const contentType = c.req.header('content-type') || '';
+    if (!contentType.includes('multipart/form-data')) {
+        return createJsonResponse(null, 400, 'Content-Type must be multipart/form-data');
+    }
+    // 解析 multipart/form-data
+    const formData = await c.req.formData();
+    const file = formData.get('file');
+    if (!file || typeof file === 'string') {
+        return createJsonResponse(null, 400, 'No file uploaded');
+    }
+    // file: File 类型
+    const { name, type, size } = file;
+    // 读取文件内容为 ArrayBuffer
+    const arrayBuffer = await file.arrayBuffer();
+    // 计算 md5
+    const hashBuffer = await crypto.subtle.digest('MD5', arrayBuffer);
+    // 转为16进制字符串
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const md5 = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return createJsonResponse({
+        name,
+        type,
+        size,
+        md5
     });
 });
 
