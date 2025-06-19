@@ -42,6 +42,34 @@ function createJsonResponse(data: any, statusCode: number = 200, message: string
     );
 }
 
+// SSE 响应工具函数
+function createSseResponse(data: any): Response {
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+        start(controller) {
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+            controller.close();
+        }
+    });
+    return new Response(stream, {
+        headers: {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive'
+        }
+    });
+}
+
+// 智能响应函数，自动判断SSE或JSON
+function smartResponse(c: any, data: any, statusCode: number = 200, message: string = 'success') {
+    const isSse = c.req.header('accept')?.includes('text/event-stream');
+    if (isSse) {
+        return createSseResponse({ code: statusCode, message, data });
+    } else {
+        return createJsonResponse(data, statusCode, message);
+    }
+}
+
 // 中间件：初始化数据库会话
 app.use('*', async (c, next) => {
     const bookmark = c.req.header("x-d1-bookmark") ?? "first-unconstrained";
@@ -121,7 +149,7 @@ app.get('/api/user', async (c) => {
             const total = totalResult?.total || 0;
     
             if (total === 0) {
-                return createJsonResponse({
+                return smartResponse(c, {
                     results: [],
                     total: total,
                     page: pageNum,
@@ -148,7 +176,7 @@ app.get('/api/user', async (c) => {
                 user.address = addressMap[user.id] ?? null;
             }
 
-            return createJsonResponse({
+            return smartResponse(c, {
                 results: results,
                 total: total,
                 page: pageNum,
@@ -168,13 +196,13 @@ app.get('/api/user/:id', async (c) => {
             // 查询用户
             const user = await session.prepare(`SELECT * FROM t_user WHERE id = ? LIMIT 1`).bind(userId).first<User>();
             if (!user) {
-                return createJsonResponse(null, 404, "User not found");
+                return smartResponse(c, null, 404, "User not found");
             }
             // 查询地址
             const address = await session
                 .prepare(`SELECT * FROM t_address WHERE user_id = ? LIMIT 1`).bind(user.id).first<Address>();
             user.address = address ?? null;
-            return createJsonResponse(user);
+            return smartResponse(c, user);
         }, shouldRetry);
     });
 });
@@ -185,8 +213,7 @@ app.post('/api/user', async (c) => {
     const requestData = await c.req.json<User>();
 
     return await withTablesInitialized(session, async (session) => {
-
-        return createJsonResponse({
+        return smartResponse(c, {
             ...requestData,
             id: Date.now(), // 模拟生成的ID
             message: 'User created successfully'
@@ -204,11 +231,11 @@ app.put('/api/user/:id', async (c) => {
         // 查询用户
         const user = await session.prepare(`SELECT * FROM t_user WHERE id = ? LIMIT 1`).bind(requestData.id).first<User>();
         if (!user) {
-            return createJsonResponse(null, 404, "User not found");
+            return smartResponse(c, null, 404, "User not found");
         }
         // 合并 user 和 requestData，以 requestData 为准
         const mergedUser = { ...user, ...requestData };
-        return createJsonResponse({
+        return smartResponse(c, {
             ...mergedUser,
             message: 'User updated successfully'
         });
@@ -226,11 +253,11 @@ app.patch('/api/user/:id', async (c) => {
         // 查询用户
         const user = await session.prepare(`SELECT * FROM t_user WHERE id = ? LIMIT 1`).bind(requestData.id).first<User>();
         if (!user) {
-            return createJsonResponse(null, 404, "User not found");
+            return smartResponse(c, null, 404, "User not found");
         }
         // 合并 user 和 requestData，以 requestData 为准
         const mergedUser = { ...user, ...requestData };
-        return createJsonResponse({
+        return smartResponse(c, {
             ...mergedUser,
             message: 'User updated successfully'
         });
@@ -246,9 +273,9 @@ app.delete('/api/user/:id', async (c) => {
         // 查询用户
         const user = await session.prepare(`SELECT * FROM t_user WHERE id = ? LIMIT 1`).bind(userId).first<User>();
         if (!user) {
-            return createJsonResponse(null, 404, "User not found");
+            return smartResponse(c, null, 404, "User not found");
         }
-        return createJsonResponse({
+        return smartResponse(c, {
             message: `User ${userId} deleted successfully`
         });
     });
@@ -258,13 +285,13 @@ app.delete('/api/user/:id', async (c) => {
 app.post('/api/upload', async (c) => {
     const contentType = c.req.header('content-type') || '';
     if (!contentType.includes('multipart/form-data')) {
-        return createJsonResponse(null, 400, 'Content-Type must be multipart/form-data');
+        return smartResponse(c, null, 400, 'Content-Type must be multipart/form-data');
     }
     // 解析 multipart/form-data
     const formData = await c.req.formData();
     const file = formData.get('file');
     if (!file || typeof file === 'string') {
-        return createJsonResponse(null, 400, 'No file uploaded');
+        return smartResponse(c, null, 400, 'No file uploaded');
     }
     // file: File 类型
     const { name, type, size } = file;
@@ -275,7 +302,7 @@ app.post('/api/upload', async (c) => {
     // 转为16进制字符串
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const md5 = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return createJsonResponse({
+    return smartResponse(c, {
         name,
         type,
         size,
@@ -294,18 +321,18 @@ const fileMap: Record<string, { path: string, name: string }> = {
 app.get('/api/download', async (c) => {
     const id = c.req.query('id');
     if (!id || !fileMap[id]) {
-        return createJsonResponse(null, 404, 'File not found');
+        return smartResponse(c, null, 404, 'File not found');
     }
     const { path, name } = fileMap[id];
     // 防止非法路径
     if (!path || path.includes('..') || path.startsWith('/')) {
-        return createJsonResponse(null, 400, 'Invalid file path');
+        return smartResponse(c, null, 400, 'Invalid file path');
     }
     // 读取文件内容
     // @ts-ignore
     const file = await __STATIC_CONTENT.get(`files/${path}`);
     if (!file) {
-        return createJsonResponse(null, 404, 'File not found');
+        return smartResponse(c, null, 404, 'File not found');
     }
     // 设置 Content-Type
     const ext = path.split('.').pop()?.toLowerCase();
@@ -332,7 +359,7 @@ app.get('/api/download', async (c) => {
 
 // 404 处理
 app.notFound((c) => {
-    return createJsonResponse(null, 404, "Not found");
+    return smartResponse(c, null, 404, "Not found");
 });
 
 // 导出 Cloudflare Workers 处理器
