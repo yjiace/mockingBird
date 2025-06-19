@@ -43,11 +43,11 @@ function createJsonResponse(data: any, statusCode: number = 200, message: string
 }
 
 // SSE 响应工具函数
-function createSseResponse(data: any): Response {
+function createSseResponse(data: string): Response {
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
         start(controller) {
-            controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+            controller.enqueue(encoder.encode(`data: ${data}\n\n`));
             controller.close();
         }
     });
@@ -64,7 +64,8 @@ function createSseResponse(data: any): Response {
 function smartResponse(c: any, data: any, statusCode: number = 200, message: string = 'success') {
     const isSse = c.req.header('accept')?.includes('text/event-stream');
     if (isSse) {
-        return createSseResponse({ code: statusCode, message, data });
+        // 只发送 data 字段，且为字符串
+        return createSseResponse(typeof data === 'string' ? data : JSON.stringify(data));
     } else {
         return createJsonResponse(data, statusCode, message);
     }
@@ -176,12 +177,36 @@ app.get('/api/user', async (c) => {
                 user.address = addressMap[user.id] ?? null;
             }
 
-            return smartResponse(c, {
-                results: results,
-                total: total,
-                page: pageNum,
-                size: sizeNum,
-            });
+            // 判断是否为 SSE
+            const isSse = c.req.header('accept')?.includes('text/event-stream');
+            if (isSse) {
+                // 返回流式 SSE，每条用户一条消息
+                const encoder = new TextEncoder();
+                const stream = new ReadableStream({
+                    async start(controller) {
+                        for (const user of results) {
+                            controller.enqueue(encoder.encode(`data: ${JSON.stringify(user)}\n\n`));
+                        }
+                        // 发送总数/分页信息
+                        controller.enqueue(encoder.encode(`event: meta\ndata: ${JSON.stringify({ total, page: pageNum, size: sizeNum })}\n\n`));
+                        controller.close();
+                    }
+                });
+                return new Response(stream, {
+                    headers: {
+                        'Content-Type': 'text/event-stream',
+                        'Cache-Control': 'no-cache',
+                        'Connection': 'keep-alive'
+                    }
+                });
+            } else {
+                return smartResponse(c, {
+                    results: results,
+                    total: total,
+                    page: pageNum,
+                    size: sizeNum,
+                });
+            }
         }, shouldRetry);
     });
 });
