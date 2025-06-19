@@ -66,11 +66,9 @@ async function handleRequest(request: Request, session: D1DatabaseSession) {
     const {pathname} = new URL(request.url);
     const { searchParams } = new URL(request.url);
 
-    const tsStart = Date.now();
-
     if (request.method === "GET" && pathname === "/api/user") {
-        const page = searchParams.get('page') || 0;
-        const size = searchParams.get('size') || 10;
+        const page = parseInt(searchParams.get('page') || '1');
+        const size = parseInt(searchParams.get('size') || '10');
         const name = searchParams.get('name');
         const email = searchParams.get('email');
         const mobile = searchParams.get('mobile');
@@ -86,38 +84,42 @@ async function handleRequest(request: Request, session: D1DatabaseSession) {
             whereClause = `WHERE ${conditions.join(' AND ')}`;
         }
         //分页
-        const offset = (Number(page) - 1) * Number(size);
-        // C. Session read query.
+        const offset = (page - 1) * size;
+        
         return await Retries.tryWhile(async () => {
+            const totalResult = await session.prepare(`SELECT COUNT(*) as total FROM t_user ${whereClause}`).first<{ total: number }>();
+            const total = totalResult?.total || 0;
+    
+            if (total === 0) {
+                return createJsonResponse({
+                    results: [],
+                    total: total,
+                    page: page,
+                    size: size,
+                    // servedByRegion: "",
+                    // servedByPrimary: "",
+                    // sessionBookmark: session.getBookmark(),
+                });
+            }
             const resp = await session
                 .prepare(`select * from t_user ${whereClause} order by id limit ${size} offset ${offset}`).all();
-            return createJsonResponse(buildResponse(session, resp, tsStart));
+            return createJsonResponse({
+                results: resp.results,
+                total: total,
+                page: page,
+                size: size,
+                // servedByRegion: resp.meta.served_by_region ?? "",
+                // servedByPrimary: resp.meta.served_by_primary ?? "",
+                // sessionBookmark: session.getBookmark(),
+            });
         }, shouldRetry);
     } else if (request.method === "POST" && pathname === "/api/user") {
         const requestData = await request.json<User>();
-        // Here you would typically insert the user data into the database
-        // For now, just returning the received data as an example
         return createJsonResponse(requestData);
     }
     return createJsonResponse(null, 404, "Not found");
 }
 
-function buildResponse(
-    session: D1DatabaseSession,
-    res: D1Result,
-    tsStart: number,
-) {
-    return {
-        d1Latency: Date.now() - tsStart,
-
-        results: res.results,
-        servedByRegion: res.meta.served_by_region ?? "",
-        servedByPrimary: res.meta.served_by_primary ?? "",
-
-        // Add the session bookmark inside the response body too.
-        sessionBookmark: session.getBookmark(),
-    };
-}
 
 function shouldRetry(err: unknown, nextAttempt: number) {
     const errMsg = String(err);
