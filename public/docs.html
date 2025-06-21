@@ -754,7 +754,8 @@
                 content.classList.remove('active');
             });
             
-            const targetContent = tabContainer.querySelector(`[data-tab="${tabName}"]`);
+            // Find the target content by matching the data-tab attribute
+            const targetContent = tabContainer.querySelector(`.tab-content[data-tab="${tabName}"]`);
             
             if (targetContent) {
                 targetContent.classList.add('active');
