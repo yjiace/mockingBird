@@ -5,80 +5,243 @@
       "path": "/api/user",
       "method": "GET",
       "summary": "获取用户列表",
-      "description": "获取系统中所有用户的列表信息，支持分页和筛选。支持 HTTP 和 SSE 两种协议。",
+      "description": "获取系统中所有用户的列表信息，支持分页和筛选。",
       "parameters": {
         "query": [
           { "name": "page", "type": "integer", "required": false, "description": "页码，默认为1" },
-          { "name": "size", "type": "integer", "required": false, "description": "每页数量，默认为10" },
-          { "name": "name", "type": "string", "required": false, "description": "按姓名筛选" },
-          { "name": "email", "type": "string", "required": false, "description": "按邮箱筛选" },
-          { "name": "mobile", "type": "string", "required": false, "description": "按手机号筛选" }
-        ],
-        "headers": [
-          { "name": "Accept", "type": "string", "required": false, "description": "application/json 或 text/event-stream" }
+          { "name": "size", "type": "integer", "required": false, "description": "每页数量，默认为10" }
         ]
       },
       "responses": {
         "200": {
           "description": "成功返回用户列表",
-          "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"results\": [\n      {\n        \"id\": 1,\n        \"name\": \"张三\",\n        \"age\": 25,\n        \"email\": \"zhangsan@example.com\",\n        \"mobile\": \"13800138000\",\n        \"balance\": 1000.50,\n        \"is_active\": 1,\n        \"address\": {\n          \"id\": 1,\n          \"province\": \"北京市\",\n          \"city\": \"北京市\",\n          \"district\": \"朝阳区\",\n          \"street\": \"三里屯街道\",\n          \"user_id\": \"1\"\n        }\n      }\n    ],\n    \"total\": 100,\n    \"page\": 1,\n    \"size\": 10\n  }\n}"
+          "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"results\": [],\n    \"total\": 100,\n    \"page\": 1,\n    \"size\": 10\n  }\n}"
         }
       },
       "codeSamples": {
-        "javascript": "// HTTP 请求\nfetch('/api/user?page=1&size=10')\n  .then(response => response.json())\n  .then(data => console.log(data));\n\n// SSE 请求\nconst eventSource = new EventSource('/api/user');\neventSource.onmessage = function(event) {\n  const userData = JSON.parse(event.data);\n  console.log('收到用户数据:', userData);\n};",
-        "java": "// HTTP 请求 (OkHttp)\nimport okhttp3.*;\nimport com.google.gson.Gson;\n\nOkHttpClient client = new OkHttpClient();\nRequest request = new Request.Builder()\n    .url(\"https://yourdomain.com/api/user?page=1&size=10\")\n    .addHeader(\"Accept\", \"application/json\")\n    .build();\n\nResponse response = client.newCall(request).execute();\nString jsonData = response.body().string();\nSystem.out.println(jsonData);\n\n// HTTP 请求 (HttpRequest - Java 11+)\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://yourdomain.com/api/user?page=1&size=10\"))\n    .header(\"Accept\", \"application/json\")\n    .GET()\n    .build();\n\nHttpResponse<String> response = HttpClient.newHttpClient()\n    .send(request, HttpResponse.BodyHandlers.ofString());\nSystem.out.println(response.body());\n\n// SSE 请求 (Java 11+)\nHttpRequest sseRequest = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://yourdomain.com/api/user\"))\n    .header(\"Accept\", \"text/event-stream\")\n    .GET()\n    .build();\n\nHttpClient.newHttpClient()\n    .send(sseRequest, HttpResponse.BodyHandlers.ofLines())\n    .body()\n    .forEach(line -> {\n        if (line.startsWith(\"data: \")) {\n            System.out.println(line.substring(6));\n        }\n    });",
-        "go": "package main\n\nimport (\n    \"fmt\"\n    \"io\"\n    \"net/http\"\n    \"bufio\"\n)\n\n// HTTP 请求\nfunc httpRequest() {\n    resp, err := http.Get(\"https://yourdomain.com/api/user?page=1&size=10\")\n    if err != nil {\n        panic(err)\n    }\n    defer resp.Body.Close()\n    \n    body, err := io.ReadAll(resp.Body)\n    if err != nil {\n        panic(err)\n    }\n    fmt.Println(string(body))\n}\n\n// SSE 请求\nfunc sseRequest() {\n    req, err := http.NewRequest(\"GET\", \"https://yourdomain.com/api/user\", nil)\n    if err != nil {\n        panic(err)\n    }\n    req.Header.Set(\"Accept\", \"text/event-stream\")\n    \n    client := &http.Client{}\n    resp, err := client.Do(req)\n    if err != nil {\n        panic(err)\n    }\n    defer resp.Body.Close()\n    \n    reader := bufio.NewReader(resp.Body)\n    for {\n        line, err := reader.ReadString('\\n')\n        if err != nil {\n            break\n        }\n        if len(line) > 6 && line[:6] == \"data: \" {\n            fmt.Println(line[6:])\n        }\n    }\n}",
-        "php": "<?php\n\n// HTTP 请求 (cURL)\n$ch = curl_init();\ncurl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user?page=1&size=10');\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, [\n    'Accept: application/json'\n]);\n\n$response = curl_exec($ch);\ncurl_close($ch);\n\necho $response;\n\n// HTTP 请求 (file_get_contents)\n$context = stream_context_create([\n    'http' => [\n        'header' => 'Accept: application/json'\n    ]\n]);\n\n$response = file_get_contents('https://yourdomain.com/api/user?page=1&size=10', false, $context);\necho $response;\n\n// SSE 请求\n$ch = curl_init();\ncurl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user');\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, [\n    'Accept: text/event-stream'\n]);\ncurl_setopt($ch, CURLOPT_WRITEFUNCTION, function($ch, $data) {\n    $lines = explode(\"\\n\", $data);\n    foreach ($lines as $line) {\n        if (strpos($line, 'data: ') === 0) {\n            echo substr($line, 6) . \"\\n\";\n        }\n    }\n    return strlen($data);\n});\n\ncurl_exec($ch);\ncurl_close($ch);",
-        "python": "import requests\n\n# HTTP 请求\nresponse = requests.get('https://yourdomain.com/api/user', {\n    'page': 1,\n    'size': 10\n})\nprint(response.json())\n\n# SSE 请求\nresponse = requests.get('https://yourdomain.com/api/user', \n                       headers={'Accept': 'text/event-stream'}, \n                       stream=True)\nfor line in response.iter_lines():\n    if line.startswith(b'data: '):\n        print(line[6:])",
-        "curl": "# HTTP 请求\ncurl -X GET \"https://yourdomain.com/api/user?page=1&size=10\" \\\n  -H \"Accept: application/json\"\n\n# SSE 请求\ncurl -X GET \"https://yourdomain.com/api/user\" \\\n  -H \"Accept: text/event-stream\" \\\n  -N"
+        "javascript": "// HTTP 请求\nfetch('/api/user?page=1&size=10')\n  .then(response => response.json())\n  .then(data => console.log(data));",
+        "java": "// HTTP 请求 (OkHttp)\nimport okhttp3.*;\n\nOkHttpClient client = new OkHttpClient();\nRequest request = new Request.Builder()\n    .url(\"https://yourdomain.com/api/user?page=1&size=10\")\n    .addHeader(\"Accept\", \"application/json\")\n    .build();\n\nResponse response = client.newCall(request).execute();\nString jsonData = response.body().string();\nSystem.out.println(jsonData);",
+        "go": "package main\n\nimport (\n    \"fmt\"\n    \"io\"\n    \"net/http\"\n)\n\nfunc main() {\n    resp, err := http.Get(\"https://yourdomain.com/api/user?page=1&size=10\")\n    if err != nil {\n        panic(err)\n    }\n    defer resp.Body.Close()\n    \n    body, err := io.ReadAll(resp.Body)\n    if err != nil {\n        panic(err)\n    }\n    fmt.Println(string(body))\n}",
+        "php": "<?php\n\n$ch = curl_init();\ncurl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user?page=1&size=10');\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, [\n    'Accept: application/json'\n]);\n\n$response = curl_exec($ch);\ncurl_close($ch);\n\necho $response;",
+        "python": "import requests\n\nresponse = requests.get('https://yourdomain.com/api/user', {\n    'page': 1,\n    'size': 10\n})\nprint(response.json())",
+        "curl": "curl -X GET \"https://yourdomain.com/api/user?page=1&size=10\" \\\n  -H \"Accept: application/json\""
+      }
+    },
+    {
+      "id": "get-user",
+      "path": "/api/user/{id}",
+      "method": "GET",
+      "summary": "获取用户详情",
+      "description": "根据用户ID获取特定用户的详细信息。",
+      "parameters": {
+        "path": [
+          { "name": "id", "type": "integer", "required": true, "description": "用户ID" }
+        ]
+      },
+      "responses": {
+        "200": {
+          "description": "成功返回用户信息",
+          "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"张三\",\n    \"age\": 25,\n    \"email\": \"zhangsan@example.com\"\n  }\n}"
+        },
+        "404": {
+          "description": "用户不存在",
+          "example": "{\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}"
+        }
+      },
+      "codeSamples": {
+        "javascript": "fetch('/api/user/123')\n  .then(response => response.json())\n  .then(data => console.log(data));",
+        "java": "// HTTP 请求 (OkHttp)\nimport okhttp3.*;\n\nOkHttpClient client = new OkHttpClient();\nRequest request = new Request.Builder()\n    .url(\"https://yourdomain.com/api/user/123\")\n    .addHeader(\"Accept\", \"application/json\")\n    .build();\n\nResponse response = client.newCall(request).execute();\nString jsonData = response.body().string();\nSystem.out.println(jsonData);",
+        "go": "package main\n\nimport (\n    \"fmt\"\n    \"io\"\n    \"net/http\"\n)\n\nfunc main() {\n    resp, err := http.Get(\"https://yourdomain.com/api/user/123\")\n    if err != nil {\n        panic(err)\n    }\n    defer resp.Body.Close()\n    \n    body, err := io.ReadAll(resp.Body)\n    if err != nil {\n        panic(err)\n    }\n    fmt.Println(string(body))\n}",
+        "php": "<?php\n\n$ch = curl_init();\ncurl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user/123');\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, [\n    'Accept: application/json'\n]);\n\n$response = curl_exec($ch);\ncurl_close($ch);\n\necho $response;",
+        "python": "import requests\n\nresponse = requests.get('https://yourdomain.com/api/user/123')\nprint(response.json())",
+        "curl": "curl -X GET \"https://yourdomain.com/api/user/123\" \\\n  -H \"Accept: application/json\""
+      }
+    },
+    {
+      "id": "create-user",
+      "path": "/api/user",
+      "method": "POST",
+      "summary": "创建新用户",
+      "description": "在系统中创建一个新的用户账户。",
+      "parameters": {
+        "body": [
+          { "name": "name", "type": "string", "required": true, "description": "用户姓名" },
+          { "name": "age", "type": "integer", "required": false, "description": "用户年龄" },
+          { "name": "email", "type": "string", "required": false, "description": "用户邮箱" }
+        ]
+      },
+      "responses": {
+        "200": {
+          "description": "用户创建成功",
+          "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"id\": 1703123456789,\n    \"name\": \"李四\",\n    \"age\": 28,\n    \"email\": \"lisi@example.com\"\n  }\n}"
+        }
+      },
+      "codeSamples": {
+        "javascript": "fetch('/api/user', {\n  method: 'POST',\n  headers: {\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({\n    name: '李四',\n    age: 28,\n    email: 'lisi@example.com'\n  })\n})\n.then(response => response.json())\n.then(data => console.log(data));",
+        "java": "// HTTP 请求 (OkHttp)\nimport okhttp3.*;\nimport com.google.gson.Gson;\n\nOkHttpClient client = new OkHttpClient();\nString jsonBody = new Gson().toJson(Map.of(\n    \"name\", \"李四\",\n    \"age\", 28,\n    \"email\", \"lisi@example.com\"\n));\n\nRequestBody body = RequestBody.create(jsonBody, MediaType.parse(\"application/json\"));\nRequest request = new Request.Builder()\n    .url(\"https://yourdomain.com/api/user\")\n    .post(body)\n    .addHeader(\"Content-Type\", \"application/json\")\n    .build();\n\nResponse response = client.newCall(request).execute();\nString jsonData = response.body().string();\nSystem.out.println(jsonData);",
+        "go": "package main\n\nimport (\n    \"bytes\"\n    \"encoding/json\"\n    \"fmt\"\n    \"io\"\n    \"net/http\"\n)\n\ntype User struct {\n    Name  string `json:\"name\"`\n    Age   int    `json:\"age\"`\n    Email string `json:\"email\"`\n}\n\nfunc main() {\n    user := User{\n        Name:  \"李四\",\n        Age:   28,\n        Email: \"lisi@example.com\",\n    }\n    \n    jsonData, _ := json.Marshal(user)\n    \n    resp, err := http.Post(\"https://yourdomain.com/api/user\", \n                          \"application/json\", \n                          bytes.NewBuffer(jsonData))\n    if err != nil {\n        panic(err)\n    }\n    defer resp.Body.Close()\n    \n    body, err := io.ReadAll(resp.Body)\n    if err != nil {\n        panic(err)\n    }\n    fmt.Println(string(body))\n}",
+        "php": "<?php\n\n$data = [\n    'name' => '李四',\n    'age' => 28,\n    'email' => 'lisi@example.com'\n];\n\n$ch = curl_init();\ncurl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user');\ncurl_setopt($ch, CURLOPT_POST, true);\ncurl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, [\n    'Content-Type: application/json'\n]);\n\n$response = curl_exec($ch);\ncurl_close($ch);\n\necho $response;",
+        "python": "import requests\n\ndata = {\n    'name': '李四',\n    'age': 28,\n    'email': 'lisi@example.com'\n}\n\nresponse = requests.post('https://yourdomain.com/api/user', json=data)\nprint(response.json())",
+        "curl": "curl -X POST \"https://yourdomain.com/api/user\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"李四\",\n    \"age\": 28,\n    \"email\": \"lisi@example.com\"\n  }'"
+      }
+    },
+    {
+      "id": "update-user",
+      "path": "/api/user/{id}",
+      "method": "PUT",
+      "summary": "更新用户信息",
+      "description": "完整更新指定用户的信息。",
+      "parameters": {
+        "path": [
+          { "name": "id", "type": "integer", "required": true, "description": "用户ID" }
+        ],
+        "body": [
+          { "name": "name", "type": "string", "required": false, "description": "用户姓名" },
+          { "name": "age", "type": "integer", "required": false, "description": "用户年龄" },
+          { "name": "email", "type": "string", "required": false, "description": "用户邮箱" }
+        ]
+      },
+      "responses": {
+        "200": {
+          "description": "用户更新成功",
+          "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"id\": 123,\n    \"name\": \"李四\",\n    \"age\": 29,\n    \"email\": \"lisi_new@example.com\"\n  }\n}"
+        },
+        "404": {
+          "description": "用户不存在",
+          "example": "{\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}"
+        }
+      },
+      "codeSamples": {
+        "javascript": "fetch('/api/user/123', {\n  method: 'PUT',\n  headers: {\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({\n    name: '李四',\n    age: 29,\n    email: 'lisi_new@example.com'\n  })\n})\n.then(response => response.json())\n.then(data => console.log(data));",
+        "java": "// HTTP 请求 (OkHttp)\nimport okhttp3.*;\nimport com.google.gson.Gson;\n\nOkHttpClient client = new OkHttpClient();\nString jsonBody = new Gson().toJson(Map.of(\n    \"name\", \"李四\",\n    \"age\", 29,\n    \"email\", \"lisi_new@example.com\"\n));\n\nRequestBody body = RequestBody.create(jsonBody, MediaType.parse(\"application/json\"));\nRequest request = new Request.Builder()\n    .url(\"https://yourdomain.com/api/user/123\")\n    .put(body)\n    .addHeader(\"Content-Type\", \"application/json\")\n    .build();\n\nResponse response = client.newCall(request).execute();\nString jsonData = response.body().string();\nSystem.out.println(jsonData);",
+        "go": "package main\n\nimport (\n    \"bytes\"\n    \"encoding/json\"\n    \"fmt\"\n    \"io\"\n    \"net/http\"\n)\n\ntype UserUpdate struct {\n    Name  string `json:\"name\"`\n    Age   int    `json:\"age\"`\n    Email string `json:\"email\"`\n}\n\nfunc main() {\n    user := UserUpdate{\n        Name:  \"李四\",\n        Age:   29,\n        Email: \"lisi_new@example.com\",\n    }\n    \n    jsonData, _ := json.Marshal(user)\n    \n    req, err := http.NewRequest(\"PUT\", \"https://yourdomain.com/api/user/123\", bytes.NewBuffer(jsonData))\n    if err != nil {\n        panic(err)\n    }\n    req.Header.Set(\"Content-Type\", \"application/json\")\n    \n    client := &http.Client{}\n    resp, err := client.Do(req)\n    if err != nil {\n        panic(err)\n    }\n    defer resp.Body.Close()\n    \n    body, err := io.ReadAll(resp.Body)\n    if err != nil {\n        panic(err)\n    }\n    fmt.Println(string(body))\n}",
+        "php": "<?php\n\n$data = [\n    'name' => '李四',\n    'age' => 29,\n    'email' => 'lisi_new@example.com'\n];\n\n$ch = curl_init();\ncurl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user/123');\ncurl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');\ncurl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, [\n    'Content-Type: application/json'\n]);\n\n$response = curl_exec($ch);\ncurl_close($ch);\n\necho $response;",
+        "python": "import requests\n\ndata = {\n    'name': '李四',\n    'age': 29,\n    'email': 'lisi_new@example.com'\n}\n\nresponse = requests.put('https://yourdomain.com/api/user/123', json=data)\nprint(response.json())",
+        "curl": "curl -X PUT \"https://yourdomain.com/api/user/123\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"李四\",\n    \"age\": 29,\n    \"email\": \"lisi_new@example.com\"\n  }'"
+      }
+    },
+    {
+      "id": "patch-user",
+      "path": "/api/user/{id}",
+      "method": "PATCH",
+      "summary": "部分更新用户",
+      "description": "部分更新指定用户的信息。",
+      "parameters": {
+        "path": [
+          { "name": "id", "type": "integer", "required": true, "description": "用户ID" }
+        ],
+        "body": [
+          { "name": "name", "type": "string", "required": false, "description": "用户姓名" },
+          { "name": "age", "type": "integer", "required": false, "description": "用户年龄" },
+          { "name": "email", "type": "string", "required": false, "description": "用户邮箱" }
+        ]
+      },
+      "responses": {
+        "200": {
+          "description": "用户更新成功",
+          "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"id\": 123,\n    \"name\": \"李四\",\n    \"age\": 25,\n    \"email\": \"lisi@example.com\"\n  }\n}"
+        },
+        "404": {
+          "description": "用户不存在",
+          "example": "{\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}"
+        }
+      },
+      "codeSamples": {
+        "javascript": "fetch('/api/user/123', {\n  method: 'PATCH',\n  headers: {\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({\n    balance: 1200.00\n  })\n})\n.then(response => response.json())\n.then(data => console.log(data));",
+        "java": "// HTTP 请求 (OkHttp)\nimport okhttp3.*;\nimport com.google.gson.Gson;\n\nOkHttpClient client = new OkHttpClient();\nString jsonBody = new Gson().toJson(Map.of(\n    \"balance\", 1200.00\n));\n\nRequestBody body = RequestBody.create(jsonBody, MediaType.parse(\"application/json\"));\nRequest request = new Request.Builder()\n    .url(\"https://yourdomain.com/api/user/123\")\n    .patch(body)\n    .addHeader(\"Content-Type\", \"application/json\")\n    .build();\n\nResponse response = client.newCall(request).execute();\nString jsonData = response.body().string();\nSystem.out.println(jsonData);",
+        "go": "package main\n\nimport (\n    \"bytes\"\n    \"encoding/json\"\n    \"fmt\"\n    \"io\"\n    \"net/http\"\n)\n\ntype UserPatch struct {\n    Balance float64 `json:\"balance\"`\n}\n\nfunc main() {\n    user := UserPatch{\n        Balance: 1200.00,\n    }\n    \n    jsonData, _ := json.Marshal(user)\n    \n    req, err := http.NewRequest(\"PATCH\", \"https://yourdomain.com/api/user/123\", bytes.NewBuffer(jsonData))\n    if err != nil {\n        panic(err)\n    }\n    req.Header.Set(\"Content-Type\", \"application/json\")\n    \n    client := &http.Client{}\n    resp, err := client.Do(req)\n    if err != nil {\n        panic(err)\n    }\n    defer resp.Body.Close()\n    \n    body, err := io.ReadAll(resp.Body)\n    if err != nil {\n        panic(err)\n    }\n    fmt.Println(string(body))\n}",
+        "php": "<?php\n\n$data = [\n    'balance' => 1200.00\n];\n\n$ch = curl_init();\ncurl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user/123');\ncurl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');\ncurl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, [\n    'Content-Type: application/json'\n]);\n\n$response = curl_exec($ch);\ncurl_close($ch);\n\necho $response;",
+        "python": "import requests\n\ndata = {'balance': 1200.00}\n\nresponse = requests.patch('https://yourdomain.com/api/user/123', json=data)\nprint(response.json())",
+        "curl": "curl -X PATCH \"https://yourdomain.com/api/user/123\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"balance\": 1200.00}'"
+      }
+    },
+    {
+      "id": "delete-user",
+      "path": "/api/user/{id}",
+      "method": "DELETE",
+      "summary": "删除用户",
+      "description": "删除指定的用户账户。",
+      "parameters": {
+        "path": [
+          { "name": "id", "type": "integer", "required": true, "description": "用户ID" }
+        ]
+      },
+      "responses": {
+        "200": {
+          "description": "用户删除成功",
+          "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"message\": \"User 123 deleted successfully\"\n  }\n}"
+        },
+        "404": {
+          "description": "用户不存在",
+          "example": "{\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}"
+        }
+      },
+      "codeSamples": {
+        "javascript": "fetch('/api/user/123', {\n  method: 'DELETE'\n})\n.then(response => response.json())\n.then(data => console.log(data));",
+        "java": "// HTTP 请求 (OkHttp)\nimport okhttp3.*;\n\nOkHttpClient client = new OkHttpClient();\nRequest request = new Request.Builder()\n    .url(\"https://yourdomain.com/api/user/123\")\n    .delete()\n    .build();\n\nResponse response = client.newCall(request).execute();\nString jsonData = response.body().string();\nSystem.out.println(jsonData);",
+        "go": "package main\n\nimport (\n    \"fmt\"\n    \"io\"\n    \"net/http\"\n)\n\nfunc main() {\n    req, err := http.NewRequest(\"DELETE\", \"https://yourdomain.com/api/user/123\", nil)\n    if err != nil {\n        panic(err)\n    }\n    \n    client := &http.Client{}\n    resp, err := client.Do(req)\n    if err != nil {\n        panic(err)\n    }\n    defer resp.Body.Close()\n    \n    body, err := io.ReadAll(resp.Body)\n    if err != nil {\n        panic(err)\n    }\n    fmt.Println(string(body))\n}",
+        "php": "<?php\n\n$ch = curl_init();\ncurl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user/123');\ncurl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\n\n$response = curl_exec($ch);\ncurl_close($ch);\n\necho $response;",
+        "python": "import requests\n\nresponse = requests.delete('https://yourdomain.com/api/user/123')\nprint(response.json())",
+        "curl": "curl -X DELETE \"https://yourdomain.com/api/user/123\""
+      }
+    },
+    {
+      "id": "upload-file",
+      "path": "/api/upload",
+      "method": "POST",
+      "summary": "文件上传",
+      "description": "上传文件到服务器，支持多种文件格式。",
+      "parameters": {
+        "body": [
+          { "name": "file", "type": "file", "required": true, "description": "要上传的文件" }
+        ]
+      },
+      "responses": {
+        "200": {
+          "description": "文件上传成功",
+          "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"name\": \"document.pdf\",\n    \"type\": \"application/pdf\",\n    \"size\": 1024000,\n    \"md5\": \"5d41402abc4b2a76b9719d911017c592\"\n  }\n}"
+        }
+      },
+      "codeSamples": {
+        "javascript": "const formData = new FormData();\nformData.append('file', fileInput.files[0]);\n\nfetch('/api/upload', {\n  method: 'POST',\n  body: formData\n})\n.then(response => response.json())\n.then(data => console.log(data));",
+        "java": "// HTTP 请求 (OkHttp)\nimport okhttp3.*;\nimport java.io.File;\n\nOkHttpClient client = new OkHttpClient();\nFile file = new File(\"document.pdf\");\n\nRequestBody requestBody = new MultipartBody.Builder()\n    .setType(MultipartBody.FORM)\n    .addFormDataPart(\"file\", file.getName(),\n        RequestBody.create(file, MediaType.parse(\"application/pdf\")))\n    .build();\n\nRequest request = new Request.Builder()\n    .url(\"https://yourdomain.com/api/upload\")\n    .post(requestBody)\n    .build();\n\nResponse response = client.newCall(request).execute();\nString jsonData = response.body().string();\nSystem.out.println(jsonData);",
+        "go": "package main\n\nimport (\n    \"bytes\"\n    \"fmt\"\n    \"io\"\n    \"mime/multipart\"\n    \"net/http\"\n    \"os\"\n)\n\nfunc main() {\n    file, err := os.Open(\"document.pdf\")\n    if err != nil {\n        panic(err)\n    }\n    defer file.Close()\n    \n    var buf bytes.Buffer\n    writer := multipart.NewWriter(&buf)\n    \n    part, err := writer.CreateFormFile(\"file\", \"document.pdf\")\n    if err != nil {\n        panic(err)\n    }\n    \n    _, err = io.Copy(part, file)\n    if err != nil {\n        panic(err)\n    }\n    writer.Close()\n    \n    resp, err := http.Post(\"https://yourdomain.com/api/upload\", \n                          writer.FormDataContentType(), \n                          &buf)\n    if err != nil {\n        panic(err)\n    }\n    defer resp.Body.Close()\n    \n    body, err := io.ReadAll(resp.Body)\n    if err != nil {\n        panic(err)\n    }\n    fmt.Println(string(body))\n}",
+        "php": "<?php\n\n$ch = curl_init();\ncurl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/upload');\ncurl_setopt($ch, CURLOPT_POST, true);\ncurl_setopt($ch, CURLOPT_POSTFIELDS, [\n    'file' => new CURLFile('document.pdf')\n]);\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\n\n$response = curl_exec($ch);\ncurl_close($ch);\n\necho $response;",
+        "python": "import requests\n\nfiles = {'file': open('document.pdf', 'rb')}\n\nresponse = requests.post('https://yourdomain.com/api/upload', files=files)\nprint(response.json())",
+        "curl": "curl -X POST \"https://yourdomain.com/api/upload\" \\\n  -F \"file=@document.pdf\""
+      }
+    },
+    {
+      "id": "download-file",
+      "path": "/api/download/{id}",
+      "method": "GET",
+      "summary": "文件下载",
+      "description": "根据文件ID下载文件。",
+      "parameters": {
+        "path": [
+          { "name": "id", "type": "string", "required": true, "description": "文件ID (1-6)" }
+        ]
+      },
+      "responses": {
+        "200": {
+          "description": "文件下载成功",
+          "example": "二进制文件内容"
+        },
+        "404": {
+          "description": "文件不存在",
+          "example": "{\n  \"code\": 404,\n  \"message\": \"File not found\",\n  \"data\": null\n}"
+        }
+      },
+      "codeSamples": {
+        "javascript": "fetch('/api/download/1')\n  .then(response => response.blob())\n  .then(blob => {\n    const url = window.URL.createObjectURL(blob);\n    const a = document.createElement('a');\n    a.href = url;\n    a.download = 'downloaded_file';\n    a.click();\n  });",
+        "java": "// HTTP 请求 (OkHttp)\nimport okhttp3.*;\nimport java.io.FileOutputStream;\nimport java.io.IOException;\n\nOkHttpClient client = new OkHttpClient();\nRequest request = new Request.Builder()\n    .url(\"https://yourdomain.com/api/download/1\")\n    .build();\n\nResponse response = client.newCall(request).execute();\nif (response.isSuccessful()) {\n    try (FileOutputStream fos = new FileOutputStream(\"downloaded_file\")) {\n        fos.write(response.body().bytes());\n    }\n    System.out.println(\"文件下载成功\");\n}",
+        "go": "package main\n\nimport (\n    \"fmt\"\n    \"io\"\n    \"net/http\"\n    \"os\"\n)\n\nfunc main() {\n    resp, err := http.Get(\"https://yourdomain.com/api/download/1\")\n    if err != nil {\n        panic(err)\n    }\n    defer resp.Body.Close()\n    \n    file, err := os.Create(\"downloaded_file\")\n    if err != nil {\n        panic(err)\n    }\n    defer file.Close()\n    \n    _, err = io.Copy(file, resp.Body)\n    if err != nil {\n        panic(err)\n    }\n    \n    fmt.Println(\"文件下载成功\")\n}",
+        "php": "<?php\n\n$ch = curl_init();\ncurl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/download/1');\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\n\n$response = curl_exec($ch);\ncurl_close($ch);\n\nfile_put_contents('downloaded_file', $response);\necho \"文件下载成功\";",
+        "python": "import requests\n\nresponse = requests.get('https://yourdomain.com/api/download/1')\nwith open('downloaded_file', 'wb') as f:\n    f.write(response.content)\nprint(\"文件下载成功\")",
+        "curl": "curl -X GET \"https://yourdomain.com/api/download/1\" \\\n  -o downloaded_file"
       }
     }
   ],
-  "availableFiles": {
-    "1": "picture_1.png",
-    "2": "picture_2.png",
-    "3": "picture_3.png",
-    "4": "picture_4.png",
-    "5": "video_1.mp4",
-    "6": "video_2.mp4"
-  },
-  "protocolInfo": {
-    "http": {
-      "name": "HTTP 协议",
-      "description": "标准的 RESTful API 调用，返回 JSON 格式数据。",
-      "usage": "设置 Accept: application/json 或不设置 Accept 头"
-    },
-    "sse": {
-      "name": "SSE (Server-Sent Events) 协议",
-      "description": "实时数据流推送，适用于需要实时更新的场景。",
-      "usage": "设置 Accept: text/event-stream"
-    }
-  },
-  "tableStructures": {
-    "t_user": {
-      "name": "用户表",
-      "fields": [
-        { "name": "id", "type": "INTEGER", "description": "用户ID，主键" },
-        { "name": "name", "type": "TEXT", "description": "用户姓名" },
-        { "name": "age", "type": "INTEGER", "description": "用户年龄" },
-        { "name": "email", "type": "TEXT", "description": "用户邮箱，唯一" },
-        { "name": "mobile", "type": "TEXT", "description": "手机号码" },
-        { "name": "balance", "type": "REAL", "description": "账户余额" },
-        { "name": "is_active", "type": "INTEGER", "description": "是否激活 (0或1)" }
-      ]
-    },
-    "t_address": {
-      "name": "地址表",
-      "fields": [
-        { "name": "id", "type": "INTEGER", "description": "地址ID，主键" },
-        { "name": "province", "type": "TEXT", "description": "省份" },
-        { "name": "city", "type": "TEXT", "description": "城市" },
-        { "name": "district", "type": "TEXT", "description": "区县" },
-        { "name": "street", "type": "TEXT", "description": "街道" },
-        { "name": "user_id", "type": "INTEGER", "description": "关联用户ID，外键" }
-      ]
-    }
-  },
   "methodColors": {
     "GET": "#22c55e",
     "POST": "#3b82f6",

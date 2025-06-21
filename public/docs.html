@@ -506,7 +506,7 @@
         // 从JSON配置文件加载数据
         async function loadApiConfig() {
             try {
-                const response = await fetch('api-config-complete.json');
+                const response = await fetch('api-config.json');
                 const config = await response.json();
                 
                 apiDefinitions = config.apiDefinitions;
