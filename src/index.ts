@@ -1,8 +1,10 @@
 import { Hono } from 'hono';
+import { serveStatic } from 'hono/cloudflare-workers';
 import { Retries } from "durable-utils";
 
 export type Env = {
     DB01: D1Database;
+    __STATIC_CONTENT: KVNamespace;
 };
 
 type CustomContext = {
@@ -95,6 +97,17 @@ app.onError((err, c) => {
         { error: String(err), errorDetails: err },
         500
     );
+});
+
+// 静态文件服务 - 使用中间件处理静态文件
+app.use('*', async (c, next) => {
+    // 如果是API路由，跳过静态文件处理
+    if (c.req.path.startsWith('/api/')) {
+        return next();
+    }
+    
+    // 处理静态文件
+    return serveStatic({ manifest: c.env.__STATIC_CONTENT })(c, next);
 });
 
 // 中间件：数据库表初始化

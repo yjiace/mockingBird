@@ -1,35 +1,31 @@
-class FooterComponent extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-        this.shadowRoot.innerHTML = `
-            <style>
-                :host {
-                    display: block;
-                }
-                .footer {
-                    text-align: center;
-                    color: #666;
-                    padding-bottom: 20px;
-                    font-size: 14px;
-                    line-height: 1.6;
-                }
-                .footer p {
-                    margin: 5px 0;
-                }
-            </style>
-            <div class="footer">
-                <p>© 冀ICP备17000836号-2 | <img src="img/beian.png" alt="冀公网安备 13018102000160号" style="vertical-align:middle;"> 冀公网安备 13018102000160号</p>
-                <p>提供稳定可靠的模拟API服务。</p>
-            </div>
-        `;
-    }
+// Footer Component
+function createFooter() {
+    return `
+    <footer class="footer">
+        <p>© 冀ICP备17000836号-2 | <img src="img/beian.png" alt="冀公网安备 13018102000160号" style="vertical-align:middle;"> 冀公网安备 13018102000160号</p>
+        <p>提供稳定可靠的模拟API服务。</p>
+    </footer>
+    `;
 }
 
-customElements.define('footer-component', FooterComponent);
+// Footer CSS Styles
+const footerStyles = `
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 2rem;
+    color: hsl(var(--muted-foreground));
+    border-top: 1px solid hsl(var(--border));
+    margin-top: auto;
+}
 
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('#footer-component').forEach(el => {
-        el.replaceWith(new FooterComponent());
-    });
-});
+.footer p {
+    margin: 0;
+    font-size: 0.875rem;
+}
+`;
+
+// Export for use in other files
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { createFooter, footerStyles };
+}

@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>在线测试 | Mock Flow API - 实时API接口测试工具</title>
+    <meta name="title" content="在线测试 | Mock Flow API - 实时API接口测试工具">
+    <meta name="description" content="Mock Flow API 在线测试工具 - 支持HTTP、SSE、WebSocket等多种协议的实时API接口测试。提供完整的请求配置、参数设置和响应结果展示。">
+    <meta name="keywords" content="API测试, 在线测试, Mock API, 接口测试, HTTP测试, SSE测试, WebSocket测试, API调试, 接口调试, 实时测试">
+    <meta name="author" content="Mock Flow API">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="zh-CN">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://mockflow-api.com/test">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mockflow-api.com/test">
+    <meta property="og:title" content="在线测试 | Mock Flow API">
+    <meta property="og:description" content="Mock Flow API 在线测试工具 - 支持HTTP、SSE、WebSocket等多种协议的实时API接口测试。">
+    <meta property="og:image" content="https://mockflow-api.com/img/logo.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Mock Flow API">
+    <meta property="og:locale" content="zh_CN">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://mockflow-api.com/test">
+    <meta property="twitter:title" content="在线测试 | Mock Flow API">
+    <meta property="twitter:description" content="Mock Flow API 在线测试工具 - 支持HTTP、SSE、WebSocket等多种协议的实时API接口测试。">
+    <meta property="twitter:image" content="https://mockflow-api.com/img/logo.png">
+    
+    <!-- Additional Meta Tags -->
+    <meta name="theme-color" content="#D33A82">
+    <meta name="msapplication-TileColor" content="#D33A82">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon" sizes="32x32"/>
+    <link rel="apple-touch-icon" href="img/logo.png">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Mock Flow API 测试工具",
+        "description": "Mock Flow API 在线测试工具 - 支持HTTP、SSE、WebSocket等多种协议的实时API接口测试。",
+        "url": "https://mockflow-api.com/test",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "CNY"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "Mock Flow API Team"
+        },
+        "featureList": [
+            "HTTP API测试",
+            "SSE实时数据流测试",
+            "WebSocket双向通信测试",
+            "请求参数配置",
+            "响应结果展示",
+            "实时调试工具"
+        ],
+        "screenshot": "https://mockflow-api.com/img/logo.png",
+        "softwareVersion": "1.0.0"
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "在线测试",
+        "description": "Mock Flow API 在线测试工具",
+        "url": "https://mockflow-api.com/test",
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "Mock Flow API",
+            "url": "https://mockflow-api.com/"
+        },
+        "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "首页",
+                    "item": "https://mockflow-api.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "在线测试",
+                    "item": "https://mockflow-api.com/test"
+                }
+            ]
+        }
+    }
+    </script>
+    <style>
+        /* CSS Variables - Dark Theme */
+        :root {
+            --background: 0 0% 7%;
+            --foreground: 0 0% 98%;
+            --card: 0 0% 12%;
+            --card-foreground: 0 0% 98%;
+            --popover: 0 0% 10%;
+            --popover-foreground: 0 0% 98%;
+            --primary: 330 65% 50%;
+            --primary-foreground: 0 0% 98%;
+            --secondary: 195 60% 45%;
+            --secondary-foreground: 0 0% 98%;
+            --muted: 0 0% 15%;
+            --muted-foreground: 0 0% 65%;
+            --accent: 195 65% 50%;
+            --accent-foreground: 0 0% 98%;
+            --destructive: 0 70% 50%;
+            --destructive-foreground: 0 0% 98%;
+            --border: 0 0% 20%;
+            --input: 0 0% 14%;
+            --ring: 330 65% 55%;
+            --radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 24px 24px;
+            mask: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 70%);
+            -webkit-mask: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Main Container */
+        .main-container {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--accent)));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-description {
+            color: hsl(var(--muted-foreground));
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Tester Container */
+        .tester-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            min-height: 600px;
+        }
+
+        .tester-panel {
+            background: hsl(var(--card));
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            border: 1px solid hsl(var(--border));
+        }
+
+        .panel-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: hsl(var(--foreground));
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+            border: none;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: hsl(var(--foreground));
+        }
+
+        .form-select,
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: hsl(var(--input));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            color: hsl(var(--foreground));
+            font-size: 0.875rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-select:focus,
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: hsl(var(--ring));
+            box-shadow: 0 0 0 2px hsla(var(--ring), 0.2);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+
+        .method-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-left: 0.5rem;
+        }
+
+        .method-get { background: hsla(120, 70%, 50%, 0.2); color: hsl(120, 70%, 60%); }
+        .method-post { background: hsla(210, 70%, 50%, 0.2); color: hsl(210, 70%, 60%); }
+        .method-put { background: hsla(45, 70%, 50%, 0.2); color: hsl(45, 70%, 60%); }
+        .method-delete { background: hsla(0, 70%, 50%, 0.2); color: hsl(0, 70%, 60%); }
+
+        /* Protocol Toggle */
+        .protocol-toggle {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .protocol-button {
+            padding: 0.5rem 1rem;
+            background: hsl(var(--muted));
+            border: none;
+            border-radius: var(--radius);
+            color: hsl(var(--muted-foreground));
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .protocol-button:hover {
+            background: hsla(var(--accent), 0.1);
+            color: hsl(var(--foreground));
+        }
+
+        .protocol-button.active {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            border-color: hsl(var(--primary));
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+
+        .btn:hover {
+            background: hsl(var(--primary) / 0.9);
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: hsl(var(--muted));
+            color: hsl(var(--muted-foreground));
+        }
+
+        .btn-secondary:hover {
+            background: hsl(var(--muted) / 0.8);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        /* Response Area */
+        .response-area {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .response-status {
+            font-size: 0.875rem;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .status-success { background: hsla(120, 70%, 50%, 0.2); color: hsl(120, 70%, 60%); }
+        .status-error { background: hsla(0, 70%, 50%, 0.2); color: hsl(0, 70%, 60%); }
+        .status-info { background: hsla(210, 70%, 50%, 0.2); color: hsl(210, 70%, 60%); }
+
+        .response-content {
+            flex: 1;
+            background: hsl(var(--input));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            padding: 1rem;
+            overflow-y: auto;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .response-content pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* SSE and WebSocket Messages */
+        .sse-message,
+        .ws-message {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            background: hsla(var(--accent), 0.1);
+            border-left: 3px solid hsl(var(--accent));
+        }
+
+        .sse-timestamp,
+        .ws-timestamp {
+            font-size: 0.75rem;
+            color: hsl(var(--muted-foreground));
+            margin-bottom: 0.25rem;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid hsl(var(--border));
+            border-top: 2px solid hsl(var(--primary));
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tester-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-container {
+                padding: 1rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header will be loaded here -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <header>
+            <h1 class="page-title">在线测试</h1>
+            <p class="page-description">在线测试 API 接口功能，支持 HTTP 请求、SSE 实时数据流和 WebSocket 双向通信。</p>
+        </header>
+
+        <div class="tester-container">
+            <!-- Request Panel -->
+            <section class="tester-panel" aria-labelledby="request-panel-title">
+                <h2 id="request-panel-title" class="panel-title">请求配置</h2>
+                
+                <form role="form" aria-label="API请求配置表单">
+                    <!-- API Selection -->
+                    <div class="form-group">
+                        <label class="form-label" for="apiSelect">选择 API</label>
+                        <select class="form-select" id="apiSelect" aria-describedby="api-select-help">
+                            <option value="">请选择一个 API</option>
+                        </select>
+                    </div>
+
+                    <!-- Protocol Selection -->
+                    <fieldset class="form-group">
+                        <legend class="form-label">协议类型</legend>
+                        <div class="protocol-toggle" role="radiogroup" aria-label="协议选择">
+                            <button type="button" class="protocol-button active" data-protocol="http" aria-pressed="true">HTTP</button>
+                            <button type="button" class="protocol-button" data-protocol="sse" aria-pressed="false">SSE</button>
+                            <button type="button" class="protocol-button" data-protocol="ws" aria-pressed="false">WebSocket</button>
+                        </div>
+                    </fieldset>
+
+                    <!-- Path Parameters -->
+                    <div class="form-group" id="pathParamsGroup" style="display: none;">
+                        <label class="form-label">路径参数</label>
+                        <div id="pathParams" role="group" aria-label="路径参数配置"></div>
+                    </div>
+
+                    <!-- Query Parameters -->
+                    <div class="form-group" id="queryParamsGroup" style="display: none;">
+                        <label class="form-label">查询参数</label>
+                        <div id="queryParams" role="group" aria-label="查询参数配置"></div>
+                    </div>
+
+                    <!-- Request Headers -->
+                    <div class="form-group" id="headersGroup" style="display: none;">
+                        <label class="form-label">请求头</label>
+                        <div id="headers" role="group" aria-label="请求头配置"></div>
+                    </div>
+
+                    <!-- Request Body -->
+                    <div class="form-group" id="bodyGroup" style="display: none;">
+                        <label class="form-label" for="requestBody">请求体 (JSON)</label>
+                        <textarea class="form-textarea" id="requestBody" placeholder="输入 JSON 格式的请求体" aria-describedby="request-body-help"></textarea>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="btn-group" role="group" aria-label="操作按钮">
+                        <button type="button" class="btn" id="sendBtn" disabled aria-label="发送请求">发送请求</button>
+                        <button type="button" class="btn btn-secondary" id="clearBtn" aria-label="清空所有配置">清空</button>
+                        <button type="button" class="btn btn-secondary" id="stopBtn" style="display: none;" aria-label="停止连接">停止连接</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Response Panel -->
+            <section class="tester-panel" aria-labelledby="response-panel-title">
+                <div class="response-area">
+                    <div class="response-header">
+                        <h2 id="response-panel-title" class="panel-title">响应结果</h2>
+                        <div class="response-status" id="responseStatus" aria-live="polite"></div>
+                    </div>
+                    <div class="response-content" id="responseContent" role="log" aria-label="API响应结果" aria-live="polite">
+                        <pre>等待发送请求...</pre>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded here -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Load Components -->
+    <script src="components/header.js"></script>
+    <script src="components/footer.js"></script>
+    <script>
+        // Load header and footer
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header
+            document.getElementById('header-placeholder').innerHTML = createHeader('test');
+            
+            // Load footer
+            document.getElementById('footer-placeholder').innerHTML = createFooter();
+            
+            // Add header styles
+            const headerStyle = document.createElement('style');
+            headerStyle.textContent = headerStyles;
+            document.head.appendChild(headerStyle);
+            
+            // Add footer styles
+            const footerStyle = document.createElement('style');
+            footerStyle.textContent = footerStyles;
+            document.head.appendChild(footerStyle);
+        });
+
+        // API Definitions
+        const apiDefinitions = [
+            {
+                id: 'get-users',
+                path: '/api/user',
+                method: 'GET',
+                summary: '获取用户列表',
+                description: '获取系统中所有用户的列表信息，支持分页和筛选。支持HTTP和SSE协议。',
+                parameters: {
+                    query: [
+                        { name: 'size', type: 'integer', required: false, description: '每页数量，默认为10' },
+                        { name: 'name', type: 'string', required: false, description: '按姓名筛选' },
+                        { name: 'email', type: 'string', required: false, description: '按邮箱筛选' },
+                        { name: 'mobile', type: 'string', required: false, description: '按手机号筛选' }
+                    ]
+                }
+            },
+            {
+                id: 'create-user',
+                path: '/api/user',
+                method: 'POST',
+                summary: '创建新用户',
+                description: '在系统中创建一个新的用户账户。支持HTTP和SSE协议。',
+                parameters: {
+                    body: [
+                        { name: 'name', type: 'string', required: true, description: '用户姓名' },
+                        { name: 'email', type: 'string', required: true, description: '用户邮箱' },
+                        { name: 'age', type: 'integer', required: false, description: '用户年龄' },
+                        { name: 'mobile', type: 'string', required: false, description: '手机号码' },
+                        { name: 'balance', type: 'number', required: false, description: '账户余额' },
+                        { name: 'is_active', type: 'boolean', required: false, description: '是否激活' }
+                    ]
+                }
+            },
+            {
+                id: 'get-user',
+                path: '/api/user/{id}',
+                method: 'GET',
+                summary: '获取用户详情',
+                description: '根据用户ID获取特定用户的详细信息。支持HTTP和SSE协议。',
+                parameters: {
+                    path: [
+                        { name: 'id', type: 'integer', required: true, description: '用户ID' }
+                    ]
+                }
+            },
+            {
+                id: 'update-user',
+                path: '/api/user/{id}',
+                method: 'PUT',
+                summary: '更新用户信息',
+                description: '更新指定用户的全部信息。支持HTTP和SSE协议。',
+                parameters: {
+                    path: [
+                        { name: 'id', type: 'integer', required: true, description: '用户ID' }
+                    ],
+                    body: [
+                        { name: 'name', type: 'string', required: true, description: '用户姓名' },
+                        { name: 'email', type: 'string', required: true, description: '用户邮箱' },
+                        { name: 'age', type: 'integer', required: false, description: '用户年龄' },
+                        { name: 'mobile', type: 'string', required: false, description: '手机号码' },
+                        { name: 'balance', type: 'number', required: false, description: '账户余额' },
+                        { name: 'is_active', type: 'boolean', required: false, description: '是否激活' }
+                    ]
+                }
+            },
+            {
+                id: 'partial-update-user',
+                path: '/api/user/{id}',
+                method: 'PATCH',
+                summary: '部分更新用户',
+                description: '更新指定用户的部分信息。支持HTTP和SSE协议。',
+                parameters: {
+                    path: [
+                        { name: 'id', type: 'integer', required: true, description: '用户ID' }
+                    ],
+                    body: [
+                        { name: 'name', type: 'string', required: false, description: '用户姓名' },
+                        { name: 'email', type: 'string', required: false, description: '用户邮箱' },
+                        { name: 'age', type: 'integer', required: false, description: '用户年龄' },
+                        { name: 'mobile', type: 'string', required: false, description: '手机号码' },
+                        { name: 'balance', type: 'number', required: false, description: '账户余额' },
+                        { name: 'is_active', type: 'boolean', required: false, description: '是否激活' }
+                    ]
+                }
+            },
+            {
+                id: 'delete-user',
+                path: '/api/user/{id}',
+                method: 'DELETE',
+                summary: '删除用户',
+                description: '删除指定的用户。支持HTTP和SSE协议。',
+                parameters: {
+                    path: [
+                        { name: 'id', type: 'integer', required: true, description: '用户ID' }
+                    ]
+                }
+            }
+        ];
+
+        // Global variables
+        let selectedApi = null;
+        let currentProtocol = 'http';
+        let eventSource = null;
+        let webSocket = null;
+        let isLoading = false;
+
+        // Initialize the tester
+        function initTester() {
+            // Populate API select
+            const apiSelect = document.getElementById('apiSelect');
+            apiDefinitions.forEach(api => {
+                const option = document.createElement('option');
+                option.value = api.id;
+                option.textContent = `${api.method} ${api.path} - ${api.summary}`;
+                apiSelect.appendChild(option);
+            });
+
+            // Add event listeners
+            apiSelect.addEventListener('change', handleApiChange);
+            document.querySelectorAll('.protocol-button').forEach(btn => {
+                btn.addEventListener('click', handleProtocolChange);
+            });
+            document.getElementById('sendBtn').addEventListener('click', handleSend);
+            document.getElementById('clearBtn').addEventListener('click', handleClear);
+            document.getElementById('stopBtn').addEventListener('click', handleStop);
+        }
+
+        function handleApiChange() {
+            const apiId = document.getElementById('apiSelect').value;
+            selectedApi = apiDefinitions.find(api => api.id === apiId);
+            updateUI();
+        }
+
+        function handleProtocolChange(e) {
+            document.querySelectorAll('.protocol-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            e.target.classList.add('active');
+            currentProtocol = e.target.dataset.protocol;
+            updateUI();
+        }
+
+        function updateUI() {
+            const sendBtn = document.getElementById('sendBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            
+            sendBtn.disabled = !selectedApi || isLoading;
+            
+            if (currentProtocol === 'sse' || currentProtocol === 'ws') {
+                stopBtn.style.display = 'block';
+            } else {
+                stopBtn.style.display = 'none';
+            }
+
+            // Show/hide parameter groups
+            if (selectedApi) {
+                showParameterGroup('pathParamsGroup', selectedApi.parameters?.path);
+                showParameterGroup('queryParamsGroup', selectedApi.parameters?.query);
+                showParameterGroup('headersGroup', selectedApi.parameters?.headers);
+                showParameterGroup('bodyGroup', ['POST', 'PUT', 'PATCH'].includes(selectedApi.method));
+            } else {
+                hideAllParameterGroups();
+            }
+        }
+
+        function showParameterGroup(groupId, parameters) {
+            const group = document.getElementById(groupId);
+            if (parameters && parameters.length > 0) {
+                group.style.display = 'block';
+                renderParameters(groupId, parameters);
+            } else {
+                group.style.display = 'none';
+            }
+        }
+
+        function hideAllParameterGroups() {
+            ['pathParamsGroup', 'queryParamsGroup', 'headersGroup', 'bodyGroup'].forEach(id => {
+                document.getElementById(id).style.display = 'none';
+            });
+        }
+
+        function renderParameters(containerId, parameters) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            parameters.forEach(param => {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'form-input';
+                input.placeholder = param.description;
+                input.dataset.param = param.name;
+                input.required = param.required;
+                
+                const label = document.createElement('label');
+                label.className = 'form-label';
+                label.textContent = param.name;
+                
+                const group = document.createElement('div');
+                group.className = 'form-group';
+                group.appendChild(label);
+                group.appendChild(input);
+                
+                container.appendChild(group);
+            });
+        }
+
+        function handleSend() {
+            if (!selectedApi) return;
+            
+            setLoading(true);
+            
+            switch (currentProtocol) {
+                case 'http':
+                    sendHttpRequest();
+                    break;
+                case 'sse':
+                    connectSSE();
+                    break;
+                case 'ws':
+                    connectWebSocket();
+                    break;
+            }
+        }
+
+        function sendHttpRequest() {
+            const url = buildRequestURL();
+            const options = buildRequestOptions();
+            
+            fetch(url, options)
+                .then(response => {
+                    updateResponseStatus(`${response.status} ${response.statusText}`, 
+                        response.ok ? 'success' : 'error');
+                    return response.text();
+                })
+                .then(data => {
+                    updateResponseContent(data);
+                    setLoading(false);
+                })
+                .catch(error => {
+                    updateResponseStatus('Error', 'error');
+                    updateResponseContent(`请求失败: ${error.message}`);
+                    setLoading(false);
+                });
+        }
+
+        function connectSSE() {
+            try {
+                let url = buildRequestURL();
+                url += (url.includes('?') ? '&' : '?') + 'stream=true';
+                
+                eventSource = new EventSource(url);
+                
+                updateResponseStatus('Connecting', 'info');
+                updateResponseContent('');
+                
+                eventSource.onopen = function(event) {
+                    updateResponseStatus('Connected', 'success');
+                    addSSEMessage('SSE 连接已建立');
+                    setLoading(false);
+                };
+                
+                eventSource.onmessage = function(event) {
+                    addSSEMessage(event.data);
+                };
+                
+                eventSource.onerror = function(event) {
+                    updateResponseStatus('Connection Error', 'error');
+                    addSSEMessage('连接错误');
+                    setLoading(false);
+                };
+                
+            } catch (error) {
+                updateResponseStatus('Error', 'error');
+                updateResponseContent(`SSE 连接失败: ${error.message}`);
+                setLoading(false);
+            }
+        }
+
+        function connectWebSocket() {
+            try {
+                // Convert HTTP URL to WebSocket URL
+                let url = buildRequestURL();
+                url = url.replace(/^http/, 'ws');
+                
+                webSocket = new WebSocket(url);
+                
+                updateResponseStatus('Connecting', 'info');
+                updateResponseContent('');
+                
+                webSocket.onopen = function(event) {
+                    updateResponseStatus('Connected', 'success');
+                    addWSMessage('WebSocket 连接已建立');
+                    
+                    // Send initial message if body is provided
+                    const bodyText = document.getElementById('requestBody').value.trim();
+                    if (bodyText) {
+                        webSocket.send(bodyText);
+                        addWSMessage('已发送: ' + bodyText);
+                    }
+                    
+                    setLoading(false);
+                };
+                
+                webSocket.onmessage = function(event) {
+                    addWSMessage(event.data);
+                };
+                
+                webSocket.onerror = function(event) {
+                    updateResponseStatus('Connection Error', 'error');
+                    addWSMessage('连接错误');
+                    setLoading(false);
+                };
+                
+                webSocket.onclose = function(event) {
+                    updateResponseStatus('Disconnected', 'info');
+                    addWSMessage(`连接已关闭 (代码: ${event.code}${event.reason ? ', 原因: ' + event.reason : ''})`);
+                    webSocket = null;
+                    setLoading(false);
+                };
+                
+            } catch (error) {
+                updateResponseStatus('Error', 'error');
+                updateResponseContent(`WebSocket 连接失败: ${error.message}`);
+                setLoading(false);
+            }
+        }
+
+        function buildRequestURL() {
+            let url = selectedApi.path;
+            
+            // Replace path parameters
+            const pathParams = getParameterValues('pathParams');
+            Object.entries(pathParams).forEach(([key, value]) => {
+                url = url.replace(`{${key}}`, encodeURIComponent(value));
+            });
+            
+            // Add query parameters
+            const queryParams = getParameterValues('queryParams');
+            const queryString = new URLSearchParams(queryParams).toString();
+            if (queryString) {
+                url += '?' + queryString;
+            }
+            
+            return url;
+        }
+
+        function buildRequestOptions() {
+            const options = {
+                method: selectedApi.method,
+                headers: {}
+            };
+            
+            // Add custom headers
+            const headers = getParameterValues('headers');
+            Object.assign(options.headers, headers);
+            
+            // Add body for POST/PUT requests
+            if (['POST', 'PUT'].includes(selectedApi.method)) {
+                const bodyText = document.getElementById('requestBody').value.trim();
+                if (bodyText) {
+                    options.body = bodyText;
+                    options.headers['Content-Type'] = 'application/json';
+                }
+            }
+            
+            return options;
+        }
+
+        function getParameterValues(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) {
+                return {};
+            }
+            const inputs = container.querySelectorAll('input');
+            const values = {};
+            
+            inputs.forEach(input => {
+                const paramName = input.dataset.param;
+                const value = input.value.trim();
+                if (value) {
+                    values[paramName] = value;
+                }
+            });
+            
+            return values;
+        }
+
+        function setLoading(loading) {
+            isLoading = loading;
+            const sendBtn = document.getElementById('sendBtn');
+            const responseStatus = document.getElementById('responseStatus');
+            
+            if (loading) {
+                sendBtn.disabled = true;
+                responseStatus.innerHTML = '<div class="loading"><div class="spinner"></div>请求中...</div>';
+            } else {
+                sendBtn.disabled = false;
+            }
+        }
+
+        function updateResponseStatus(status, type) {
+            const responseStatus = document.getElementById('responseStatus');
+            responseStatus.innerHTML = `<span class="status-badge status-${type}">${status}</span>`;
+        }
+
+        function updateResponseContent(content) {
+            const responseContent = document.getElementById('responseContent');
+            responseContent.innerHTML = `<pre><code>${content}</code></pre>`;
+            hljs.highlightAll();
+        }
+
+        function addSSEMessage(data) {
+            const responseContent = document.getElementById('responseContent');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'sse-message';
+            messageDiv.innerHTML = `
+                <div class="sse-timestamp">${timestamp}</div>
+                <pre><code>${data}</code></pre>
+            `;
+            
+            responseContent.appendChild(messageDiv);
+            responseContent.scrollTop = responseContent.scrollHeight;
+        }
+        
+        function addWSMessage(data) {
+            const responseContent = document.getElementById('responseContent');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'ws-message';
+            messageDiv.innerHTML = `
+                <div class="ws-timestamp">${timestamp}</div>
+                <pre><code>${data}</code></pre>
+            `;
+            
+            responseContent.appendChild(messageDiv);
+            responseContent.scrollTop = responseContent.scrollHeight;
+        }
+
+        function handleClear() {
+            document.getElementById('apiSelect').value = '';
+            document.getElementById('requestBody').value = '';
+            selectedApi = null;
+            updateUI();
+            updateResponseContent('等待发送请求...');
+            document.getElementById('responseStatus').innerHTML = '';
+        }
+
+        function handleStop() {
+            if (eventSource) {
+                eventSource.close();
+                eventSource = null;
+                updateResponseStatus('Disconnected', 'info');
+                addSSEMessage('连接已断开');
+                setLoading(false);
+            }
+            
+            if (webSocket) {
+                webSocket.close();
+                webSocket = null;
+                updateResponseStatus('Disconnected', 'info');
+                addWSMessage('WebSocket连接已断开');
+                setLoading(false);
+            }
+        }
+
+        // Navigation
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('a[href="/"]')) {
+                e.preventDefault();
+                window.location.href = '/index.html';
+            } else if (e.target.matches('a[href="/docs"]')) {
+                e.preventDefault();
+                window.location.href = '/docs.html';
+            }
+        });
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initTester);
+    </script>
+</body>
+</html> 

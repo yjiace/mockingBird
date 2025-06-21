@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>网站地图 | Mock Flow API</title>
+    <meta name="title" content="网站地图 | Mock Flow API">
+    <meta name="description" content="Mock Flow API 网站地图 - 包含所有页面的导航链接和功能说明">
+    <meta name="keywords" content="网站地图, 导航, Mock Flow API, 页面索引">
+    <meta name="author" content="Mock Flow API">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="zh-CN">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://mockflow-api.com/sitemap.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mockflow-api.com/sitemap.html">
+    <meta property="og:title" content="网站地图 | Mock Flow API">
+    <meta property="og:description" content="Mock Flow API 网站地图 - 包含所有页面的导航链接和功能说明">
+    <meta property="og:image" content="https://mockflow-api.com/img/logo.png">
+    <meta property="og:site_name" content="Mock Flow API">
+    <meta property="og:locale" content="zh_CN">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:url" content="https://mockflow-api.com/sitemap.html">
+    <meta property="twitter:title" content="网站地图 | Mock Flow API">
+    <meta property="twitter:description" content="Mock Flow API 网站地图 - 包含所有页面的导航链接和功能说明">
+    <meta property="twitter:image" content="https://mockflow-api.com/img/logo.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon" sizes="32x32"/>
+    <link rel="apple-touch-icon" href="img/logo.png">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "网站地图",
+        "description": "Mock Flow API 网站地图",
+        "url": "https://mockflow-api.com/sitemap.html",
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "Mock Flow API",
+            "url": "https://mockflow-api.com/"
+        },
+        "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "首页",
+                    "item": "https://mockflow-api.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "网站地图",
+                    "item": "https://mockflow-api.com/sitemap.html"
+                }
+            ]
+        }
+    }
+    </script>
+    
+    <style>
+        /* CSS Variables - Dark Theme */
+        :root {
+            --background: 0 0% 7%;
+            --foreground: 0 0% 98%;
+            --card: 0 0% 12%;
+            --card-foreground: 0 0% 98%;
+            --popover: 0 0% 10%;
+            --popover-foreground: 0 0% 98%;
+            --primary: 330 65% 50%;
+            --primary-foreground: 0 0% 98%;
+            --secondary: 195 60% 45%;
+            --secondary-foreground: 0 0% 98%;
+            --muted: 0 0% 15%;
+            --muted-foreground: 0 0% 65%;
+            --accent: 195 65% 50%;
+            --accent-foreground: 0 0% 98%;
+            --destructive: 0 70% 50%;
+            --destructive-foreground: 0 0% 98%;
+            --border: 0 0% 20%;
+            --input: 0 0% 14%;
+            --ring: 330 65% 55%;
+            --radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-container {
+            flex: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--accent)));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-description {
+            color: hsl(var(--muted-foreground));
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+
+        .sitemap-section {
+            background: hsl(var(--card));
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid hsl(var(--border));
+        }
+
+        .sitemap-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: hsl(var(--foreground));
+        }
+
+        .sitemap-list {
+            list-style: none;
+        }
+
+        .sitemap-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: hsl(var(--muted));
+            border-radius: var(--radius);
+            border: 1px solid hsl(var(--border));
+            transition: all 0.3s ease;
+        }
+
+        .sitemap-item:hover {
+            border-color: hsl(var(--primary));
+            transform: translateY(-2px);
+        }
+
+        .sitemap-link {
+            display: block;
+            text-decoration: none;
+            color: hsl(var(--foreground));
+            font-weight: 500;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sitemap-link:hover {
+            color: hsl(var(--primary));
+        }
+
+        .sitemap-description {
+            color: hsl(var(--muted-foreground));
+            font-size: 0.9rem;
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .priority-high {
+            background: hsla(120, 70%, 50%, 0.2);
+            color: hsl(120, 70%, 60%);
+        }
+
+        .priority-medium {
+            background: hsla(45, 70%, 50%, 0.2);
+            color: hsl(45, 70%, 60%);
+        }
+
+        .priority-low {
+            background: hsla(210, 70%, 50%, 0.2);
+            color: hsl(210, 70%, 60%);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            text-decoration: none;
+            border-radius: var(--radius);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .back-link:hover {
+            background: hsl(var(--primary));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px hsla(var(--primary), 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .sitemap-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header will be loaded here -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="main-container" role="main">
+        <a href="/" class="back-link" aria-label="返回首页">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15,18 9,12 15,6"></polyline>
+            </svg>
+            返回首页
+        </a>
+
+        <header>
+            <h1 class="page-title">网站地图</h1>
+            <p class="page-description">Mock Flow API 网站地图 - 包含所有页面的导航链接和功能说明</p>
+        </header>
+
+        <section class="sitemap-section" aria-labelledby="main-pages-title">
+            <h2 id="main-pages-title">主要页面</h2>
+            <ul class="sitemap-list" role="list">
+                <li class="sitemap-item" role="listitem">
+                    <a href="/" class="sitemap-link">
+                        首页
+                        <span class="priority-badge priority-high">高优先级</span>
+                    </a>
+                    <p class="sitemap-description">Mock Flow API 主页，介绍产品功能和特色，提供快速导航到文档和测试工具。</p>
+                </li>
+                <li class="sitemap-item" role="listitem">
+                    <a href="/docs" class="sitemap-link">
+                        API 文档
+                        <span class="priority-badge priority-high">高优先级</span>
+                    </a>
+                    <p class="sitemap-description">完整的API接口文档，包含详细的参数说明、示例代码和使用指南。</p>
+                </li>
+                <li class="sitemap-item" role="listitem">
+                    <a href="/test" class="sitemap-link">
+                        在线测试
+                        <span class="priority-badge priority-high">高优先级</span>
+                    </a>
+                    <p class="sitemap-description">在线API测试工具，支持HTTP、SSE、WebSocket等多种协议的实时测试。</p>
+                </li>
+            </ul>
+        </section>
+
+        <section class="sitemap-section" aria-labelledby="resources-title">
+            <h2 id="resources-title">资源文件</h2>
+            <ul class="sitemap-list" role="list">
+                <li class="sitemap-item" role="listitem">
+                    <a href="/sitemap.xml" class="sitemap-link">
+                        XML 网站地图
+                        <span class="priority-badge priority-medium">中优先级</span>
+                    </a>
+                    <p class="sitemap-description">搜索引擎优化的XML格式网站地图，帮助搜索引擎更好地索引网站内容。</p>
+                </li>
+                <li class="sitemap-item" role="listitem">
+                    <a href="/robots.txt" class="sitemap-link">
+                        Robots.txt
+                        <span class="priority-badge priority-medium">中优先级</span>
+                    </a>
+                    <p class="sitemap-description">搜索引擎爬虫配置文件，指导搜索引擎如何爬取网站内容。</p>
+                </li>
+            </ul>
+        </section>
+
+        <section class="sitemap-section" aria-labelledby="features-title">
+            <h2 id="features-title">功能特色</h2>
+            <ul class="sitemap-list" role="list">
+                <li class="sitemap-item" role="listitem">
+                    <span class="sitemap-link">
+                        实时API调用
+                        <span class="priority-badge priority-medium">中优先级</span>
+                    </span>
+                    <p class="sitemap-description">支持HTTP、HTTPS协议的API接口实时调用和测试。</p>
+                </li>
+                <li class="sitemap-item" role="listitem">
+                    <span class="sitemap-link">
+                        SSE实时数据流
+                        <span class="priority-badge priority-medium">中优先级</span>
+                    </span>
+                    <p class="sitemap-description">Server-Sent Events 实时数据流测试，体验实时数据推送功能。</p>
+                </li>
+                <li class="sitemap-item" role="listitem">
+                    <span class="sitemap-link">
+                        WebSocket双向通信
+                        <span class="priority-badge priority-medium">中优先级</span>
+                    </span>
+                    <p class="sitemap-description">WebSocket 双向通信测试，支持实时双向数据传输。</p>
+                </li>
+                <li class="sitemap-item" role="listitem">
+                    <span class="sitemap-link">
+                        模拟数据生成
+                        <span class="priority-badge priority-medium">中优先级</span>
+                    </span>
+                    <p class="sitemap-description">自动生成多样化的模拟数据，满足各种测试场景需求。</p>
+                </li>
+                <li class="sitemap-item" role="listitem">
+                    <span class="sitemap-link">
+                        多媒体支持
+                        <span class="priority-badge priority-low">低优先级</span>
+                    </span>
+                    <p class="sitemap-description">支持文件上传下载和多媒体内容的API接口测试。</p>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer will be loaded here -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Load Components -->
+    <script src="components/header.js"></script>
+    <script src="components/footer.js"></script>
+    <script>
+        // Load header and footer
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header
+            document.getElementById('header-placeholder').innerHTML = createHeader('sitemap');
+            
+            // Load footer
+            document.getElementById('footer-placeholder').innerHTML = createFooter();
+            
+            // Add header styles
+            const headerStyle = document.createElement('style');
+            headerStyle.textContent = headerStyles;
+            document.head.appendChild(headerStyle);
+            
+            // Add footer styles
+            const footerStyle = document.createElement('style');
+            footerStyle.textContent = footerStyles;
+            document.head.appendChild(footerStyle);
+        });
+    </script>
+</body>
+</html> 

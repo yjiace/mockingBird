@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>API 文档 | Mock Flow API - 详细的接口文档和使用指南</title>
+    <meta name="title" content="API 文档 | Mock Flow API - 详细的接口文档和使用指南">
+    <meta name="description" content="Mock Flow API 完整文档 - 包含所有API接口的详细说明、参数配置、示例代码和使用指南。支持HTTP、SSE、WebSocket等多种协议。">
+    <meta name="keywords" content="API文档, 接口文档, Mock API, 开发文档, API接口说明, 接口参数, 示例代码, HTTP API, SSE API, WebSocket API">
+    <meta name="author" content="Mock Flow API">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="zh-CN">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://mockflow-api.com/docs">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mockflow-api.com/docs">
+    <meta property="og:title" content="API 文档 | Mock Flow API">
+    <meta property="og:description" content="Mock Flow API 完整文档 - 包含所有API接口的详细说明、参数配置、示例代码和使用指南。">
+    <meta property="og:image" content="https://mockflow-api.com/img/logo.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Mock Flow API">
+    <meta property="og:locale" content="zh_CN">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://mockflow-api.com/docs">
+    <meta property="twitter:title" content="API 文档 | Mock Flow API">
+    <meta property="twitter:description" content="Mock Flow API 完整文档 - 包含所有API接口的详细说明、参数配置、示例代码和使用指南。">
+    <meta property="twitter:image" content="https://mockflow-api.com/img/logo.png">
+    
+    <!-- Additional Meta Tags -->
+    <meta name="theme-color" content="#D33A82">
+    <meta name="msapplication-TileColor" content="#D33A82">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon" sizes="32x32" />
+    <link rel="apple-touch-icon" href="img/logo.png">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Mock Flow API 文档",
+        "description": "Mock Flow API 完整文档 - 包含所有API接口的详细说明、参数配置、示例代码和使用指南。",
+        "author": {
+            "@type": "Organization",
+            "name": "Mock Flow API Team"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Mock Flow API",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://mockflow-api.com/img/logo.png"
+            }
+        },
+        "datePublished": "2024-01-01",
+        "dateModified": "2024-01-01",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://mockflow-api.com/docs"
+        },
+        "about": {
+            "@type": "Thing",
+            "name": "API Documentation"
+        },
+        "audience": {
+            "@type": "Audience",
+            "audienceType": "Developers"
+        }
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "API 文档",
+        "description": "Mock Flow API 完整文档和使用指南",
+        "url": "https://mockflow-api.com/docs",
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "Mock Flow API",
+            "url": "https://mockflow-api.com/"
+        },
+        "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "首页",
+                    "item": "https://mockflow-api.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "API 文档",
+                    "item": "https://mockflow-api.com/docs"
+                }
+            ]
+        }
+    }
+    </script>
+    <style>
+        /* CSS Variables - Dark Theme */
+        :root {
+            --background: 0 0% 7%;
+            --foreground: 0 0% 98%;
+            --card: 0 0% 12%;
+            --card-foreground: 0 0% 98%;
+            --popover: 0 0% 10%;
+            --popover-foreground: 0 0% 98%;
+            --primary: 330 65% 50%;
+            --primary-foreground: 0 0% 98%;
+            --secondary: 195 60% 45%;
+            --secondary-foreground: 0 0% 98%;
+            --muted: 0 0% 15%;
+            --muted-foreground: 0 0% 65%;
+            --accent: 195 65% 50%;
+            --accent-foreground: 0 0% 98%;
+            --destructive: 0 70% 50%;
+            --destructive-foreground: 0 0% 98%;
+            --border: 0 0% 20%;
+            --input: 0 0% 14%;
+            --ring: 330 65% 55%;
+            --radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Main Layout */
+        .main-container {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            width: 100%;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background: hsl(var(--card));
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+            border: 1px solid hsl(var(--border));
+        }
+
+        .sidebar h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: hsl(var(--foreground));
+        }
+
+        .api-list {
+            list-style: none;
+        }
+
+        .api-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .api-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border-radius: calc(var(--radius) - 2px);
+            text-decoration: none;
+            color: hsl(var(--muted-foreground));
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .api-link:hover {
+            background: hsla(var(--accent), 0.1);
+            color: hsl(var(--foreground));
+        }
+
+        .api-link.active {
+            background: hsla(var(--primary), 0.2);
+            color: hsl(var(--primary));
+        }
+
+        .method-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .method-get {
+            background: hsla(120, 70%, 50%, 0.2);
+            color: hsl(120, 70%, 60%);
+        }
+
+        .method-post {
+            background: hsla(210, 70%, 50%, 0.2);
+            color: hsl(210, 70%, 60%);
+        }
+
+        .method-put {
+            background: hsla(45, 70%, 50%, 0.2);
+            color: hsl(45, 70%, 60%);
+        }
+
+        .method-delete {
+            background: hsla(0, 70%, 50%, 0.2);
+            color: hsl(0, 70%, 60%);
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            background: hsl(var(--card));
+            border-radius: var(--radius);
+            padding: 2rem;
+            border: 1px solid hsl(var(--border));
+        }
+
+        .api-doc {
+            display: none;
+        }
+
+        .api-doc.active {
+            display: block;
+        }
+
+        .api-doc h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .api-path {
+            background: hsl(var(--muted));
+            color: hsl(var(--foreground));
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .api-summary {
+            color: hsl(var(--foreground));
+            font-weight: 600;
+        }
+
+        .api-doc .description {
+            color: hsl(var(--muted-foreground));
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: hsl(var(--foreground));
+        }
+
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+            background: hsl(var(--muted));
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .param-table th,
+        .param-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid hsl(var(--border));
+        }
+
+        .param-table th {
+            background: hsla(var(--primary), 0.1);
+            font-weight: 600;
+            color: hsl(var(--foreground));
+        }
+
+        .param-table td {
+            color: hsl(var(--muted-foreground));
+        }
+
+        .param-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .code-block {
+            background: hsl(var(--muted));
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            border: 1px solid hsl(var(--border));
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .tabs {
+            margin-bottom: 1rem;
+        }
+
+        .tab-list {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid hsl(var(--border));
+        }
+
+        .tab-button {
+            padding: 0.75rem 1rem;
+            background: none;
+            border: none;
+            color: hsl(var(--muted-foreground));
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab-button:hover {
+            color: hsl(var(--foreground));
+        }
+
+        .tab-button.active {
+            color: hsl(var(--primary));
+            border-bottom-color: hsl(var(--primary));
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .response-example {
+            background: hsl(var(--muted));
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid hsl(var(--primary));
+        }
+
+        .status-code {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-200 {
+            background: hsla(120, 70%, 50%, 0.2);
+            color: hsl(120, 70%, 60%);
+        }
+
+        .status-400 {
+            background: hsla(45, 70%, 50%, 0.2);
+            color: hsl(45, 70%, 60%);
+        }
+
+        .status-500 {
+            background: hsla(0, 70%, 50%, 0.2);
+            color: hsl(0, 70%, 60%);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+
+            .nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header will be loaded here -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" role="complementary" aria-label="API接口导航">
+            <h3>API 接口</h3>
+            <nav>
+                <ul class="api-list" id="apiList" role="list">
+                    <!-- API list will be populated by JavaScript -->
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Content -->
+        <main class="content" role="main" aria-labelledby="api-docs-title">
+            <div id="apiDocs" role="region" aria-label="API文档内容">
+                <!-- API documentation will be populated by JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer will be loaded here -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Load Components -->
+    <script src="components/header.js"></script>
+    <script src="components/footer.js"></script>
+    <script>
+        // Load header and footer
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header
+            document.getElementById('header-placeholder').innerHTML = createHeader('docs');
+            
+            // Load footer
+            document.getElementById('footer-placeholder').innerHTML = createFooter();
+            
+            // Add header styles
+            const headerStyle = document.createElement('style');
+            headerStyle.textContent = headerStyles;
+            document.head.appendChild(headerStyle);
+            
+            // Add footer styles
+            const footerStyle = document.createElement('style');
+            footerStyle.textContent = footerStyles;
+            document.head.appendChild(footerStyle);
+        });
+
+        // 全局变量存储API配置
+        let apiDefinitions = [];
+        let availableFiles = {};
+        let protocolInfo = {};
+        let tableStructures = {};
+        let methodColors = {};
+
+        // 从JSON配置文件加载数据
+        async function loadApiConfig() {
+            try {
+                const response = await fetch('api-config-complete.json');
+                const config = await response.json();
+                
+                apiDefinitions = config.apiDefinitions;
+                availableFiles = config.availableFiles || {};
+                protocolInfo = config.protocolInfo || {};
+                tableStructures = config.tableStructures || {};
+                methodColors = config.methodColors || {};
+                
+                // 加载配置后初始化文档
+                initDocs();
+            } catch (error) {
+                console.error('加载API配置失败:', error);
+                // 如果加载失败，显示错误信息
+                document.getElementById('apiDocs').innerHTML = `
+                    <div style="text-align: center; padding: 2rem;">
+                        <h2>配置加载失败</h2>
+                        <p>无法加载API配置文件，请检查网络连接或联系管理员。</p>
+                        <p>错误信息: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize the documentation
+        function initDocs() {
+            const apiList = document.getElementById('apiList');
+            const apiDocs = document.getElementById('apiDocs');
+
+            // 清空现有内容
+            apiList.innerHTML = '';
+            apiDocs.innerHTML = '';
+
+            // Populate sidebar
+            apiDefinitions.forEach(api => {
+                const listItem = document.createElement('li');
+                listItem.className = 'api-item';
+                listItem.innerHTML = `
+                    <div class="api-link" data-api-id="${api.id}">
+                        <span class="method-badge method-${api.method.toLowerCase()}">${api.method}</span>
+                        <span>${api.summary}</span>
+                    </div>
+                `;
+                apiList.appendChild(listItem);
+
+                // Create documentation content
+                const docElement = createApiDoc(api);
+                apiDocs.appendChild(docElement);
+            });
+
+            // Add click handlers for API navigation
+            document.querySelectorAll('.api-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    const apiId = link.dataset.apiId;
+                    showApiDoc(apiId);
+                });
+            });
+
+            // Show first API by default
+            if (apiDefinitions.length > 0) {
+                showApiDoc(apiDefinitions[0].id);
+            }
+
+            // Handle URL hash
+            if (window.location.hash) {
+                const apiId = window.location.hash.substring(1);
+                showApiDoc(apiId);
+            }
+        }
+
+        function createApiDoc(api) {
+            const doc = document.createElement('div');
+            doc.className = 'api-doc';
+            doc.id = `doc-${api.id}`;
+
+            let parametersHtml = '';
+            if (api.parameters) {
+                if (api.parameters.path) {
+                    parametersHtml += createParameterTable('路径参数', api.parameters.path);
+                }
+                if (api.parameters.query) {
+                    parametersHtml += createParameterTable('查询参数', api.parameters.query);
+                }
+                if (api.parameters.headers) {
+                    parametersHtml += createParameterTable('请求头', api.parameters.headers);
+                }
+                if (api.parameters.body) {
+                    parametersHtml += createParameterTable('请求体参数', api.parameters.body);
+                }
+            }
+
+            let responsesHtml = '';
+            if (api.responses) {
+                responsesHtml = '<div class="section"><h3>响应示例</h3>';
+                
+                // 如果有多个响应示例，创建tab栏
+                const responseEntries = Object.entries(api.responses);
+                if (responseEntries.length > 1) {
+                    responsesHtml += `<div class="tabs" data-api-id="${api.id}">`;
+                    responsesHtml += '<div class="tab-list">';
+                    
+                    // 创建tab按钮
+                    responseEntries.forEach(([status, response], index) => {
+                        responsesHtml += `<button class="tab-button ${index === 0 ? 'active' : ''}" data-tab="response-${api.id}-${status}">状态码 ${status}</button>`;
+                    });
+                    
+                    responsesHtml += '</div>';
+                    
+                    // 创建tab内容
+                    responseEntries.forEach(([status, response], index) => {
+                        responsesHtml += `
+                            <div class="tab-content ${index === 0 ? 'active' : ''}" data-tab="response-${api.id}-${status}">
+                                <div class="response-example">
+                                    <div class="status-code status-${status}">${status}</div>
+                                    <p>${response.description}</p>
+                                    <div class="code-block">
+                                        <pre><code class="language-json">${response.example}</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    responsesHtml += '</div>';
+                } else {
+                    // 如果只有一个响应示例，直接显示
+                    responseEntries.forEach(([status, response]) => {
+                        responsesHtml += `
+                            <div class="response-example">
+                                <div class="status-code status-${status}">${status}</div>
+                                <p>${response.description}</p>
+                                <div class="code-block">
+                                    <pre><code class="language-json">${response.example}</code></pre>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                responsesHtml += '</div>';
+            }
+
+            let codeSamplesHtml = '';
+            if (api.codeSamples) {
+                codeSamplesHtml = `
+                    <div class="section">
+                        <h3>代码示例</h3>
+                        <div class="tabs" data-api-id="${api.id}">
+                            <div class="tab-list">
+                                ${Object.keys(api.codeSamples).map((lang, index) =>
+                    `<button class="tab-button ${index === 0 ? 'active' : ''}" data-tab="code-${api.id}-${lang}">${lang.charAt(0).toUpperCase() + lang.slice(1)}</button>`
+                ).join('')}
+                            </div>
+                            ${Object.entries(api.codeSamples).map(([lang, code], index) =>
+                    `<div class="tab-content ${index === 0 ? 'active' : ''}" data-tab="code-${api.id}-${lang}">
+                                    <div class="code-block">
+                                        <pre><code class="language-${lang}">${code}</code></pre>
+                                    </div>
+                                </div>`
+                ).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            doc.innerHTML = `
+                <h2>
+                    <span class="method-badge method-${api.method.toLowerCase()}">${api.method}</span>
+                    <code class="api-path">${api.path}</code>
+                    <span class="api-summary">${api.summary}</span>
+                </h2>
+                <p class="description">${api.description}</p>
+                ${parametersHtml}
+                ${responsesHtml}
+                ${codeSamplesHtml}
+            `;
+
+            return doc;
+        }
+
+        function createParameterTable(title, parameters) {
+            return `
+                <div class="section">
+                    <h3>${title}</h3>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>参数名</th>
+                                <th>类型</th>
+                                <th>必需</th>
+                                <th>描述</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${parameters.map(param => `
+                                <tr>
+                                    <td><code>${param.name}</code></td>
+                                    <td>${param.type}</td>
+                                    <td>${param.required ? '是' : '否'}</td>
+                                    <td>${param.description}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function showApiDoc(apiId) {
+            // Update sidebar active state
+            document.querySelectorAll('.api-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[data-api-id="${apiId}"]`).classList.add('active');
+
+            // Update content active state
+            document.querySelectorAll('.api-doc').forEach(doc => {
+                doc.classList.remove('active');
+            });
+            document.getElementById(`doc-${apiId}`).classList.add('active');
+
+            // Update URL hash
+            window.location.hash = apiId;
+
+            // Highlight code
+            setTimeout(() => {
+                hljs.highlightAll();
+            }, 100);
+        }
+
+        // Tab click handler function
+        function handleTabClick(e) {
+            const tabName = e.target.dataset.tab;
+            const tabContainer = e.target.closest('.tabs');
+
+            if (!tabContainer) return;
+
+            // Update tab buttons
+            tabContainer.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            e.target.classList.add('active');
+
+            // Update tab content
+            tabContainer.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            const targetContent = tabContainer.querySelector(`[data-tab="${tabName}"]`);
+            
+            if (targetContent) {
+                targetContent.classList.add('active');
+                
+                // Re-highlight code in the active tab
+                setTimeout(() => {
+                    const codeBlocks = targetContent.querySelectorAll('pre code');
+                    codeBlocks.forEach(block => {
+                        hljs.highlightElement(block);
+                    });
+                }, 50);
+            }
+        }
+
+        // Global event delegation for tab switching
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('tab-button')) {
+                e.preventDefault();
+                handleTabClick(e);
+            }
+        });
+
+        // Navigation
+        document.addEventListener('click', function (e) {
+            if (e.target.matches('a[href="/"]')) {
+                e.preventDefault();
+                window.location.href = '/index.html';
+            } else if (e.target.matches('a[href="/test"]')) {
+                e.preventDefault();
+                window.location.href = '/test.html';
+            }
+        });
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', loadApiConfig);
+    </script>
+</body>
+
+</html>
