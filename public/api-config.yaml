@@ -115,11 +115,14 @@ apiDefinitions:
           import okhttp3.*;
           
           OkHttpClient client = new OkHttpClient();
+          HttpUrl.Builder urlBuilder = HttpUrl.parse("https://mock.smallyoung.cn/api/user").newBuilder();
+          urlBuilder.addQueryParameter("page", "1");
+          urlBuilder.addQueryParameter("size", "10");
+          String url = urlBuilder.build().toString();
           Request request = new Request.Builder()
-              .url("https://yourdomain.com/api/user?page=1&size=10")
+              .url(url)
               .addHeader("Accept", "application/json")
               .build();
-          
           Response response = client.newCall(request).execute();
           String jsonData = response.body().string();
           System.out.println(jsonData);
@@ -129,7 +132,7 @@ apiDefinitions:
           import org.springframework.http.ResponseEntity;
           
           RestTemplate restTemplate = new RestTemplate();
-          String url = "https://yourdomain.com/api/user?page=1&size=10";
+          String url = "https://mock.smallyoung.cn/api/user?page=1&size=10";
           ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
           System.out.println(response.getBody());
         httpclient: |
@@ -140,9 +143,8 @@ apiDefinitions:
           import org.apache.http.util.EntityUtils;
           
           CloseableHttpClient client = HttpClients.createDefault();
-          HttpGet request = new HttpGet("https://yourdomain.com/api/user?page=1&size=10");
+          HttpGet request = new HttpGet("https://mock.smallyoung.cn/api/user?page=1&size=10");
           request.addHeader("Accept", "application/json");
-          
           String response = EntityUtils.toString(client.execute(request).getEntity());
           System.out.println(response);
           client.close();
@@ -157,12 +159,11 @@ apiDefinitions:
           )
           
           func main() {
-              resp, err := http.Get("https://yourdomain.com/api/user?page=1&size=10")
+              resp, err := http.Get("https://mock.smallyoung.cn/api/user?page=1&size=10")
               if err != nil {
                   panic(err)
               }
               defer resp.Body.Close()
-              
               body, err := io.ReadAll(resp.Body)
               if err != nil {
                   panic(err)
@@ -175,7 +176,6 @@ apiDefinitions:
           import (
               "fmt"
               "io"
-              "os"
               "github.com/valyala/fasthttp"
           )
           
@@ -184,14 +184,11 @@ apiDefinitions:
               resp := fasthttp.AcquireResponse()
               defer fasthttp.ReleaseRequest(req)
               defer fasthttp.ReleaseResponse(resp)
-              
-              req.SetRequestURI("https://yourdomain.com/api/user?page=1&size=10")
-              
+              req.SetRequestURI("https://mock.smallyoung.cn/api/user?page=1&size=10")
               err := fasthttp.Do(req, resp)
               if err != nil {
                   panic(err)
               }
-              
               body, err := io.ReadAll(resp.Body)
               if err != nil {
                   panic(err)
@@ -199,27 +196,11 @@ apiDefinitions:
               fmt.Println(string(body))
           }
       php:
-        curl: |
-          <?php
-          
-          $ch = curl_init();
-          curl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user?page=1&size=10');
-          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-          curl_setopt($ch, CURLOPT_HTTPHEADER, [
-              'Accept: application/json'
-          ]);
-          
-          $response = curl_exec($ch);
-          curl_close($ch);
-          
-          echo $response;
         guzzle: |
           <?php
-          
           use GuzzleHttp\Client;
-          
           $client = new Client();
-          $response = $client->get('https://yourdomain.com/api/user', [
+          $response = $client->get('https://mock.smallyoung.cn/api/user', [
               'query' => [
                   'page' => 1,
                   'size' => 10
@@ -228,15 +209,12 @@ apiDefinitions:
                   'Accept' => 'application/json'
               ]
           ]);
-          
           echo $response->getBody();
         symfony: |
           <?php
-          
           use Symfony\Component\HttpClient\HttpClient;
-          
           $client = HttpClient::create();
-          $response = $client->request('GET', 'https://yourdomain.com/api/user', [
+          $response = $client->request('GET', 'https://mock.smallyoung.cn/api/user', [
               'query' => [
                   'page' => 1,
                   'size' => 10
@@ -245,22 +223,19 @@ apiDefinitions:
                   'Accept' => 'application/json'
               ]
           ]);
-          
           echo $response->getContent();
       python:
         requests: |
           import requests
-          
-          response = requests.get('https://yourdomain.com/api/user', {
+          response = requests.get('https://mock.smallyoung.cn/api/user', params={
               'page': 1,
               'size': 10
           })
           print(response.json())
         httpx: |
           import httpx
-          
           with httpx.Client() as client:
-              response = client.get('https://yourdomain.com/api/user', params={
+              response = client.get('https://mock.smallyoung.cn/api/user', params={
                   'page': 1,
                   'size': 10
               })
@@ -268,23 +243,21 @@ apiDefinitions:
         aiohttp: |
           import aiohttp
           import asyncio
-          
           async def main():
               async with aiohttp.ClientSession() as session:
-                  async with session.get('https://yourdomain.com/api/user', params={
+                  async with session.get('https://mock.smallyoung.cn/api/user', params={
                       'page': 1,
                       'size': 10
                   }) as response:
                       data = await response.json()
                       print(data)
-          
           asyncio.run(main())
       curl:
         basic: |
-          curl -X GET "https://yourdomain.com/api/user?page=1&size=10" \
+          curl -X GET "https://mock.smallyoung.cn/api/user?page=1&size=10" \
             -H "Accept: application/json"
         verbose: |
-          curl -X GET "https://yourdomain.com/api/user?page=1&size=10" \
+          curl -X GET "https://mock.smallyoung.cn/api/user?page=1&size=10" \
             -H "Accept: application/json" \
             -v \
             -w "\nTime: %{time_total}s\nStatus: %{http_code}\n"
@@ -325,19 +298,19 @@ apiDefinitions:
       javascript:
         fetch: |
           // HTTP 请求
-          fetch('/api/user/' + id)
+          fetch(`/api/user/${id}`)
             .then(response => response.json())
             .then(data => console.log(data));
         axios: |
           // HTTP 请求 (Axios)
           import axios from 'axios';
-          axios.get('/api/user/' + id)
+          axios.get(`/api/user/${id}`)
             .then(response => console.log(response.data))
             .catch(error => console.error(error));
         jquery: |
           // HTTP 请求 (jQuery)
           $.ajax({
-            url: '/api/user/' + id,
+            url: `/api/user/${id}`,
             method: 'GET',
             success: function(data) {
               console.log(data);
@@ -352,11 +325,11 @@ apiDefinitions:
           import okhttp3.*;
           
           OkHttpClient client = new OkHttpClient();
+          String url = "https://mock.smallyoung.cn/api/user/" + id;
           Request request = new Request.Builder()
-              .url("https://yourdomain.com/api/user/" + id)
+              .url(url)
               .addHeader("Accept", "application/json")
               .build();
-          
           Response response = client.newCall(request).execute();
           String jsonData = response.body().string();
           System.out.println(jsonData);
@@ -366,7 +339,7 @@ apiDefinitions:
           import org.springframework.http.ResponseEntity;
           
           RestTemplate restTemplate = new RestTemplate();
-          String url = "https://yourdomain.com/api/user/" + id;
+          String url = "https://mock.smallyoung.cn/api/user/" + id;
           ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
           System.out.println(response.getBody());
         httpclient: |
@@ -377,9 +350,8 @@ apiDefinitions:
           import org.apache.http.util.EntityUtils;
           
           CloseableHttpClient client = HttpClients.createDefault();
-          HttpGet request = new HttpGet("https://yourdomain.com/api/user/" + id");
+          HttpGet request = new HttpGet(url);
           request.addHeader("Accept", "application/json");
-          
           String response = EntityUtils.toString(client.execute(request).getEntity());
           System.out.println(response);
           client.close();
@@ -394,12 +366,12 @@ apiDefinitions:
           )
           
           func main() {
-              resp, err := http.Get("https://yourdomain.com/api/user/" + id)
+              url := "https://mock.smallyoung.cn/api/user/" + id
+              resp, err := http.Get(url)
               if err != nil {
                   panic(err)
               }
               defer resp.Body.Close()
-              
               body, err := io.ReadAll(resp.Body)
               if err != nil {
                   panic(err)
@@ -412,23 +384,20 @@ apiDefinitions:
           import (
               "fmt"
               "io"
-              "os"
               "github.com/valyala/fasthttp"
           )
           
           func main() {
+              url := "https://mock.smallyoung.cn/api/user/" + id
               req := fasthttp.AcquireRequest()
               resp := fasthttp.AcquireResponse()
               defer fasthttp.ReleaseRequest(req)
               defer fasthttp.ReleaseResponse(resp)
-              
-              req.SetRequestURI("https://yourdomain.com/api/user/" + id)
-              
+              req.SetRequestURI(url)
               err := fasthttp.Do(req, resp)
               if err != nil {
                   panic(err)
               }
-              
               body, err := io.ReadAll(resp.Body)
               if err != nil {
                   panic(err)
@@ -436,75 +405,56 @@ apiDefinitions:
               fmt.Println(string(body))
           }
       php:
-        curl: |
-          <?php
-          
-          $ch = curl_init();
-          curl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user/' + id);
-          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-          curl_setopt($ch, CURLOPT_HTTPHEADER, [
-              'Accept: application/json'
-          ]);
-          
-          $response = curl_exec($ch);
-          curl_close($ch);
-          
-          echo $response;
         guzzle: |
           <?php
-          
           use GuzzleHttp\Client;
-          
           $client = new Client();
-          $response = $client->get('https://yourdomain.com/api/user/' + id, [
+          $url = 'https://mock.smallyoung.cn/api/user/' . $id;
+          $response = $client->get($url, [
               'headers' => [
                   'Accept' => 'application/json'
               ]
           ]);
-          
           echo $response->getBody();
         symfony: |
           <?php
-          
           use Symfony\Component\HttpClient\HttpClient;
-          
           $client = HttpClient::create();
-          $response = $client->request('GET', 'https://yourdomain.com/api/user/' + id, [
+          $url = 'https://mock.smallyoung.cn/api/user/' . $id;
+          $response = $client->request('GET', $url, [
               'headers' => [
                   'Accept' => 'application/json'
               ]
           ]);
-          
           echo $response->getContent();
       python:
         requests: |
           import requests
-          
-          response = requests.get('https://yourdomain.com/api/user/' + id)
+          url = f'https://mock.smallyoung.cn/api/user/{id}'
+          response = requests.get(url)
           print(response.json())
         httpx: |
           import httpx
-          
+          url = f'https://mock.smallyoung.cn/api/user/{id}'
           with httpx.Client() as client:
-              response = client.get('https://yourdomain.com/api/user/' + id)
+              response = client.get(url)
               print(response.json())
         aiohttp: |
           import aiohttp
           import asyncio
-          
           async def main():
+              url = f'https://mock.smallyoung.cn/api/user/{id}'
               async with aiohttp.ClientSession() as session:
-                  async with session.get('https://yourdomain.com/api/user/' + id) as response:
+                  async with session.get(url) as response:
                       data = await response.json()
                       print(data)
-          
           asyncio.run(main())
       curl:
         basic: |
-          curl -X GET "https://yourdomain.com/api/user/" + id \
+          curl -X GET "https://mock.smallyoung.cn/api/user/${id}" \
             -H "Accept: application/json"
         verbose: |
-          curl -X GET "https://yourdomain.com/api/user/" + id \
+          curl -X GET "https://mock.smallyoung.cn/api/user/${id}" \
             -H "Accept: application/json" \
             -v \
             -w "\nTime: %{time_total}s\nStatus: %{http_code}\n"
@@ -604,7 +554,7 @@ apiDefinitions:
               .build();
           
           Request request = new Request.Builder()
-              .url("https://yourdomain.com/api/user")
+              .url("https://mock.smallyoung.cn/api/user")
               .addHeader("Accept", "application/json")
               .post(requestBody)
               .build();
@@ -618,7 +568,7 @@ apiDefinitions:
           import org.springframework.http.ResponseEntity;
           
           RestTemplate restTemplate = new RestTemplate();
-          String url = "https://yourdomain.com/api/user";
+          String url = "https://mock.smallyoung.cn/api/user";
           ResponseEntity<String> response = restTemplate.postForEntity(url, {
             name: '李四',
             age: 28,
@@ -634,7 +584,7 @@ apiDefinitions:
           import org.apache.http.util.EntityUtils;
           
           CloseableHttpClient client = HttpClients.createDefault();
-          HttpPost request = new HttpPost("https://yourdomain.com/api/user");
+          HttpPost request = new HttpPost("https://mock.smallyoung.cn/api/user");
           request.addHeader("Accept", "application/json");
           
           StringEntity entity = new StringEntity("{ \"name\": \"李四\", \"age\": 28, \"email\": \"lisi@example.com\" }");
@@ -657,7 +607,7 @@ apiDefinitions:
               client := &http.Client{}
               jsonStr := `{"name":"李四","age":28,"email":"lisi@example.com"}`
               
-              req, err := http.NewRequest("POST", "https://yourdomain.com/api/user", bytes.NewBuffer([]byte(jsonStr)))
+              req, err := http.NewRequest("POST", "https://mock.smallyoung.cn/api/user", bytes.NewBuffer([]byte(jsonStr)))
               if err != nil {
                   panic(err)
               }
@@ -691,7 +641,7 @@ apiDefinitions:
               jsonStr := `{"name":"李四","age":28,"email":"lisi@example.com"}`
               
               req := fasthttp.AcquireRequest()
-              req.SetRequestURI("https://yourdomain.com/api/user")
+              req.SetRequestURI("https://mock.smallyoung.cn/api/user")
               req.Header.SetContentType("application/json")
               req.Header.Set("Accept", "application/json")
               req.SetBody([]byte(jsonStr))
@@ -712,33 +662,13 @@ apiDefinitions:
               fmt.Println(string(body))
           }
       php:
-        curl: |
-          <?php
-          
-          $ch = curl_init();
-          curl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user');
-          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-          curl_setopt($ch, CURLOPT_POST, true);
-          curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-              'name' => '李四',
-              'age' => 28,
-              'email' => 'lisi@example.com'
-          ]));
-          curl_setopt($ch, CURLOPT_HTTPHEADER, [
-              'Accept: application/json'
-          ]);
-          
-          $response = curl_exec($ch);
-          curl_close($ch);
-          
-          echo $response;
         guzzle: |
           <?php
           
           use GuzzleHttp\Client;
           
           $client = new Client();
-          $response = $client->post('https://yourdomain.com/api/user', [
+          $response = $client->post('https://mock.smallyoung.cn/api/user', [
               'json' => [
                   'name' => '李四',
                   'age' => 28,
@@ -756,7 +686,7 @@ apiDefinitions:
           use Symfony\Component\HttpClient\HttpClient;
           
           $client = HttpClient::create();
-          $response = $client->request('POST', 'https://yourdomain.com/api/user', [
+          $response = $client->request('POST', 'https://mock.smallyoung.cn/api/user', [
               'json' => [
                   'name' => '李四',
                   'age' => 28,
@@ -772,7 +702,7 @@ apiDefinitions:
         requests: |
           import requests
           
-          response = requests.post('https://yourdomain.com/api/user', json={
+          response = requests.post('https://mock.smallyoung.cn/api/user', json={
               'name': '李四',
               'age': 28,
               'email': 'lisi@example.com'
@@ -782,7 +712,7 @@ apiDefinitions:
           import httpx
           
           with httpx.Client() as client:
-              response = client.post('https://yourdomain.com/api/user', json={
+              response = client.post('https://mock.smallyoung.cn/api/user', json={
                   'name': '李四',
                   'age': 28,
                   'email': 'lisi@example.com'
@@ -794,7 +724,7 @@ apiDefinitions:
           
           async def main():
               async with aiohttp.ClientSession() as session:
-                  async with session.post('https://yourdomain.com/api/user', json={
+                  async with session.post('https://mock.smallyoung.cn/api/user', json={
                       'name': '李四',
                       'age': 28,
                       'email': 'lisi@example.com'
@@ -805,11 +735,11 @@ apiDefinitions:
           asyncio.run(main())
       curl:
         basic: |
-          curl -X POST "https://yourdomain.com/api/user" \
+          curl -X POST "https://mock.smallyoung.cn/api/user" \
             -H "Accept: application/json" \
             -d "name=李四&age=28&email=lisi@example.com"
         verbose: |
-          curl -X POST "https://yourdomain.com/api/user" \
+          curl -X POST "https://mock.smallyoung.cn/api/user" \
             -H "Accept: application/json" \
             -d "name=李四&age=28&email=lisi@example.com" \
             -v \
@@ -921,7 +851,7 @@ apiDefinitions:
               .build();
           
           Request request = new Request.Builder()
-              .url("https://yourdomain.com/api/user/" + id)
+              .url("https://mock.smallyoung.cn/api/user/" + id)
               .addHeader("Accept", "application/json")
               .put(requestBody)
               .build();
@@ -935,7 +865,7 @@ apiDefinitions:
           import org.springframework.http.ResponseEntity;
           
           RestTemplate restTemplate = new RestTemplate();
-          String url = "https://yourdomain.com/api/user/" + id;
+          String url = "https://mock.smallyoung.cn/api/user/" + id;
           ResponseEntity<String> response = restTemplate.put(url, {
             name: '李四',
             age: 29,
@@ -951,7 +881,7 @@ apiDefinitions:
           import org.apache.http.util.EntityUtils;
           
           CloseableHttpClient client = HttpClients.createDefault();
-          HttpPut request = new HttpPut("https://yourdomain.com/api/user/" + id);
+          HttpPut request = new HttpPut("https://mock.smallyoung.cn/api/user/" + id);
           request.addHeader("Accept", "application/json");
           
           StringEntity entity = new StringEntity("{ \"name\": \"李四\", \"age\": 29, \"email\": \"lisi_new@example.com\" }");
@@ -974,7 +904,7 @@ apiDefinitions:
               client := &http.Client{}
               jsonStr := `{"name":"李四","age":29,"email":"lisi_new@example.com"}`
               
-              req, err := http.NewRequest("PUT", "https://yourdomain.com/api/user/" + id, bytes.NewBuffer([]byte(jsonStr)))
+              req, err := http.NewRequest("PUT", "https://mock.smallyoung.cn/api/user/" + id, bytes.NewBuffer([]byte(jsonStr)))
               if err != nil {
                   panic(err)
               }
@@ -1008,7 +938,7 @@ apiDefinitions:
               jsonStr := `{"name":"李四","age":29,"email":"lisi_new@example.com"}`
               
               req := fasthttp.AcquireRequest()
-              req.SetRequestURI("https://yourdomain.com/api/user/" + id)
+              req.SetRequestURI("https://mock.smallyoung.cn/api/user/" + id)
               req.Header.SetContentType("application/json")
               req.Header.Set("Accept", "application/json")
               req.SetBody([]byte(jsonStr))
@@ -1029,33 +959,14 @@ apiDefinitions:
               fmt.Println(string(body))
           }
       php:
-        curl: |
-          <?php
-          
-          $ch = curl_init();
-          curl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user/' + id);
-          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-          curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-          curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-              'name' => '李四',
-              'age' => 29,
-              'email' => 'lisi_new@example.com'
-          ]));
-          curl_setopt($ch, CURLOPT_HTTPHEADER, [
-              'Accept: application/json'
-          ]);
-          
-          $response = curl_exec($ch);
-          curl_close($ch);
-          
-          echo $response;
         guzzle: |
           <?php
           
           use GuzzleHttp\Client;
           
           $client = new Client();
-          $response = $client->put('https://yourdomain.com/api/user/' + id, [
+          $url = 'https://mock.smallyoung.cn/api/user/' . $id;
+          $response = $client->put($url, [
               'json' => [
                   'name' => '李四',
                   'age' => 29,
@@ -1073,7 +984,8 @@ apiDefinitions:
           use Symfony\Component\HttpClient\HttpClient;
           
           $client = HttpClient::create();
-          $response = $client->request('PUT', 'https://yourdomain.com/api/user/' + id, [
+          $url = 'https://mock.smallyoung.cn/api/user/' . $id;
+          $response = $client->request('PUT', $url, [
               'json' => [
                   'name' => '李四',
                   'age' => 29,
@@ -1089,7 +1001,7 @@ apiDefinitions:
         requests: |
           import requests
           
-          response = requests.put('https://yourdomain.com/api/user/' + id, json={
+          response = requests.put('https://mock.smallyoung.cn/api/user/' + id, json={
               'name': '李四',
               'age': 29,
               'email': 'lisi_new@example.com'
@@ -1099,7 +1011,7 @@ apiDefinitions:
           import httpx
           
           with httpx.Client() as client:
-              response = client.put('https://yourdomain.com/api/user/' + id, json={
+              response = client.put('https://mock.smallyoung.cn/api/user/' + id, json={
                   'name': '李四',
                   'age': 29,
                   'email': 'lisi_new@example.com'
@@ -1111,7 +1023,7 @@ apiDefinitions:
           
           async def main():
               async with aiohttp.ClientSession() as session:
-                  async with session.put('https://yourdomain.com/api/user/' + id, json={
+                  async with session.put('https://mock.smallyoung.cn/api/user/' + id, json={
                       'name': '李四',
                       'age': 29,
                       'email': 'lisi_new@example.com'
@@ -1122,11 +1034,11 @@ apiDefinitions:
           asyncio.run(main())
       curl:
         basic: |
-          curl -X PUT "https://yourdomain.com/api/user/" + id \
+          curl -X PUT "https://mock.smallyoung.cn/api/user/" + id \
             -H "Accept: application/json" \
             -d "name=李四&age=29&email=lisi_new@example.com"
         verbose: |
-          curl -X PUT "https://yourdomain.com/api/user/" + id \
+          curl -X PUT "https://mock.smallyoung.cn/api/user/" + id \
             -H "Accept: application/json" \
             -d "name=李四&age=29&email=lisi_new@example.com" \
             -v \
@@ -1238,7 +1150,7 @@ apiDefinitions:
               .build();
           
           Request request = new Request.Builder()
-              .url("https://yourdomain.com/api/user/" + id)
+              .url("https://mock.smallyoung.cn/api/user/" + id)
               .addHeader("Accept", "application/json")
               .patch(requestBody)
               .build();
@@ -1252,7 +1164,7 @@ apiDefinitions:
           import org.springframework.http.ResponseEntity;
           
           RestTemplate restTemplate = new RestTemplate();
-          String url = "https://yourdomain.com/api/user/" + id;
+          String url = "https://mock.smallyoung.cn/api/user/" + id;
           ResponseEntity<String> response = restTemplate.patchForEntity(url, {
             name: '李四',
             age: 25,
@@ -1268,7 +1180,7 @@ apiDefinitions:
           import org.apache.http.util.EntityUtils;
           
           CloseableHttpClient client = HttpClients.createDefault();
-          HttpPatch request = new HttpPatch("https://yourdomain.com/api/user/" + id);
+          HttpPatch request = new HttpPatch("https://mock.smallyoung.cn/api/user/" + id);
           request.addHeader("Accept", "application/json");
           
           StringEntity entity = new StringEntity("{ \"name\": \"李四\", \"age\": 25, \"email\": \"lisi@example.com\" }");
@@ -1291,7 +1203,7 @@ apiDefinitions:
               client := &http.Client{}
               jsonStr := `{"name":"李四","age":25,"email":"lisi@example.com"}`
               
-              req, err := http.NewRequest("PATCH", "https://yourdomain.com/api/user/" + id, bytes.NewBuffer([]byte(jsonStr)))
+              req, err := http.NewRequest("PATCH", "https://mock.smallyoung.cn/api/user/" + id, bytes.NewBuffer([]byte(jsonStr)))
               if err != nil {
                   panic(err)
               }
@@ -1325,7 +1237,7 @@ apiDefinitions:
               jsonStr := `{"name":"李四","age":25,"email":"lisi@example.com"}`
               
               req := fasthttp.AcquireRequest()
-              req.SetRequestURI("https://yourdomain.com/api/user/" + id)
+              req.SetRequestURI("https://mock.smallyoung.cn/api/user/" + id)
               req.Header.SetContentType("application/json")
               req.Header.Set("Accept", "application/json")
               req.SetBody([]byte(jsonStr))
@@ -1346,33 +1258,14 @@ apiDefinitions:
               fmt.Println(string(body))
           }
       php:
-        curl: |
-          <?php
-          
-          $ch = curl_init();
-          curl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user/' + id);
-          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-          curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
-          curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-              'name' => '李四',
-              'age' => 25,
-              'email' => 'lisi@example.com'
-          ]));
-          curl_setopt($ch, CURLOPT_HTTPHEADER, [
-              'Accept: application/json'
-          ]);
-          
-          $response = curl_exec($ch);
-          curl_close($ch);
-          
-          echo $response;
         guzzle: |
           <?php
           
           use GuzzleHttp\Client;
           
           $client = new Client();
-          $response = $client->patch('https://yourdomain.com/api/user/' + id, [
+          $url = 'https://mock.smallyoung.cn/api/user/' . $id;
+          $response = $client->patch($url, [
               'json' => [
                   'name' => '李四',
                   'age' => 25,
@@ -1390,7 +1283,8 @@ apiDefinitions:
           use Symfony\Component\HttpClient\HttpClient;
           
           $client = HttpClient::create();
-          $response = $client->request('PATCH', 'https://yourdomain.com/api/user/' + id, [
+          $url = 'https://mock.smallyoung.cn/api/user/' . $id;
+          $response = $client->request('PATCH', $url, [
               'json' => [
                   'name' => '李四',
                   'age' => 25,
@@ -1406,7 +1300,7 @@ apiDefinitions:
         requests: |
           import requests
           
-          response = requests.patch('https://yourdomain.com/api/user/' + id, json={
+          response = requests.patch('https://mock.smallyoung.cn/api/user/' + id, json={
               'name': '李四',
               'age': 25,
               'email': 'lisi@example.com'
@@ -1416,7 +1310,7 @@ apiDefinitions:
           import httpx
           
           with httpx.Client() as client:
-              response = client.patch('https://yourdomain.com/api/user/' + id, json={
+              response = client.patch('https://mock.smallyoung.cn/api/user/' + id, json={
                   'name': '李四',
                   'age': 25,
                   'email': 'lisi@example.com'
@@ -1428,7 +1322,7 @@ apiDefinitions:
           
           async def main():
               async with aiohttp.ClientSession() as session:
-                  async with session.patch('https://yourdomain.com/api/user/' + id, json={
+                  async with session.patch('https://mock.smallyoung.cn/api/user/' + id, json={
                       'name': '李四',
                       'age': 25,
                       'email': 'lisi@example.com'
@@ -1439,11 +1333,11 @@ apiDefinitions:
           asyncio.run(main())
       curl:
         basic: |
-          curl -X PATCH "https://yourdomain.com/api/user/" + id \
+          curl -X PATCH "https://mock.smallyoung.cn/api/user/" + id \
             -H "Accept: application/json" \
             -d "name=李四&age=25&email=lisi@example.com"
         verbose: |
-          curl -X PATCH "https://yourdomain.com/api/user/" + id \
+          curl -X PATCH "https://mock.smallyoung.cn/api/user/" + id \
             -H "Accept: application/json" \
             -d "name=李四&age=25&email=lisi@example.com" \
             -v \
@@ -1522,7 +1416,7 @@ apiDefinitions:
           
           OkHttpClient client = new OkHttpClient();
           Request request = new Request.Builder()
-              .url("https://yourdomain.com/api/user/" + id)
+              .url("https://mock.smallyoung.cn/api/user/" + id)
               .addHeader("Accept", "application/json")
               .delete()
               .build();
@@ -1536,7 +1430,7 @@ apiDefinitions:
           import org.springframework.http.ResponseEntity;
           
           RestTemplate restTemplate = new RestTemplate();
-          String url = "https://yourdomain.com/api/user/" + id;
+          String url = "https://mock.smallyoung.cn/api/user/" + id;
           ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
           System.out.println(response.getBody());
         httpclient: |
@@ -1547,7 +1441,7 @@ apiDefinitions:
           import org.apache.http.util.EntityUtils;
           
           CloseableHttpClient client = HttpClients.createDefault();
-          HttpDelete request = new HttpDelete("https://yourdomain.com/api/user/" + id);
+          HttpDelete request = new HttpDelete("https://mock.smallyoung.cn/api/user/" + id);
           request.addHeader("Accept", "application/json");
           
           String response = EntityUtils.toString(client.execute(request).getEntity());
@@ -1566,7 +1460,7 @@ apiDefinitions:
           func main() {
               client := &http.Client{}
               
-              req, err := http.NewRequest("DELETE", "https://yourdomain.com/api/user/" + id, nil)
+              req, err := http.NewRequest("DELETE", "https://mock.smallyoung.cn/api/user/" + id, nil)
               if err != nil {
                   panic(err)
               }
@@ -1598,7 +1492,7 @@ apiDefinitions:
               client := &fasthttp.Client{}
               
               req := fasthttp.AcquireRequest()
-              req.SetRequestURI("https://yourdomain.com/api/user/" + id)
+              req.SetRequestURI("https://mock.smallyoung.cn/api/user/" + id)
               req.Header.Set("Accept", "application/json")
               
               resp := fasthttp.AcquireResponse()
@@ -1617,28 +1511,13 @@ apiDefinitions:
               fmt.Println(string(body))
           }
       php:
-        curl: |
-          <?php
-          
-          $ch = curl_init();
-          curl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user/' + id);
-          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-          curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-          curl_setopt($ch, CURLOPT_HTTPHEADER, [
-              'Accept: application/json'
-          ]);
-          
-          $response = curl_exec($ch);
-          curl_close($ch);
-          
-          echo $response;
         guzzle: |
           <?php
           
           use GuzzleHttp\Client;
           
           $client = new Client();
-          $response = $client->delete('https://yourdomain.com/api/user/' + id, [
+          $response = $client->delete('https://mock.smallyoung.cn/api/user/' + id, [
               'headers' => [
                   'Accept' => 'application/json'
               ]
@@ -1651,7 +1530,7 @@ apiDefinitions:
           use Symfony\Component\HttpClient\HttpClient;
           
           $client = HttpClient::create();
-          $response = $client->request('DELETE', 'https://yourdomain.com/api/user/' + id, [
+          $response = $client->request('DELETE', 'https://mock.smallyoung.cn/api/user/' + id, [
               'headers' => [
                   'Accept' => 'application/json'
               ]
@@ -1662,13 +1541,13 @@ apiDefinitions:
         requests: |
           import requests
           
-          response = requests.delete('https://yourdomain.com/api/user/' + id)
+          response = requests.delete('https://mock.smallyoung.cn/api/user/' + id)
           print(response.json())
         httpx: |
           import httpx
           
           with httpx.Client() as client:
-              response = client.delete('https://yourdomain.com/api/user/' + id)
+              response = client.delete('https://mock.smallyoung.cn/api/user/' + id)
               print(response.json())
         aiohttp: |
           import aiohttp
@@ -1676,17 +1555,17 @@ apiDefinitions:
           
           async def main():
               async with aiohttp.ClientSession() as session:
-                  async with session.delete('https://yourdomain.com/api/user/' + id) as response:
+                  async with session.delete('https://mock.smallyoung.cn/api/user/' + id) as response:
                       data = await response.json()
                       print(data)
           
           asyncio.run(main())
       curl:
         basic: |
-          curl -X DELETE "https://yourdomain.com/api/user/" + id \
+          curl -X DELETE "https://mock.smallyoung.cn/api/user/" + id \
             -H "Accept: application/json"
         verbose: |
-          curl -X DELETE "https://yourdomain.com/api/user/" + id \
+          curl -X DELETE "https://mock.smallyoung.cn/api/user/" + id \
             -H "Accept: application/json" \
             -v \
             -w "\nTime: %{time_total}s\nStatus: %{http_code}\n"
@@ -1767,7 +1646,7 @@ apiDefinitions:
               .build();
           
           Request request = new Request.Builder()
-              .url("https://yourdomain.com/api/upload")
+              .url("https://mock.smallyoung.cn/api/upload")
               .addHeader("Accept", "application/json")
               .post(requestBody)
               .build();
@@ -1781,7 +1660,7 @@ apiDefinitions:
           import org.springframework.http.ResponseEntity;
           
           RestTemplate restTemplate = new RestTemplate();
-          String url = "https://yourdomain.com/api/upload";
+          String url = "https://mock.smallyoung.cn/api/upload";
           ResponseEntity<String> response = restTemplate.postForEntity(url, {
             file: new File(fileBytes)
           }, String.class);
@@ -1799,7 +1678,7 @@ apiDefinitions:
           import org.apache.http.util.EntityUtils;
           
           CloseableHttpClient client = HttpClients.createDefault();
-          HttpPost request = new HttpPost("https://yourdomain.com/api/upload");
+          HttpPost request = new HttpPost("https://mock.smallyoung.cn/api/upload");
           request.addHeader("Accept", "application/json");
           
           MultipartEntityBuilder builder = MultipartEntityBuilder.create();
@@ -1824,11 +1703,13 @@ apiDefinitions:
           
           func main() {
               client := &http.Client{}
+              jsonStr := `{"name":"李四","age":28,"email":"lisi@example.com"}`
               
-              req, err := http.NewRequest("POST", "https://yourdomain.com/api/upload", bytes.NewReader(fileBytes))
+              req, err := http.NewRequest("POST", "https://mock.smallyoung.cn/api/user", bytes.NewBuffer([]byte(jsonStr)))
               if err != nil {
                   panic(err)
               }
+              req.Header.Set("Content-Type", "application/json")
               req.Header.Set("Accept", "application/json")
               
               resp, err := client.Do(req)
@@ -1855,21 +1736,19 @@ apiDefinitions:
           
           func main() {
               client := &fasthttp.Client{}
+              jsonStr := `{"name":"李四","age":28,"email":"lisi@example.com"}`
               
               req := fasthttp.AcquireRequest()
-              req.SetRequestURI("https://yourdomain.com/api/upload")
+              req.SetRequestURI("https://mock.smallyoung.cn/api/user")
+              req.Header.SetContentType("application/json")
               req.Header.Set("Accept", "application/json")
+              req.SetBody([]byte(jsonStr))
               
               resp := fasthttp.AcquireResponse()
               defer fasthttp.ReleaseRequest(req)
               defer fasthttp.ReleaseResponse(resp)
               
-              err := client.Post(req, resp, &fasthttp.PostFormData{
-                  "file": fasthttp.File{
-                      File: bytes.NewReader(fileBytes),
-                      Name: "document.pdf",
-                  },
-              })
+              err := client.Do(req, resp)
               if err != nil {
                   panic(err)
               }
@@ -1881,31 +1760,13 @@ apiDefinitions:
               fmt.Println(string(body))
           }
       php:
-        curl: |
-          <?php
-          
-          $ch = curl_init();
-          curl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/upload');
-          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-          curl_setopt($ch, CURLOPT_POST, true);
-          curl_setopt($ch, CURLOPT_POSTFIELDS, [
-              'file' => new CURLFile(realpath($file['tmp_name']), $file['type'], $file['name'])
-          ]);
-          curl_setopt($ch, CURLOPT_HTTPHEADER, [
-              'Accept: application/json'
-          ]);
-          
-          $response = curl_exec($ch);
-          curl_close($ch);
-          
-          echo $response;
         guzzle: |
           <?php
           
           use GuzzleHttp\Client;
           
           $client = new Client();
-          $response = $client->post('https://yourdomain.com/api/upload', [
+          $response = $client->post('https://mock.smallyoung.cn/api/user', [
               'multipart' => [
                   [
                       'name' => 'file',
@@ -1928,7 +1789,7 @@ apiDefinitions:
           use Symfony\Component\HttpClient\HttpClient;
           
           $client = HttpClient::create();
-          $response = $client->request('POST', 'https://yourdomain.com/api/upload', [
+          $response = $client->request('POST', 'https://mock.smallyoung.cn/api/user', [
               'headers' => [
                   'Accept' => 'application/json'
               ],
@@ -1949,7 +1810,7 @@ apiDefinitions:
         requests: |
           import requests
           
-          response = requests.post('https://yourdomain.com/api/upload', files={
+          response = requests.post('https://mock.smallyoung.cn/api/user', files={
               'file': open(file_path, 'rb')
           })
           print(response.json())
@@ -1957,7 +1818,7 @@ apiDefinitions:
           import httpx
           
           with httpx.Client() as client:
-              response = client.post('https://yourdomain.com/api/upload', files={
+              response = client.post('https://mock.smallyoung.cn/api/user', files={
                   'file': open(file_path, 'rb')
               })
               print(response.json())
@@ -1967,7 +1828,7 @@ apiDefinitions:
           
           async def main():
               async with aiohttp.ClientSession() as session:
-                  async with session.post('https://yourdomain.com/api/upload', data={
+                  async with session.post('https://mock.smallyoung.cn/api/user', data={
                       'file': aiohttp.FileField(name='file', filename=file_path)
                   }) as response:
                       data = await response.json()
@@ -1976,11 +1837,11 @@ apiDefinitions:
           asyncio.run(main())
       curl:
         basic: |
-          curl -X POST "https://yourdomain.com/api/upload" \
+          curl -X POST "https://mock.smallyoung.cn/api/upload" \
             -H "Accept: application/json" \
             -F "file=@$file_path"
         verbose: |
-          curl -X POST "https://yourdomain.com/api/upload" \
+          curl -X POST "https://mock.smallyoung.cn/api/upload" \
             -H "Accept: application/json" \
             -F "file=@$file_path" \
             -v \
@@ -2069,7 +1930,7 @@ apiDefinitions:
           
           OkHttpClient client = new OkHttpClient();
           Request request = new Request.Builder()
-              .url("https://yourdomain.com/api/download/" + id)
+              .url("https://mock.smallyoung.cn/api/download/" + id)
               .addHeader("Accept", "application/octet-stream")
               .build();
           
@@ -2091,7 +1952,7 @@ apiDefinitions:
           import org.springframework.http.ResponseEntity;
           
           RestTemplate restTemplate = new RestTemplate();
-          String url = "https://yourdomain.com/api/download/" + id;
+          String url = "https://mock.smallyoung.cn/api/download/" + id;
           ResponseEntity<byte[]> response = restTemplate.getForEntity(url, byte[].class);
           
           FileOutputStream outputStream = new FileOutputStream("document.pdf");
@@ -2105,7 +1966,7 @@ apiDefinitions:
           import org.apache.http.util.EntityUtils;
           
           CloseableHttpClient client = HttpClients.createDefault();
-          HttpGet request = new HttpGet("https://yourdomain.com/api/download/" + id);
+          HttpGet request = new HttpGet("https://mock.smallyoung.cn/api/download/" + id);
           request.addHeader("Accept", "application/octet-stream");
           
           InputStream inputStream = client.execute(request).getEntity().getContent();
@@ -2131,7 +1992,7 @@ apiDefinitions:
           )
           
           func main() {
-              resp, err := http.Get("https://yourdomain.com/api/download/" + id)
+              resp, err := http.Get("https://mock.smallyoung.cn/api/download/" + id)
               if err != nil {
                   panic(err)
               }
@@ -2162,7 +2023,7 @@ apiDefinitions:
               client := &fasthttp.Client{}
               
               req := fasthttp.AcquireRequest()
-              req.SetRequestURI("https://yourdomain.com/api/download/" + id)
+              req.SetRequestURI("https://mock.smallyoung.cn/api/download/" + id)
               req.Header.Set("Accept", "application/octet-stream")
               
               resp := fasthttp.AcquireResponse()
@@ -2186,27 +2047,13 @@ apiDefinitions:
               }
           }
       php:
-        curl: |
-          <?php
-          
-          $ch = curl_init();
-          curl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/download/' + id);
-          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-          curl_setopt($ch, CURLOPT_HTTPHEADER, [
-              'Accept: application/octet-stream'
-          ]);
-          
-          $response = curl_exec($ch);
-          curl_close($ch);
-          
-          file_put_contents("document.pdf", $response);
         guzzle: |
           <?php
           
           use GuzzleHttp\Client;
           
           $client = new Client();
-          $response = $client->get('https://yourdomain.com/api/download/' + id, [
+          $response = $client->get('https://mock.smallyoung.cn/api/download/' + id, [
               'headers' => [
                   'Accept' => 'application/octet-stream'
               ]
@@ -2219,7 +2066,7 @@ apiDefinitions:
           use Symfony\Component\HttpClient\HttpClient;
           
           $client = HttpClient::create();
-          $response = $client->request('GET', 'https://yourdomain.com/api/download/' + id, [
+          $response = $client->request('GET', 'https://mock.smallyoung.cn/api/download/' + id, [
               'headers' => [
                   'Accept' => 'application/octet-stream'
               ]
@@ -2230,7 +2077,7 @@ apiDefinitions:
         requests: |
           import requests
           
-          response = requests.get('https://yourdomain.com/api/download/' + id, stream=True)
+          response = requests.get('https://mock.smallyoung.cn/api/download/' + id, stream=True)
           response.raise_for_status()
           
           with open('document.pdf', 'wb') as f:
@@ -2240,7 +2087,7 @@ apiDefinitions:
           import httpx
           
           with httpx.Client() as client:
-              response = client.get('https://yourdomain.com/api/download/' + id, stream=True)
+              response = client.get('https://mock.smallyoung.cn/api/download/' + id, stream=True)
               response.raise_for_status()
               
               with open('document.pdf', 'wb') as f:
@@ -2252,7 +2099,7 @@ apiDefinitions:
           
           async def main():
               async with aiohttp.ClientSession() as session:
-                  async with session.get('https://yourdomain.com/api/download/' + id, headers={
+                  async with session.get('https://mock.smallyoung.cn/api/download/' + id, headers={
                       'Accept': 'application/octet-stream'
                   }) as response:
                       response.raise_for_status()
@@ -2263,10 +2110,10 @@ apiDefinitions:
           asyncio.run(main())
       curl:
         basic: |
-          curl -X GET "https://yourdomain.com/api/download/" + id \
+          curl -X GET "https://mock.smallyoung.cn/api/download/" + id \
             -H "Accept: application/octet-stream"
         verbose: |
-          curl -X GET "https://yourdomain.com/api/download/" + id \
+          curl -X GET "https://mock.smallyoung.cn/api/download/" + id \
             -H "Accept: application/octet-stream" \
             -v \
             -w "\nTime: %{time_total}s\nStatus: %{http_code}\n"
