@@ -1,0 +1,2279 @@
+# Mock Flow API 配置（YAML格式）
+apiDefinitions:
+  # get-users
+  - id: get-users
+    path: /api/user
+    method: GET
+    summary: 获取用户列表
+    description: 获取系统中所有用户的列表信息，支持分页和筛选。
+    parameters:
+      query:
+        - name: page
+          type: integer
+          required: false
+          value: '1'
+          description: 页码，默认为1
+        - name: size
+          type: integer
+          required: false
+          value: '10'
+          description: 每页数量，默认为10
+        - name: name
+          type: String
+          required: false
+          description: 姓名查询
+        - name: email
+          type: String
+          required: false
+          description: 邮箱查询
+        - name: mobile
+          type: String
+          required: false
+          description: 手机号查询
+      headers:
+        - name: Accept
+          type: string
+          required: false
+          value: text/event-stream
+          description: text/event-stream，使用SSE协议
+    responses:
+      http:
+        '200':
+          description: 成功返回用户列表
+          example:
+            code: 200
+            message: success
+            data:
+              results: []
+              total: 100
+              page: 1
+              size: 10
+        '404':
+          description: 用户不存在
+          example:
+            code: 404
+            message: User not found
+            data: null
+      sse:
+        '200':
+          description: SSE流式返回用户列表
+          example:
+            event: message
+            data:
+              code: 200
+              message: success
+              data:
+                results: []
+                total: 100
+                page: 1
+                size: 10
+        '404':
+          description: SSE流式返回错误信息
+          example:
+            event: message
+            data:
+              code: 404
+              message: User not found
+              data: null
+    codeSamples:
+      javascript:
+        fetch: |
+          // HTTP 请求
+          fetch('/api/user?page=1&size=10')
+            .then(response => response.json())
+            .then(data => console.log(data));
+        axios: |
+          // HTTP 请求 (Axios)
+          import axios from 'axios';
+          axios.get('/api/user', {
+            params: {
+              page: 1,
+              size: 10
+            }
+          })
+          .then(response => console.log(response.data))
+          .catch(error => console.error(error));
+        jquery: |
+          // HTTP 请求 (jQuery)
+          $.ajax({
+            url: '/api/user',
+            method: 'GET',
+            data: {
+              page: 1,
+              size: 10
+            },
+            success: function(data) {
+              console.log(data);
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+            }
+          });
+      java:
+        okhttp: |
+          // HTTP 请求 (OkHttp)
+          import okhttp3.*;
+          
+          OkHttpClient client = new OkHttpClient();
+          Request request = new Request.Builder()
+              .url("https://yourdomain.com/api/user?page=1&size=10")
+              .addHeader("Accept", "application/json")
+              .build();
+          
+          Response response = client.newCall(request).execute();
+          String jsonData = response.body().string();
+          System.out.println(jsonData);
+        spring: |
+          // HTTP 请求 (Spring RestTemplate)
+          import org.springframework.web.client.RestTemplate;
+          import org.springframework.http.ResponseEntity;
+          
+          RestTemplate restTemplate = new RestTemplate();
+          String url = "https://yourdomain.com/api/user?page=1&size=10";
+          ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+          System.out.println(response.getBody());
+        httpclient: |
+          // HTTP 请求 (Apache HttpClient)
+          import org.apache.http.client.methods.HttpGet;
+          import org.apache.http.impl.client.CloseableHttpClient;
+          import org.apache.http.impl.client.HttpClients;
+          import org.apache.http.util.EntityUtils;
+          
+          CloseableHttpClient client = HttpClients.createDefault();
+          HttpGet request = new HttpGet("https://yourdomain.com/api/user?page=1&size=10");
+          request.addHeader("Accept", "application/json");
+          
+          String response = EntityUtils.toString(client.execute(request).getEntity());
+          System.out.println(response);
+          client.close();
+      go:
+        nethttp: |
+          package main
+          
+          import (
+              "fmt"
+              "io"
+              "net/http"
+          )
+          
+          func main() {
+              resp, err := http.Get("https://yourdomain.com/api/user?page=1&size=10")
+              if err != nil {
+                  panic(err)
+              }
+              defer resp.Body.Close()
+              
+              body, err := io.ReadAll(resp.Body)
+              if err != nil {
+                  panic(err)
+              }
+              fmt.Println(string(body))
+          }
+        fasthttp: |
+          package main
+          
+          import (
+              "fmt"
+              "io"
+              "os"
+              "github.com/valyala/fasthttp"
+          )
+          
+          func main() {
+              req := fasthttp.AcquireRequest()
+              resp := fasthttp.AcquireResponse()
+              defer fasthttp.ReleaseRequest(req)
+              defer fasthttp.ReleaseResponse(resp)
+              
+              req.SetRequestURI("https://yourdomain.com/api/user?page=1&size=10")
+              
+              err := fasthttp.Do(req, resp)
+              if err != nil {
+                  panic(err)
+              }
+              
+              body, err := io.ReadAll(resp.Body)
+              if err != nil {
+                  panic(err)
+              }
+              fmt.Println(string(body))
+          }
+      php:
+        curl: |
+          <?php
+          
+          $ch = curl_init();
+          curl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user?page=1&size=10');
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          curl_setopt($ch, CURLOPT_HTTPHEADER, [
+              'Accept: application/json'
+          ]);
+          
+          $response = curl_exec($ch);
+          curl_close($ch);
+          
+          echo $response;
+        guzzle: |
+          <?php
+          
+          use GuzzleHttp\Client;
+          
+          $client = new Client();
+          $response = $client->get('https://yourdomain.com/api/user', [
+              'query' => [
+                  'page' => 1,
+                  'size' => 10
+              ],
+              'headers' => [
+                  'Accept' => 'application/json'
+              ]
+          ]);
+          
+          echo $response->getBody();
+        symfony: |
+          <?php
+          
+          use Symfony\Component\HttpClient\HttpClient;
+          
+          $client = HttpClient::create();
+          $response = $client->request('GET', 'https://yourdomain.com/api/user', [
+              'query' => [
+                  'page' => 1,
+                  'size' => 10
+              ],
+              'headers' => [
+                  'Accept' => 'application/json'
+              ]
+          ]);
+          
+          echo $response->getContent();
+      python:
+        requests: |
+          import requests
+          
+          response = requests.get('https://yourdomain.com/api/user', {
+              'page': 1,
+              'size': 10
+          })
+          print(response.json())
+        httpx: |
+          import httpx
+          
+          with httpx.Client() as client:
+              response = client.get('https://yourdomain.com/api/user', params={
+                  'page': 1,
+                  'size': 10
+              })
+              print(response.json())
+        aiohttp: |
+          import aiohttp
+          import asyncio
+          
+          async def main():
+              async with aiohttp.ClientSession() as session:
+                  async with session.get('https://yourdomain.com/api/user', params={
+                      'page': 1,
+                      'size': 10
+                  }) as response:
+                      data = await response.json()
+                      print(data)
+          
+          asyncio.run(main())
+      curl:
+        basic: |
+          curl -X GET "https://yourdomain.com/api/user?page=1&size=10" \
+            -H "Accept: application/json"
+        verbose: |
+          curl -X GET "https://yourdomain.com/api/user?page=1&size=10" \
+            -H "Accept: application/json" \
+            -v \
+            -w "\nTime: %{time_total}s\nStatus: %{http_code}\n"
+  # get-user
+  - id: get-user
+    path: /api/user/{id}
+    method: GET
+    summary: 获取用户详情
+    description: 根据用户ID获取特定用户的详细信息。
+    parameters:
+      path:
+        - name: id
+          type: integer
+          required: true
+          description: 用户ID
+      headers:
+        - name: Accept
+          type: string
+          required: false
+          value: text/event-stream
+          description: text/event-stream，使用SSE协议
+    responses:
+      http:
+        '200':
+          description: 成功返回用户信息
+          example: {code: 200, message: success, data: {id: 1, name: 张三, age: 25, email: zhangsan@example.com}}
+        '404':
+          description: 用户不存在
+          example: {code: 404, message: User not found, data: null}
+      sse:
+        '200':
+          description: SSE流式返回用户信息
+          example: {event: message, data: {code: 200, message: success, data: {id: 1, name: 张三, age: 25, email: zhangsan@example.com}}}
+        '404':
+          description: SSE流式返回错误信息
+          example: {event: message, data: {code: 404, message: User not found, data: null}}
+    codeSamples:
+      javascript:
+        fetch: |
+          // HTTP 请求
+          fetch('/api/user/' + id)
+            .then(response => response.json())
+            .then(data => console.log(data));
+        axios: |
+          // HTTP 请求 (Axios)
+          import axios from 'axios';
+          axios.get('/api/user/' + id)
+            .then(response => console.log(response.data))
+            .catch(error => console.error(error));
+        jquery: |
+          // HTTP 请求 (jQuery)
+          $.ajax({
+            url: '/api/user/' + id,
+            method: 'GET',
+            success: function(data) {
+              console.log(data);
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+            }
+          });
+      java:
+        okhttp: |
+          // HTTP 请求 (OkHttp)
+          import okhttp3.*;
+          
+          OkHttpClient client = new OkHttpClient();
+          Request request = new Request.Builder()
+              .url("https://yourdomain.com/api/user/" + id)
+              .addHeader("Accept", "application/json")
+              .build();
+          
+          Response response = client.newCall(request).execute();
+          String jsonData = response.body().string();
+          System.out.println(jsonData);
+        spring: |
+          // HTTP 请求 (Spring RestTemplate)
+          import org.springframework.web.client.RestTemplate;
+          import org.springframework.http.ResponseEntity;
+          
+          RestTemplate restTemplate = new RestTemplate();
+          String url = "https://yourdomain.com/api/user/" + id;
+          ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+          System.out.println(response.getBody());
+        httpclient: |
+          // HTTP 请求 (Apache HttpClient)
+          import org.apache.http.client.methods.HttpGet;
+          import org.apache.http.impl.client.CloseableHttpClient;
+          import org.apache.http.impl.client.HttpClients;
+          import org.apache.http.util.EntityUtils;
+          
+          CloseableHttpClient client = HttpClients.createDefault();
+          HttpGet request = new HttpGet("https://yourdomain.com/api/user/" + id");
+          request.addHeader("Accept", "application/json");
+          
+          String response = EntityUtils.toString(client.execute(request).getEntity());
+          System.out.println(response);
+          client.close();
+      go:
+        nethttp: |
+          package main
+          
+          import (
+              "fmt"
+              "io"
+              "net/http"
+          )
+          
+          func main() {
+              resp, err := http.Get("https://yourdomain.com/api/user/" + id)
+              if err != nil {
+                  panic(err)
+              }
+              defer resp.Body.Close()
+              
+              body, err := io.ReadAll(resp.Body)
+              if err != nil {
+                  panic(err)
+              }
+              fmt.Println(string(body))
+          }
+        fasthttp: |
+          package main
+          
+          import (
+              "fmt"
+              "io"
+              "os"
+              "github.com/valyala/fasthttp"
+          )
+          
+          func main() {
+              req := fasthttp.AcquireRequest()
+              resp := fasthttp.AcquireResponse()
+              defer fasthttp.ReleaseRequest(req)
+              defer fasthttp.ReleaseResponse(resp)
+              
+              req.SetRequestURI("https://yourdomain.com/api/user/" + id)
+              
+              err := fasthttp.Do(req, resp)
+              if err != nil {
+                  panic(err)
+              }
+              
+              body, err := io.ReadAll(resp.Body)
+              if err != nil {
+                  panic(err)
+              }
+              fmt.Println(string(body))
+          }
+      php:
+        curl: |
+          <?php
+          
+          $ch = curl_init();
+          curl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user/' + id);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          curl_setopt($ch, CURLOPT_HTTPHEADER, [
+              'Accept: application/json'
+          ]);
+          
+          $response = curl_exec($ch);
+          curl_close($ch);
+          
+          echo $response;
+        guzzle: |
+          <?php
+          
+          use GuzzleHttp\Client;
+          
+          $client = new Client();
+          $response = $client->get('https://yourdomain.com/api/user/' + id, [
+              'headers' => [
+                  'Accept' => 'application/json'
+              ]
+          ]);
+          
+          echo $response->getBody();
+        symfony: |
+          <?php
+          
+          use Symfony\Component\HttpClient\HttpClient;
+          
+          $client = HttpClient::create();
+          $response = $client->request('GET', 'https://yourdomain.com/api/user/' + id, [
+              'headers' => [
+                  'Accept' => 'application/json'
+              ]
+          ]);
+          
+          echo $response->getContent();
+      python:
+        requests: |
+          import requests
+          
+          response = requests.get('https://yourdomain.com/api/user/' + id)
+          print(response.json())
+        httpx: |
+          import httpx
+          
+          with httpx.Client() as client:
+              response = client.get('https://yourdomain.com/api/user/' + id)
+              print(response.json())
+        aiohttp: |
+          import aiohttp
+          import asyncio
+          
+          async def main():
+              async with aiohttp.ClientSession() as session:
+                  async with session.get('https://yourdomain.com/api/user/' + id) as response:
+                      data = await response.json()
+                      print(data)
+          
+          asyncio.run(main())
+      curl:
+        basic: |
+          curl -X GET "https://yourdomain.com/api/user/" + id \
+            -H "Accept: application/json"
+        verbose: |
+          curl -X GET "https://yourdomain.com/api/user/" + id \
+            -H "Accept: application/json" \
+            -v \
+            -w "\nTime: %{time_total}s\nStatus: %{http_code}\n"
+  # create-user
+  - id: create-user
+    path: /api/user
+    method: POST
+    summary: 创建新用户
+    description: 在系统中创建一个新的用户账户。
+    parameters:
+      body:
+        - name: name
+          type: string
+          required: true
+          description: 用户姓名
+        - name: age
+          type: integer
+          required: false
+          description: 用户年龄
+        - name: email
+          type: string
+          required: false
+          description: 用户邮箱
+      headers:
+        - name: Accept
+          type: string
+          required: false
+          value: text/event-stream
+          description: text/event-stream，使用SSE协议
+    responses:
+      http:
+        '200':
+          description: 用户创建成功
+          example: {code: 200, message: success, data: {id: 1703123456789, name: 李四, age: 28, email: lisi@example.com}}
+      sse:
+        '200':
+          description: SSE流式返回用户创建结果
+          example: {event: message, data: {code: 200, message: success, data: {id: 1703123456789, name: 李四, age: 28, email: lisi@example.com}}}
+    codeSamples:
+      javascript:
+        fetch: |
+          // HTTP 请求
+          fetch('/api/user', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              name: '李四',
+              age: 28,
+              email: 'lisi@example.com'
+            })
+          })
+          .then(response => response.json())
+          .then(data => console.log(data));
+        axios: |
+          // HTTP 请求 (Axios)
+          import axios from 'axios';
+          axios.post('/api/user', {
+            name: '李四',
+            age: 28,
+            email: 'lisi@example.com'
+          }, {
+            headers: {
+              Accept: 'application/json'
+            }
+          })
+          .then(response => console.log(response.data))
+          .catch(error => console.error(error));
+        jquery: |
+          // HTTP 请求 (jQuery)
+          $.ajax({
+            url: '/api/user',
+            method: 'POST',
+            data: {
+              name: '李四',
+              age: 28,
+              email: 'lisi@example.com'
+            },
+            success: function(data) {
+              console.log(data);
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+            }
+          });
+      java:
+        okhttp: |
+          // HTTP 请求 (OkHttp)
+          import okhttp3.*;
+          
+          OkHttpClient client = new OkHttpClient();
+          RequestBody requestBody = new FormBody.Builder()
+              .add("name", "李四")
+              .add("age", "28")
+              .add("email", "lisi@example.com")
+              .build();
+          
+          Request request = new Request.Builder()
+              .url("https://yourdomain.com/api/user")
+              .addHeader("Accept", "application/json")
+              .post(requestBody)
+              .build();
+          
+          Response response = client.newCall(request).execute();
+          String jsonData = response.body().string();
+          System.out.println(jsonData);
+        spring: |
+          // HTTP 请求 (Spring RestTemplate)
+          import org.springframework.web.client.RestTemplate;
+          import org.springframework.http.ResponseEntity;
+          
+          RestTemplate restTemplate = new RestTemplate();
+          String url = "https://yourdomain.com/api/user";
+          ResponseEntity<String> response = restTemplate.postForEntity(url, {
+            name: '李四',
+            age: 28,
+            email: 'lisi@example.com'
+          }, String.class);
+          System.out.println(response.getBody());
+        httpclient: |
+          // HTTP 请求 (Apache HttpClient)
+          import org.apache.http.client.methods.HttpPost;
+          import org.apache.http.entity.StringEntity;
+          import org.apache.http.impl.client.CloseableHttpClient;
+          import org.apache.http.impl.client.HttpClients;
+          import org.apache.http.util.EntityUtils;
+          
+          CloseableHttpClient client = HttpClients.createDefault();
+          HttpPost request = new HttpPost("https://yourdomain.com/api/user");
+          request.addHeader("Accept", "application/json");
+          
+          StringEntity entity = new StringEntity("{ \"name\": \"李四\", \"age\": 28, \"email\": \"lisi@example.com\" }");
+          request.setEntity(entity);
+          
+          String response = EntityUtils.toString(client.execute(request).getEntity());
+          System.out.println(response);
+          client.close();
+      go:
+        nethttp: |
+          package main
+          
+          import (
+              "fmt"
+              "io"
+              "net/http"
+          )
+          
+          func main() {
+              client := &http.Client{}
+              jsonStr := `{"name":"李四","age":28,"email":"lisi@example.com"}`
+              
+              req, err := http.NewRequest("POST", "https://yourdomain.com/api/user", bytes.NewBuffer([]byte(jsonStr)))
+              if err != nil {
+                  panic(err)
+              }
+              req.Header.Set("Content-Type", "application/json")
+              req.Header.Set("Accept", "application/json")
+              
+              resp, err := client.Do(req)
+              if err != nil {
+                  panic(err)
+              }
+              defer resp.Body.Close()
+              
+              body, err := io.ReadAll(resp.Body)
+              if err != nil {
+                  panic(err)
+              }
+              fmt.Println(string(body))
+          }
+        fasthttp: |
+          package main
+          
+          import (
+              "fmt"
+              "io"
+              "os"
+              "github.com/valyala/fasthttp"
+          )
+          
+          func main() {
+              client := &fasthttp.Client{}
+              jsonStr := `{"name":"李四","age":28,"email":"lisi@example.com"}`
+              
+              req := fasthttp.AcquireRequest()
+              req.SetRequestURI("https://yourdomain.com/api/user")
+              req.Header.SetContentType("application/json")
+              req.Header.Set("Accept", "application/json")
+              req.SetBody([]byte(jsonStr))
+              
+              resp := fasthttp.AcquireResponse()
+              defer fasthttp.ReleaseRequest(req)
+              defer fasthttp.ReleaseResponse(resp)
+              
+              err := client.Do(req, resp)
+              if err != nil {
+                  panic(err)
+              }
+              
+              body, err := io.ReadAll(resp.Body)
+              if err != nil {
+                  panic(err)
+              }
+              fmt.Println(string(body))
+          }
+      php:
+        curl: |
+          <?php
+          
+          $ch = curl_init();
+          curl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user');
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          curl_setopt($ch, CURLOPT_POST, true);
+          curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+              'name' => '李四',
+              'age' => 28,
+              'email' => 'lisi@example.com'
+          ]));
+          curl_setopt($ch, CURLOPT_HTTPHEADER, [
+              'Accept: application/json'
+          ]);
+          
+          $response = curl_exec($ch);
+          curl_close($ch);
+          
+          echo $response;
+        guzzle: |
+          <?php
+          
+          use GuzzleHttp\Client;
+          
+          $client = new Client();
+          $response = $client->post('https://yourdomain.com/api/user', [
+              'json' => [
+                  'name' => '李四',
+                  'age' => 28,
+                  'email' => 'lisi@example.com'
+              ],
+              'headers' => [
+                  'Accept' => 'application/json'
+              ]
+          ]);
+          
+          echo $response->getBody();
+        symfony: |
+          <?php
+          
+          use Symfony\Component\HttpClient\HttpClient;
+          
+          $client = HttpClient::create();
+          $response = $client->request('POST', 'https://yourdomain.com/api/user', [
+              'json' => [
+                  'name' => '李四',
+                  'age' => 28,
+                  'email' => 'lisi@example.com'
+              ],
+              'headers' => [
+                  'Accept' => 'application/json'
+              ]
+          ]);
+          
+          echo $response->getContent();
+      python:
+        requests: |
+          import requests
+          
+          response = requests.post('https://yourdomain.com/api/user', json={
+              'name': '李四',
+              'age': 28,
+              'email': 'lisi@example.com'
+          })
+          print(response.json())
+        httpx: |
+          import httpx
+          
+          with httpx.Client() as client:
+              response = client.post('https://yourdomain.com/api/user', json={
+                  'name': '李四',
+                  'age': 28,
+                  'email': 'lisi@example.com'
+              })
+              print(response.json())
+        aiohttp: |
+          import aiohttp
+          import asyncio
+          
+          async def main():
+              async with aiohttp.ClientSession() as session:
+                  async with session.post('https://yourdomain.com/api/user', json={
+                      'name': '李四',
+                      'age': 28,
+                      'email': 'lisi@example.com'
+                  }) as response:
+                      data = await response.json()
+                      print(data)
+          
+          asyncio.run(main())
+      curl:
+        basic: |
+          curl -X POST "https://yourdomain.com/api/user" \
+            -H "Accept: application/json" \
+            -d "name=李四&age=28&email=lisi@example.com"
+        verbose: |
+          curl -X POST "https://yourdomain.com/api/user" \
+            -H "Accept: application/json" \
+            -d "name=李四&age=28&email=lisi@example.com" \
+            -v \
+            -w "\nTime: %{time_total}s\nStatus: %{http_code}\n"
+  # update-user
+  - id: update-user
+    path: /api/user/{id}
+    method: PUT
+    summary: 更新用户信息
+    description: 完整更新指定用户的信息。
+    parameters:
+      path:
+        - name: id
+          type: integer
+          required: true
+          description: 用户ID
+      body:
+        - name: name
+          type: string
+          required: false
+          description: 用户姓名
+        - name: age
+          type: integer
+          required: false
+          description: 用户年龄
+        - name: email
+          type: string
+          required: false
+          description: 用户邮箱
+      headers:
+        - name: Accept
+          type: string
+          required: false
+          value: text/event-stream
+          description: text/event-stream，使用SSE协议
+    responses:
+      http:
+        '200':
+          description: 用户更新成功
+          example: {code: 200, message: success, data: {id: 123, name: 李四, age: 29, email: lisi_new@example.com}}
+        '404':
+          description: 用户不存在
+          example: {code: 404, message: User not found, data: null}
+      sse:
+        '200':
+          description: SSE流式返回用户更新结果
+          example: {event: message, data: {code: 200, message: success, data: {id: 123, name: 李四, age: 29, email: lisi_new@example.com}}}
+        '404':
+          description: SSE流式返回错误信息
+          example: {event: message, data: {code: 404, message: User not found, data: null}}
+    codeSamples:
+      javascript:
+        fetch: |
+          // HTTP 请求
+          fetch('/api/user/' + id, {
+            method: 'PUT',
+            headers: {
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              name: '李四',
+              age: 29,
+              email: 'lisi_new@example.com'
+            })
+          })
+          .then(response => response.json())
+          .then(data => console.log(data));
+        axios: |
+          // HTTP 请求 (Axios)
+          import axios from 'axios';
+          axios.put('/api/user/' + id, {
+            name: '李四',
+            age: 29,
+            email: 'lisi_new@example.com'
+          }, {
+            headers: {
+              Accept: 'application/json'
+            }
+          })
+          .then(response => console.log(response.data))
+          .catch(error => console.error(error));
+        jquery: |
+          // HTTP 请求 (jQuery)
+          $.ajax({
+            url: '/api/user/' + id,
+            method: 'PUT',
+            data: {
+              name: '李四',
+              age: 29,
+              email: 'lisi_new@example.com'
+            },
+            success: function(data) {
+              console.log(data);
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+            }
+          });
+      java:
+        okhttp: |
+          // HTTP 请求 (OkHttp)
+          import okhttp3.*;
+          
+          OkHttpClient client = new OkHttpClient();
+          RequestBody requestBody = new FormBody.Builder()
+              .add("name", "李四")
+              .add("age", "29")
+              .add("email", "lisi_new@example.com")
+              .build();
+          
+          Request request = new Request.Builder()
+              .url("https://yourdomain.com/api/user/" + id)
+              .addHeader("Accept", "application/json")
+              .put(requestBody)
+              .build();
+          
+          Response response = client.newCall(request).execute();
+          String jsonData = response.body().string();
+          System.out.println(jsonData);
+        spring: |
+          // HTTP 请求 (Spring RestTemplate)
+          import org.springframework.web.client.RestTemplate;
+          import org.springframework.http.ResponseEntity;
+          
+          RestTemplate restTemplate = new RestTemplate();
+          String url = "https://yourdomain.com/api/user/" + id;
+          ResponseEntity<String> response = restTemplate.put(url, {
+            name: '李四',
+            age: 29,
+            email: 'lisi_new@example.com'
+          }, String.class);
+          System.out.println(response.getBody());
+        httpclient: |
+          // HTTP 请求 (Apache HttpClient)
+          import org.apache.http.client.methods.HttpPut;
+          import org.apache.http.entity.StringEntity;
+          import org.apache.http.impl.client.CloseableHttpClient;
+          import org.apache.http.impl.client.HttpClients;
+          import org.apache.http.util.EntityUtils;
+          
+          CloseableHttpClient client = HttpClients.createDefault();
+          HttpPut request = new HttpPut("https://yourdomain.com/api/user/" + id);
+          request.addHeader("Accept", "application/json");
+          
+          StringEntity entity = new StringEntity("{ \"name\": \"李四\", \"age\": 29, \"email\": \"lisi_new@example.com\" }");
+          request.setEntity(entity);
+          
+          String response = EntityUtils.toString(client.execute(request).getEntity());
+          System.out.println(response);
+          client.close();
+      go:
+        nethttp: |
+          package main
+          
+          import (
+              "fmt"
+              "io"
+              "net/http"
+          )
+          
+          func main() {
+              client := &http.Client{}
+              jsonStr := `{"name":"李四","age":29,"email":"lisi_new@example.com"}`
+              
+              req, err := http.NewRequest("PUT", "https://yourdomain.com/api/user/" + id, bytes.NewBuffer([]byte(jsonStr)))
+              if err != nil {
+                  panic(err)
+              }
+              req.Header.Set("Content-Type", "application/json")
+              req.Header.Set("Accept", "application/json")
+              
+              resp, err := client.Do(req)
+              if err != nil {
+                  panic(err)
+              }
+              defer resp.Body.Close()
+              
+              body, err := io.ReadAll(resp.Body)
+              if err != nil {
+                  panic(err)
+              }
+              fmt.Println(string(body))
+          }
+        fasthttp: |
+          package main
+          
+          import (
+              "fmt"
+              "io"
+              "os"
+              "github.com/valyala/fasthttp"
+          )
+          
+          func main() {
+              client := &fasthttp.Client{}
+              jsonStr := `{"name":"李四","age":29,"email":"lisi_new@example.com"}`
+              
+              req := fasthttp.AcquireRequest()
+              req.SetRequestURI("https://yourdomain.com/api/user/" + id)
+              req.Header.SetContentType("application/json")
+              req.Header.Set("Accept", "application/json")
+              req.SetBody([]byte(jsonStr))
+              
+              resp := fasthttp.AcquireResponse()
+              defer fasthttp.ReleaseRequest(req)
+              defer fasthttp.ReleaseResponse(resp)
+              
+              err := client.Do(req, resp)
+              if err != nil {
+                  panic(err)
+              }
+              
+              body, err := io.ReadAll(resp.Body)
+              if err != nil {
+                  panic(err)
+              }
+              fmt.Println(string(body))
+          }
+      php:
+        curl: |
+          <?php
+          
+          $ch = curl_init();
+          curl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user/' + id);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+          curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+              'name' => '李四',
+              'age' => 29,
+              'email' => 'lisi_new@example.com'
+          ]));
+          curl_setopt($ch, CURLOPT_HTTPHEADER, [
+              'Accept: application/json'
+          ]);
+          
+          $response = curl_exec($ch);
+          curl_close($ch);
+          
+          echo $response;
+        guzzle: |
+          <?php
+          
+          use GuzzleHttp\Client;
+          
+          $client = new Client();
+          $response = $client->put('https://yourdomain.com/api/user/' + id, [
+              'json' => [
+                  'name' => '李四',
+                  'age' => 29,
+                  'email' => 'lisi_new@example.com'
+              ],
+              'headers' => [
+                  'Accept' => 'application/json'
+              ]
+          ]);
+          
+          echo $response->getBody();
+        symfony: |
+          <?php
+          
+          use Symfony\Component\HttpClient\HttpClient;
+          
+          $client = HttpClient::create();
+          $response = $client->request('PUT', 'https://yourdomain.com/api/user/' + id, [
+              'json' => [
+                  'name' => '李四',
+                  'age' => 29,
+                  'email' => 'lisi_new@example.com'
+              ],
+              'headers' => [
+                  'Accept' => 'application/json'
+              ]
+          ]);
+          
+          echo $response->getContent();
+      python:
+        requests: |
+          import requests
+          
+          response = requests.put('https://yourdomain.com/api/user/' + id, json={
+              'name': '李四',
+              'age': 29,
+              'email': 'lisi_new@example.com'
+          })
+          print(response.json())
+        httpx: |
+          import httpx
+          
+          with httpx.Client() as client:
+              response = client.put('https://yourdomain.com/api/user/' + id, json={
+                  'name': '李四',
+                  'age': 29,
+                  'email': 'lisi_new@example.com'
+              })
+              print(response.json())
+        aiohttp: |
+          import aiohttp
+          import asyncio
+          
+          async def main():
+              async with aiohttp.ClientSession() as session:
+                  async with session.put('https://yourdomain.com/api/user/' + id, json={
+                      'name': '李四',
+                      'age': 29,
+                      'email': 'lisi_new@example.com'
+                  }) as response:
+                      data = await response.json()
+                      print(data)
+          
+          asyncio.run(main())
+      curl:
+        basic: |
+          curl -X PUT "https://yourdomain.com/api/user/" + id \
+            -H "Accept: application/json" \
+            -d "name=李四&age=29&email=lisi_new@example.com"
+        verbose: |
+          curl -X PUT "https://yourdomain.com/api/user/" + id \
+            -H "Accept: application/json" \
+            -d "name=李四&age=29&email=lisi_new@example.com" \
+            -v \
+            -w "\nTime: %{time_total}s\nStatus: %{http_code}\n"
+  # patch-user
+  - id: patch-user
+    path: /api/user/{id}
+    method: PATCH
+    summary: 部分更新用户
+    description: 部分更新指定用户的信息。
+    parameters:
+      path:
+        - name: id
+          type: integer
+          required: true
+          description: 用户ID
+      body:
+        - name: name
+          type: string
+          required: false
+          description: 用户姓名
+        - name: age
+          type: integer
+          required: false
+          description: 用户年龄
+        - name: email
+          type: string
+          required: false
+          description: 用户邮箱
+      headers:
+        - name: Accept
+          type: string
+          required: false
+          value: text/event-stream
+          description: text/event-stream，使用SSE协议
+    responses:
+      http:
+        '200':
+          description: 用户更新成功
+          example: {code: 200, message: success, data: {id: 123, name: 李四, age: 25, email: lisi@example.com}}
+        '404':
+          description: 用户不存在
+          example: {code: 404, message: User not found, data: null}
+      sse:
+        '200':
+          description: SSE流式返回用户更新结果
+          example: {event: message, data: {code: 200, message: success, data: {id: 123, name: 李四, age: 25, email: lisi@example.com}}}
+        '404':
+          description: SSE流式返回错误信息
+          example: {event: message, data: {code: 404, message: User not found, data: null}}
+    codeSamples:
+      javascript:
+        fetch: |
+          // HTTP 请求
+          fetch('/api/user/' + id, {
+            method: 'PATCH',
+            headers: {
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              name: '李四',
+              age: 25,
+              email: 'lisi@example.com'
+            })
+          })
+          .then(response => response.json())
+          .then(data => console.log(data));
+        axios: |
+          // HTTP 请求 (Axios)
+          import axios from 'axios';
+          axios.patch('/api/user/' + id, {
+            name: '李四',
+            age: 25,
+            email: 'lisi@example.com'
+          }, {
+            headers: {
+              Accept: 'application/json'
+            }
+          })
+          .then(response => console.log(response.data))
+          .catch(error => console.error(error));
+        jquery: |
+          // HTTP 请求 (jQuery)
+          $.ajax({
+            url: '/api/user/' + id,
+            method: 'PATCH',
+            data: {
+              name: '李四',
+              age: 25,
+              email: 'lisi@example.com'
+            },
+            success: function(data) {
+              console.log(data);
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+            }
+          });
+      java:
+        okhttp: |
+          // HTTP 请求 (OkHttp)
+          import okhttp3.*;
+          
+          OkHttpClient client = new OkHttpClient();
+          RequestBody requestBody = new FormBody.Builder()
+              .add("name", "李四")
+              .add("age", "25")
+              .add("email", "lisi@example.com")
+              .build();
+          
+          Request request = new Request.Builder()
+              .url("https://yourdomain.com/api/user/" + id)
+              .addHeader("Accept", "application/json")
+              .patch(requestBody)
+              .build();
+          
+          Response response = client.newCall(request).execute();
+          String jsonData = response.body().string();
+          System.out.println(jsonData);
+        spring: |
+          // HTTP 请求 (Spring RestTemplate)
+          import org.springframework.web.client.RestTemplate;
+          import org.springframework.http.ResponseEntity;
+          
+          RestTemplate restTemplate = new RestTemplate();
+          String url = "https://yourdomain.com/api/user/" + id;
+          ResponseEntity<String> response = restTemplate.patchForEntity(url, {
+            name: '李四',
+            age: 25,
+            email: 'lisi@example.com'
+          }, String.class);
+          System.out.println(response.getBody());
+        httpclient: |
+          // HTTP 请求 (Apache HttpClient)
+          import org.apache.http.client.methods.HttpPatch;
+          import org.apache.http.entity.StringEntity;
+          import org.apache.http.impl.client.CloseableHttpClient;
+          import org.apache.http.impl.client.HttpClients;
+          import org.apache.http.util.EntityUtils;
+          
+          CloseableHttpClient client = HttpClients.createDefault();
+          HttpPatch request = new HttpPatch("https://yourdomain.com/api/user/" + id);
+          request.addHeader("Accept", "application/json");
+          
+          StringEntity entity = new StringEntity("{ \"name\": \"李四\", \"age\": 25, \"email\": \"lisi@example.com\" }");
+          request.setEntity(entity);
+          
+          String response = EntityUtils.toString(client.execute(request).getEntity());
+          System.out.println(response);
+          client.close();
+      go:
+        nethttp: |
+          package main
+          
+          import (
+              "fmt"
+              "io"
+              "net/http"
+          )
+          
+          func main() {
+              client := &http.Client{}
+              jsonStr := `{"name":"李四","age":25,"email":"lisi@example.com"}`
+              
+              req, err := http.NewRequest("PATCH", "https://yourdomain.com/api/user/" + id, bytes.NewBuffer([]byte(jsonStr)))
+              if err != nil {
+                  panic(err)
+              }
+              req.Header.Set("Content-Type", "application/json")
+              req.Header.Set("Accept", "application/json")
+              
+              resp, err := client.Do(req)
+              if err != nil {
+                  panic(err)
+              }
+              defer resp.Body.Close()
+              
+              body, err := io.ReadAll(resp.Body)
+              if err != nil {
+                  panic(err)
+              }
+              fmt.Println(string(body))
+          }
+        fasthttp: |
+          package main
+          
+          import (
+              "fmt"
+              "io"
+              "os"
+              "github.com/valyala/fasthttp"
+          )
+          
+          func main() {
+              client := &fasthttp.Client{}
+              jsonStr := `{"name":"李四","age":25,"email":"lisi@example.com"}`
+              
+              req := fasthttp.AcquireRequest()
+              req.SetRequestURI("https://yourdomain.com/api/user/" + id)
+              req.Header.SetContentType("application/json")
+              req.Header.Set("Accept", "application/json")
+              req.SetBody([]byte(jsonStr))
+              
+              resp := fasthttp.AcquireResponse()
+              defer fasthttp.ReleaseRequest(req)
+              defer fasthttp.ReleaseResponse(resp)
+              
+              err := client.Do(req, resp)
+              if err != nil {
+                  panic(err)
+              }
+              
+              body, err := io.ReadAll(resp.Body)
+              if err != nil {
+                  panic(err)
+              }
+              fmt.Println(string(body))
+          }
+      php:
+        curl: |
+          <?php
+          
+          $ch = curl_init();
+          curl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user/' + id);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
+          curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+              'name' => '李四',
+              'age' => 25,
+              'email' => 'lisi@example.com'
+          ]));
+          curl_setopt($ch, CURLOPT_HTTPHEADER, [
+              'Accept: application/json'
+          ]);
+          
+          $response = curl_exec($ch);
+          curl_close($ch);
+          
+          echo $response;
+        guzzle: |
+          <?php
+          
+          use GuzzleHttp\Client;
+          
+          $client = new Client();
+          $response = $client->patch('https://yourdomain.com/api/user/' + id, [
+              'json' => [
+                  'name' => '李四',
+                  'age' => 25,
+                  'email' => 'lisi@example.com'
+              ],
+              'headers' => [
+                  'Accept' => 'application/json'
+              ]
+          ]);
+          
+          echo $response->getBody();
+        symfony: |
+          <?php
+          
+          use Symfony\Component\HttpClient\HttpClient;
+          
+          $client = HttpClient::create();
+          $response = $client->request('PATCH', 'https://yourdomain.com/api/user/' + id, [
+              'json' => [
+                  'name' => '李四',
+                  'age' => 25,
+                  'email' => 'lisi@example.com'
+              ],
+              'headers' => [
+                  'Accept' => 'application/json'
+              ]
+          ]);
+          
+          echo $response->getContent();
+      python:
+        requests: |
+          import requests
+          
+          response = requests.patch('https://yourdomain.com/api/user/' + id, json={
+              'name': '李四',
+              'age': 25,
+              'email': 'lisi@example.com'
+          })
+          print(response.json())
+        httpx: |
+          import httpx
+          
+          with httpx.Client() as client:
+              response = client.patch('https://yourdomain.com/api/user/' + id, json={
+                  'name': '李四',
+                  'age': 25,
+                  'email': 'lisi@example.com'
+              })
+              print(response.json())
+        aiohttp: |
+          import aiohttp
+          import asyncio
+          
+          async def main():
+              async with aiohttp.ClientSession() as session:
+                  async with session.patch('https://yourdomain.com/api/user/' + id, json={
+                      'name': '李四',
+                      'age': 25,
+                      'email': 'lisi@example.com'
+                  }) as response:
+                      data = await response.json()
+                      print(data)
+          
+          asyncio.run(main())
+      curl:
+        basic: |
+          curl -X PATCH "https://yourdomain.com/api/user/" + id \
+            -H "Accept: application/json" \
+            -d "name=李四&age=25&email=lisi@example.com"
+        verbose: |
+          curl -X PATCH "https://yourdomain.com/api/user/" + id \
+            -H "Accept: application/json" \
+            -d "name=李四&age=25&email=lisi@example.com" \
+            -v \
+            -w "\nTime: %{time_total}s\nStatus: %{http_code}\n"
+  # delete-user
+  - id: delete-user
+    path: /api/user/{id}
+    method: DELETE
+    summary: 删除用户
+    description: 删除指定的用户账户。
+    parameters:
+      path:
+        - name: id
+          type: integer
+          required: true
+          description: 用户ID
+      headers:
+        - name: Accept
+          type: string
+          required: false
+          value: text/event-stream
+          description: text/event-stream，使用SSE协议
+    responses:
+      http:
+        '200':
+          description: 用户删除成功
+          example: {code: 200, message: success, data: {message: User 123 deleted successfully}}
+        '404':
+          description: 用户不存在
+          example: {code: 404, message: User not found, data: null}
+      sse:
+        '200':
+          description: SSE流式返回用户删除结果
+          example: {event: message, data: {code: 200, message: success, data: {message: User 123 deleted successfully}}}
+        '404':
+          description: SSE流式返回错误信息
+          example: {event: message, data: {code: 404, message: User not found, data: null}}
+    codeSamples:
+      javascript:
+        fetch: |
+          // HTTP 请求
+          fetch('/api/user/' + id, {
+            method: 'DELETE',
+            headers: {
+              'Accept': 'application/json'
+            }
+          })
+          .then(response => response.json())
+          .then(data => console.log(data));
+        axios: |
+          // HTTP 请求 (Axios)
+          import axios from 'axios';
+          axios.delete('/api/user/' + id, {
+            headers: {
+              Accept: 'application/json'
+            }
+          })
+          .then(response => console.log(response.data))
+          .catch(error => console.error(error));
+        jquery: |
+          // HTTP 请求 (jQuery)
+          $.ajax({
+            url: '/api/user/' + id,
+            method: 'DELETE',
+            success: function(data) {
+              console.log(data);
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+            }
+          });
+      java:
+        okhttp: |
+          // HTTP 请求 (OkHttp)
+          import okhttp3.*;
+          
+          OkHttpClient client = new OkHttpClient();
+          Request request = new Request.Builder()
+              .url("https://yourdomain.com/api/user/" + id)
+              .addHeader("Accept", "application/json")
+              .delete()
+              .build();
+          
+          Response response = client.newCall(request).execute();
+          String jsonData = response.body().string();
+          System.out.println(jsonData);
+        spring: |
+          // HTTP 请求 (Spring RestTemplate)
+          import org.springframework.web.client.RestTemplate;
+          import org.springframework.http.ResponseEntity;
+          
+          RestTemplate restTemplate = new RestTemplate();
+          String url = "https://yourdomain.com/api/user/" + id;
+          ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
+          System.out.println(response.getBody());
+        httpclient: |
+          // HTTP 请求 (Apache HttpClient)
+          import org.apache.http.client.methods.HttpDelete;
+          import org.apache.http.impl.client.CloseableHttpClient;
+          import org.apache.http.impl.client.HttpClients;
+          import org.apache.http.util.EntityUtils;
+          
+          CloseableHttpClient client = HttpClients.createDefault();
+          HttpDelete request = new HttpDelete("https://yourdomain.com/api/user/" + id);
+          request.addHeader("Accept", "application/json");
+          
+          String response = EntityUtils.toString(client.execute(request).getEntity());
+          System.out.println(response);
+          client.close();
+      go:
+        nethttp: |
+          package main
+          
+          import (
+              "fmt"
+              "io"
+              "net/http"
+          )
+          
+          func main() {
+              client := &http.Client{}
+              
+              req, err := http.NewRequest("DELETE", "https://yourdomain.com/api/user/" + id, nil)
+              if err != nil {
+                  panic(err)
+              }
+              req.Header.Set("Accept", "application/json")
+              
+              resp, err := client.Do(req)
+              if err != nil {
+                  panic(err)
+              }
+              defer resp.Body.Close()
+              
+              body, err := io.ReadAll(resp.Body)
+              if err != nil {
+                  panic(err)
+              }
+              fmt.Println(string(body))
+          }
+        fasthttp: |
+          package main
+          
+          import (
+              "fmt"
+              "io"
+              "os"
+              "github.com/valyala/fasthttp"
+          )
+          
+          func main() {
+              client := &fasthttp.Client{}
+              
+              req := fasthttp.AcquireRequest()
+              req.SetRequestURI("https://yourdomain.com/api/user/" + id)
+              req.Header.Set("Accept", "application/json")
+              
+              resp := fasthttp.AcquireResponse()
+              defer fasthttp.ReleaseRequest(req)
+              defer fasthttp.ReleaseResponse(resp)
+              
+              err := client.Do(req, resp)
+              if err != nil {
+                  panic(err)
+              }
+              
+              body, err := io.ReadAll(resp.Body)
+              if err != nil {
+                  panic(err)
+              }
+              fmt.Println(string(body))
+          }
+      php:
+        curl: |
+          <?php
+          
+          $ch = curl_init();
+          curl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/user/' + id);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+          curl_setopt($ch, CURLOPT_HTTPHEADER, [
+              'Accept: application/json'
+          ]);
+          
+          $response = curl_exec($ch);
+          curl_close($ch);
+          
+          echo $response;
+        guzzle: |
+          <?php
+          
+          use GuzzleHttp\Client;
+          
+          $client = new Client();
+          $response = $client->delete('https://yourdomain.com/api/user/' + id, [
+              'headers' => [
+                  'Accept' => 'application/json'
+              ]
+          ]);
+          
+          echo $response->getBody();
+        symfony: |
+          <?php
+          
+          use Symfony\Component\HttpClient\HttpClient;
+          
+          $client = HttpClient::create();
+          $response = $client->request('DELETE', 'https://yourdomain.com/api/user/' + id, [
+              'headers' => [
+                  'Accept' => 'application/json'
+              ]
+          ]);
+          
+          echo $response->getContent();
+      python:
+        requests: |
+          import requests
+          
+          response = requests.delete('https://yourdomain.com/api/user/' + id)
+          print(response.json())
+        httpx: |
+          import httpx
+          
+          with httpx.Client() as client:
+              response = client.delete('https://yourdomain.com/api/user/' + id)
+              print(response.json())
+        aiohttp: |
+          import aiohttp
+          import asyncio
+          
+          async def main():
+              async with aiohttp.ClientSession() as session:
+                  async with session.delete('https://yourdomain.com/api/user/' + id) as response:
+                      data = await response.json()
+                      print(data)
+          
+          asyncio.run(main())
+      curl:
+        basic: |
+          curl -X DELETE "https://yourdomain.com/api/user/" + id \
+            -H "Accept: application/json"
+        verbose: |
+          curl -X DELETE "https://yourdomain.com/api/user/" + id \
+            -H "Accept: application/json" \
+            -v \
+            -w "\nTime: %{time_total}s\nStatus: %{http_code}\n"
+  # upload-file
+  - id: upload-file
+    path: /api/upload
+    method: POST
+    summary: 文件上传
+    description: 上传文件到服务器，支持多种文件格式。
+    parameters:
+      body:
+        - name: file
+          type: file
+          required: true
+          description: 要上传的文件
+      headers:
+        - name: Accept
+          type: string
+          required: false
+          value: text/event-stream
+          description: text/event-stream，使用SSE协议
+    responses:
+      http:
+        '200':
+          description: 文件上传成功
+          example: {code: 200, message: success, data: {name: document.pdf, type: application/pdf, size: 1024000, md5: 5d41402abc4b2a76b9719d911017c592}}
+      sse:
+        '200':
+          description: SSE流式返回文件上传结果
+          example: {event: message, data: {code: 200, message: success, data: {name: document.pdf, type: application/pdf, size: 1024000, md5: 5d41402abc4b2a76b9719d911017c592}}}
+    codeSamples:
+      javascript:
+        fetch: |
+          // HTTP 请求
+          fetch('/api/upload', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json'
+            },
+            body: new File([...file.arrayBuffer])
+          })
+          .then(response => response.json())
+          .then(data => console.log(data));
+        axios: |
+          // HTTP 请求 (Axios)
+          import axios from 'axios';
+          axios.post('/api/upload', {
+            file: new File([...file.arrayBuffer])
+          }, {
+            headers: {
+              Accept: 'application/json'
+            }
+          })
+          .then(response => console.log(response.data))
+          .catch(error => console.error(error));
+        jquery: |
+          // HTTP 请求 (jQuery)
+          $.ajax({
+            url: '/api/upload',
+            method: 'POST',
+            data: new FormData($('#uploadForm')[0]),
+            success: function(data) {
+              console.log(data);
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+            }
+          });
+      java:
+        okhttp: |
+          // HTTP 请求 (OkHttp)
+          import okhttp3.*;
+          
+          OkHttpClient client = new OkHttpClient();
+          RequestBody requestBody = new MultipartBody.Builder()
+              .setType(MultipartBody.FORM)
+              .addFormDataPart("file", "document.pdf", RequestBody.create(null, fileBytes))
+              .build();
+          
+          Request request = new Request.Builder()
+              .url("https://yourdomain.com/api/upload")
+              .addHeader("Accept", "application/json")
+              .post(requestBody)
+              .build();
+          
+          Response response = client.newCall(request).execute();
+          String jsonData = response.body().string();
+          System.out.println(jsonData);
+        spring: |
+          // HTTP 请求 (Spring RestTemplate)
+          import org.springframework.web.client.RestTemplate;
+          import org.springframework.http.ResponseEntity;
+          
+          RestTemplate restTemplate = new RestTemplate();
+          String url = "https://yourdomain.com/api/upload";
+          ResponseEntity<String> response = restTemplate.postForEntity(url, {
+            file: new File(fileBytes)
+          }, String.class);
+          System.out.println(response.getBody());
+        httpclient: |
+          // HTTP 请求 (Apache HttpClient)
+          import org.apache.http.client.methods.HttpPost;
+          import org.apache.http.entity.ContentType;
+          import org.apache.http.entity.MultipartEntity;
+          import org.apache.http.entity.StringEntity;
+          import org.apache.http.entity.mime.HttpMultipartMode;
+          import org.apache.http.entity.mime.MultipartEntityBuilder;
+          import org.apache.http.impl.client.CloseableHttpClient;
+          import org.apache.http.impl.client.HttpClients;
+          import org.apache.http.util.EntityUtils;
+          
+          CloseableHttpClient client = HttpClients.createDefault();
+          HttpPost request = new HttpPost("https://yourdomain.com/api/upload");
+          request.addHeader("Accept", "application/json");
+          
+          MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+          builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+          builder.addBinaryBody("file", new ByteArrayInputStream(fileBytes), ContentType.APPLICATION_OCTET_STREAM, "document.pdf");
+          
+          HttpEntity entity = builder.build();
+          request.setEntity(entity);
+          
+          String response = EntityUtils.toString(client.execute(request).getEntity());
+          System.out.println(response);
+          client.close();
+      go:
+        nethttp: |
+          package main
+          
+          import (
+              "fmt"
+              "io"
+              "net/http"
+          )
+          
+          func main() {
+              client := &http.Client{}
+              
+              req, err := http.NewRequest("POST", "https://yourdomain.com/api/upload", bytes.NewReader(fileBytes))
+              if err != nil {
+                  panic(err)
+              }
+              req.Header.Set("Accept", "application/json")
+              
+              resp, err := client.Do(req)
+              if err != nil {
+                  panic(err)
+              }
+              defer resp.Body.Close()
+              
+              body, err := io.ReadAll(resp.Body)
+              if err != nil {
+                  panic(err)
+              }
+              fmt.Println(string(body))
+          }
+        fasthttp: |
+          package main
+          
+          import (
+              "fmt"
+              "io"
+              "os"
+              "github.com/valyala/fasthttp"
+          )
+          
+          func main() {
+              client := &fasthttp.Client{}
+              
+              req := fasthttp.AcquireRequest()
+              req.SetRequestURI("https://yourdomain.com/api/upload")
+              req.Header.Set("Accept", "application/json")
+              
+              resp := fasthttp.AcquireResponse()
+              defer fasthttp.ReleaseRequest(req)
+              defer fasthttp.ReleaseResponse(resp)
+              
+              err := client.Post(req, resp, &fasthttp.PostFormData{
+                  "file": fasthttp.File{
+                      File: bytes.NewReader(fileBytes),
+                      Name: "document.pdf",
+                  },
+              })
+              if err != nil {
+                  panic(err)
+              }
+              
+              body, err := io.ReadAll(resp.Body)
+              if err != nil {
+                  panic(err)
+              }
+              fmt.Println(string(body))
+          }
+      php:
+        curl: |
+          <?php
+          
+          $ch = curl_init();
+          curl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/upload');
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          curl_setopt($ch, CURLOPT_POST, true);
+          curl_setopt($ch, CURLOPT_POSTFIELDS, [
+              'file' => new CURLFile(realpath($file['tmp_name']), $file['type'], $file['name'])
+          ]);
+          curl_setopt($ch, CURLOPT_HTTPHEADER, [
+              'Accept: application/json'
+          ]);
+          
+          $response = curl_exec($ch);
+          curl_close($ch);
+          
+          echo $response;
+        guzzle: |
+          <?php
+          
+          use GuzzleHttp\Client;
+          
+          $client = new Client();
+          $response = $client->post('https://yourdomain.com/api/upload', [
+              'multipart' => [
+                  [
+                      'name' => 'file',
+                      'contents' => fopen($file['tmp_name'], 'r'),
+                      'filename' => $file['name'],
+                      'headers' => [
+                          'Content-Type' => $file['type']
+                      ]
+                  ]
+              ],
+              'headers' => [
+                  'Accept' => 'application/json'
+              ]
+          ]);
+          
+          echo $response->getBody();
+        symfony: |
+          <?php
+          
+          use Symfony\Component\HttpClient\HttpClient;
+          
+          $client = HttpClient::create();
+          $response = $client->request('POST', 'https://yourdomain.com/api/upload', [
+              'headers' => [
+                  'Accept' => 'application/json'
+              ],
+              'multipart' => [
+                  [
+                      'name' => 'file',
+                      'contents' => fopen($file['tmp_name'], 'r'),
+                      'filename' => $file['name'],
+                      'headers' => [
+                          'Content-Type' => $file['type']
+                      ]
+                  ]
+              ]
+          ]);
+          
+          echo $response->getContent();
+      python:
+        requests: |
+          import requests
+          
+          response = requests.post('https://yourdomain.com/api/upload', files={
+              'file': open(file_path, 'rb')
+          })
+          print(response.json())
+        httpx: |
+          import httpx
+          
+          with httpx.Client() as client:
+              response = client.post('https://yourdomain.com/api/upload', files={
+                  'file': open(file_path, 'rb')
+              })
+              print(response.json())
+        aiohttp: |
+          import aiohttp
+          import asyncio
+          
+          async def main():
+              async with aiohttp.ClientSession() as session:
+                  async with session.post('https://yourdomain.com/api/upload', data={
+                      'file': aiohttp.FileField(name='file', filename=file_path)
+                  }) as response:
+                      data = await response.json()
+                      print(data)
+          
+          asyncio.run(main())
+      curl:
+        basic: |
+          curl -X POST "https://yourdomain.com/api/upload" \
+            -H "Accept: application/json" \
+            -F "file=@$file_path"
+        verbose: |
+          curl -X POST "https://yourdomain.com/api/upload" \
+            -H "Accept: application/json" \
+            -F "file=@$file_path" \
+            -v \
+            -w "\nTime: %{time_total}s\nStatus: %{http_code}\n"
+  # download-file
+  - id: download-file
+    path: /api/download/{id}
+    method: GET
+    summary: 文件下载
+    description: 根据文件ID下载文件。
+    parameters:
+      path:
+        - name: id
+          type: integer
+          required: true
+          description: 文件ID (1-6)
+      headers:
+        - name: Accept
+          type: string
+          required: false
+          value: text/event-stream
+          description: text/event-stream，使用SSE协议
+    responses:
+      http:
+        '200':
+          description: 文件下载成功
+          example: 二进制文件内容
+        '404':
+          description: 文件不存在
+          example: {code: 404, message: File not found, data: null}
+      sse:
+        '200':
+          description: SSE流式返回文件下载结果
+          example: {event: message, data: 二进制文件内容}
+        '404':
+          description: SSE流式返回错误信息
+          example: {event: message, data: {code: 404, message: File not found, data: null}}
+    codeSamples:
+      javascript:
+        fetch: |
+          // HTTP 请求
+          fetch('/api/download/' + id)
+            .then(response => response.blob())
+            .then(blob => {
+              const link = document.createElement('a');
+              link.href = URL.createObjectURL(blob);
+              link.download = 'document.pdf';
+              link.click();
+              URL.revokeObjectURL(link.href);
+            });
+        axios: |
+          // HTTP 请求 (Axios)
+          import axios from 'axios';
+          axios.get('/api/download/' + id, {
+            responseType: 'blob'
+          })
+          .then(response => {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(response.data);
+            link.download = 'document.pdf';
+            link.click();
+            URL.revokeObjectURL(link.href);
+          })
+          .catch(error => console.error(error));
+        jquery: |
+          // HTTP 请求 (jQuery)
+          $.ajax({
+            url: '/api/download/' + id,
+            method: 'GET',
+            responseType: 'blob',
+            success: function(data) {
+              const link = document.createElement('a');
+              link.href = URL.createObjectURL(data);
+              link.download = 'document.pdf';
+              link.click();
+              URL.revokeObjectURL(link.href);
+            },
+            error: function(xhr, status, error) {
+              console.error(error);
+            }
+          });
+      java:
+        okhttp: |
+          // HTTP 请求 (OkHttp)
+          import okhttp3.*;
+          
+          OkHttpClient client = new OkHttpClient();
+          Request request = new Request.Builder()
+              .url("https://yourdomain.com/api/download/" + id)
+              .addHeader("Accept", "application/octet-stream")
+              .build();
+          
+          Response response = client.newCall(request).execute();
+          InputStream inputStream = response.body().byteStream();
+          OutputStream outputStream = new FileOutputStream("document.pdf");
+          
+          byte[] buffer = new byte[8192];
+          int bytesRead;
+          while ((bytesRead = inputStream.read(buffer)) != -1) {
+              outputStream.write(buffer, 0, bytesRead);
+          }
+          
+          inputStream.close();
+          outputStream.close();
+        spring: |
+          // HTTP 请求 (Spring RestTemplate)
+          import org.springframework.web.client.RestTemplate;
+          import org.springframework.http.ResponseEntity;
+          
+          RestTemplate restTemplate = new RestTemplate();
+          String url = "https://yourdomain.com/api/download/" + id;
+          ResponseEntity<byte[]> response = restTemplate.getForEntity(url, byte[].class);
+          
+          FileOutputStream outputStream = new FileOutputStream("document.pdf");
+          outputStream.write(response.getBody());
+          outputStream.close();
+        httpclient: |
+          // HTTP 请求 (Apache HttpClient)
+          import org.apache.http.client.methods.HttpGet;
+          import org.apache.http.impl.client.CloseableHttpClient;
+          import org.apache.http.impl.client.HttpClients;
+          import org.apache.http.util.EntityUtils;
+          
+          CloseableHttpClient client = HttpClients.createDefault();
+          HttpGet request = new HttpGet("https://yourdomain.com/api/download/" + id);
+          request.addHeader("Accept", "application/octet-stream");
+          
+          InputStream inputStream = client.execute(request).getEntity().getContent();
+          OutputStream outputStream = new FileOutputStream("document.pdf");
+          
+          byte[] buffer = new byte[8192];
+          int bytesRead;
+          while ((bytesRead = inputStream.read(buffer)) != -1) {
+              outputStream.write(buffer, 0, bytesRead);
+          }
+          
+          inputStream.close();
+          outputStream.close();
+          client.close();
+      go:
+        nethttp: |
+          package main
+          
+          import (
+              "fmt"
+              "io"
+              "net/http"
+          )
+          
+          func main() {
+              resp, err := http.Get("https://yourdomain.com/api/download/" + id)
+              if err != nil {
+                  panic(err)
+              }
+              defer resp.Body.Close()
+              
+              outputStream, err := os.Create("document.pdf")
+              if err != nil {
+                  panic(err)
+              }
+              defer outputStream.Close()
+              
+              _, err = io.Copy(outputStream, resp.Body)
+              if err != nil {
+                  panic(err)
+              }
+          }
+        fasthttp: |
+          package main
+          
+          import (
+              "fmt"
+              "io"
+              "os"
+              "github.com/valyala/fasthttp"
+          )
+          
+          func main() {
+              client := &fasthttp.Client{}
+              
+              req := fasthttp.AcquireRequest()
+              req.SetRequestURI("https://yourdomain.com/api/download/" + id)
+              req.Header.Set("Accept", "application/octet-stream")
+              
+              resp := fasthttp.AcquireResponse()
+              defer fasthttp.ReleaseRequest(req)
+              defer fasthttp.ReleaseResponse(resp)
+              
+              err := client.Do(req, resp)
+              if err != nil {
+                  panic(err)
+              }
+              
+              outputStream, err := os.Create("document.pdf")
+              if err != nil {
+                  panic(err)
+              }
+              defer outputStream.Close()
+              
+              _, err = io.Copy(outputStream, resp.BodyStream())
+              if err != nil {
+                  panic(err)
+              }
+          }
+      php:
+        curl: |
+          <?php
+          
+          $ch = curl_init();
+          curl_setopt($ch, CURLOPT_URL, 'https://yourdomain.com/api/download/' + id);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          curl_setopt($ch, CURLOPT_HTTPHEADER, [
+              'Accept: application/octet-stream'
+          ]);
+          
+          $response = curl_exec($ch);
+          curl_close($ch);
+          
+          file_put_contents("document.pdf", $response);
+        guzzle: |
+          <?php
+          
+          use GuzzleHttp\Client;
+          
+          $client = new Client();
+          $response = $client->get('https://yourdomain.com/api/download/' + id, [
+              'headers' => [
+                  'Accept' => 'application/octet-stream'
+              ]
+          ]);
+          
+          file_put_contents("document.pdf", $response->getBody());
+        symfony: |
+          <?php
+          
+          use Symfony\Component\HttpClient\HttpClient;
+          
+          $client = HttpClient::create();
+          $response = $client->request('GET', 'https://yourdomain.com/api/download/' + id, [
+              'headers' => [
+                  'Accept' => 'application/octet-stream'
+              ]
+          ]);
+          
+          file_put_contents("document.pdf", $response->getContent());
+      python:
+        requests: |
+          import requests
+          
+          response = requests.get('https://yourdomain.com/api/download/' + id, stream=True)
+          response.raise_for_status()
+          
+          with open('document.pdf', 'wb') as f:
+              for chunk in response.iter_content(chunk_size=8192):
+                  f.write(chunk)
+        httpx: |
+          import httpx
+          
+          with httpx.Client() as client:
+              response = client.get('https://yourdomain.com/api/download/' + id, stream=True)
+              response.raise_for_status()
+              
+              with open('document.pdf', 'wb') as f:
+                  for chunk in response.iter_contents(chunk_size=8192):
+                      f.write(chunk)
+        aiohttp: |
+          import aiohttp
+          import asyncio
+          
+          async def main():
+              async with aiohttp.ClientSession() as session:
+                  async with session.get('https://yourdomain.com/api/download/' + id, headers={
+                      'Accept': 'application/octet-stream'
+                  }) as response:
+                      response.raise_for_status()
+                      with open('document.pdf', 'wb') as f:
+                          while chunk := await response.content.read(8192):
+                              f.write(chunk)
+          
+          asyncio.run(main())
+      curl:
+        basic: |
+          curl -X GET "https://yourdomain.com/api/download/" + id \
+            -H "Accept: application/octet-stream"
+        verbose: |
+          curl -X GET "https://yourdomain.com/api/download/" + id \
+            -H "Accept: application/octet-stream" \
+            -v \
+            -w "\nTime: %{time_total}s\nStatus: %{http_code}\n"
+methodColors:
+  GET: '#22c55e'
+  POST: '#3b82f6'
+  PUT: '#f59e0b'
+  PATCH: '#8b5cf6'
+  DELETE: '#ef4444'
+# 若有 availableFiles、protocolInfo、tableStructures 等全局字段，也请在此补充 

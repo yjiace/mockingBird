@@ -806,6 +806,7 @@
     <!-- Load Components -->
     <script src="components/header.js"></script>
     <script src="components/footer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
     <script>
         // Load header and footer
         document.addEventListener('DOMContentLoaded', function() {
@@ -833,11 +834,12 @@
         let tableStructures = {};
         let methodColors = {};
 
-        // 从JSON配置文件加载数据
+        // 从YAML配置文件加载数据
         async function loadApiConfig() {
             try {
-                const response = await fetch('api-config.json');
-                const config = await response.json();
+                const response = await fetch('api-config.yaml');
+                const yamlText = await response.text();
+                const config = jsyaml.load(yamlText);
                 
                 apiDefinitions = config.apiDefinitions;
                 availableFiles = config.availableFiles || {};
@@ -955,7 +957,7 @@
                                     </summary>
                                     <div class="response-example">
                                         <div class="code-block">
-                                            <pre><code class="language-json">${details.example}</code></pre>
+                                            <pre><code class="language-json">${formatJsonExample(details.example, protocol)}</code></pre>
                                         </div>
                                     </div>
                                 </details>
@@ -981,7 +983,7 @@
                                 </summary>
                                 <div class="response-example" style="margin-top:1rem; border-top: 1px solid hsl(var(--border)); padding-top: 1rem;">
                                     <div class="code-block">
-                                        <pre><code class="language-json">${details.example}</code></pre>
+                                        <pre><code class="language-json">${formatJsonExample(details.example, protocol)}</code></pre>
                                     </div>
                                 </div>
                             </details>
@@ -1283,6 +1285,26 @@
                 hljs.highlightElement(codeElem);
             }
         });
+
+        function formatJsonExample(example, protocol) {
+            if (!example) return '';
+            try {
+                if (protocol === 'sse' && typeof example === 'object' && example.event && example.data) {
+                    // SSE格式，格式化data
+                    return 'event: ' + example.event + '\ndata: ' + JSON.stringify(example.data, null, 2) + '\n\n';
+                } else if (typeof example === 'object') {
+                    // 普通JSON对象
+                    return JSON.stringify(example, null, 2);
+                } else if (typeof example === 'string') {
+                    // 兼容旧字符串
+                    const obj = JSON.parse(example);
+                    return JSON.stringify(obj, null, 2);
+                }
+                return String(example);
+            } catch (e) {
+                return typeof example === 'string' ? example : JSON.stringify(example);
+            }
+        }
     </script>
 </body>
 
