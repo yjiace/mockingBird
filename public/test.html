@@ -216,6 +216,12 @@
             border: 1px solid hsl(var(--border));
             max-height: 80vh;
             overflow-y: auto;
+            /* 隐藏滚动条但保留滚动功能 */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE 10+ */
+        }
+        .tester-panel::-webkit-scrollbar {
+            display: none; /* Chrome/Safari/Webkit */
         }
 
         .panel-title {
@@ -356,6 +362,12 @@
             flex-direction: column;
             max-height: 70vh;
             overflow-y: auto;
+            /* 隐藏滚动条但保留滚动功能 */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .response-area::-webkit-scrollbar {
+            display: none;
         }
 
         .response-header {
@@ -725,8 +737,14 @@
                     addSSEMessage(event.data);
                 };
                 eventSource.onerror = function() {
-                    updateResponseStatus('Connection Error', 'error');
-                    addSSEMessage('连接错误');
+                    let msg = '连接错误';
+                    if (eventSource && eventSource.readyState === 2) { // CLOSED
+                        msg = '连接关闭';
+                        updateResponseStatus('Disconnected', 'info');
+                    } else {
+                        updateResponseStatus('Connection Error', 'error');
+                    }
+                    addSSEMessage(msg);
                     setLoading(false);
                     updateUI(); // 切换按钮
                     if (eventSource) {
