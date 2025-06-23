@@ -9,7 +9,10 @@
       "parameters": {
         "query": [
           { "name": "page", "type": "integer", "required": false, "description": "页码，默认为1" },
-          { "name": "size", "type": "integer", "required": false, "description": "每页数量，默认为10" }
+          { "name": "size", "type": "integer", "required": false, "description": "每页数量，默认为10" },
+          { "name": "name", "type": "String", "required": false, "description": "姓名查询" },
+          { "name": "email", "type": "String", "required": false, "description": "邮箱查询" },
+          { "name": "mobile", "type": "String", "required": false, "description": "手机号查询" }
         ]
       },
       "responses": {
@@ -372,7 +375,7 @@
       "description": "根据文件ID下载文件。",
       "parameters": {
         "path": [
-          { "name": "id", "type": "string", "required": true, "description": "文件ID (1-6)" }
+          { "name": "id", "type": "integer", "required": true, "description": "文件ID (1-6)" }
         ]
       },
       "responses": {
