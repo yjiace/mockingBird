@@ -54,6 +54,34 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     
+    <!-- Configure highlight.js languages -->
+    <script>
+        // 确保 highlight.js 支持所有需要的语言
+        hljs.configure({
+            ignoreUnescapedHTML: true
+        });
+        
+        // 手动注册语言（如果需要）
+        if (hljs.getLanguage('javascript') === undefined) {
+            console.warn('JavaScript language not found in highlight.js');
+        }
+        if (hljs.getLanguage('java') === undefined) {
+            console.warn('Java language not found in highlight.js');
+        }
+        if (hljs.getLanguage('go') === undefined) {
+            console.warn('Go language not found in highlight.js');
+        }
+        if (hljs.getLanguage('php') === undefined) {
+            console.warn('PHP language not found in highlight.js');
+        }
+        if (hljs.getLanguage('python') === undefined) {
+            console.warn('Python language not found in highlight.js');
+        }
+        if (hljs.getLanguage('bash') === undefined) {
+            console.warn('Bash language not found in highlight.js');
+        }
+    </script>
+    
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
@@ -443,6 +471,322 @@
                 display: none;
             }
         }
+
+        /* Framework Dropdown Styles */
+        .framework-dropdown {
+            margin-bottom: 1rem;
+        }
+
+        .framework-dropdown select {
+            background: hsl(var(--input));
+            border: 1px solid hsl(var(--border));
+            color: hsl(var(--foreground));
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+
+        .framework-dropdown select:focus {
+            outline: none;
+            border-color: hsl(var(--ring));
+            box-shadow: 0 0 0 2px hsl(var(--ring) / 0.2);
+        }
+
+        .framework-dropdown select:hover {
+            border-color: hsl(var(--ring));
+        }
+
+        .framework-dropdown label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: hsl(var(--muted-foreground));
+            margin-bottom: 0.5rem;
+        }
+
+        /* Code Block Container */
+        .code-container {
+            position: relative;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            padding: 1rem 0;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Tab Buttons */
+        .tab-list {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid hsl(var(--border));
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            color: hsl(var(--muted-foreground));
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .tab-button:hover {
+            background: hsl(var(--muted));
+            color: hsl(var(--foreground));
+        }
+
+        .tab-button.active {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        /* Code Block */
+        .code-block {
+            background: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .code-block pre {
+            margin: 0;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: hsl(var(--foreground));
+        }
+
+        /* Response Example */
+        .response-example {
+            background: hsl(var(--card));
+            /* border: 1px solid hsl(var(--border)); */
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-code {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-200 { background: #22c55e; color: white; }
+        .status-404 { background: #ef4444; color: white; }
+        .status-500 { background: #f59e0b; color: white; }
+
+        /* Parameter Table */
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .param-table th,
+        .param-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid hsl(var(--border));
+        }
+
+        .param-table th {
+            background: hsl(var(--muted));
+            font-weight: 600;
+            color: hsl(var(--foreground));
+        }
+
+        .param-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .param-table code {
+            background: hsl(var(--muted));
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        /* API Documentation */
+        .api-doc {
+            display: none;
+            background: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .api-doc.active {
+            display: block;
+        }
+
+        .api-doc h2 {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .method-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: white;
+        }
+
+        .method-get { background: #22c55e; }
+        .method-post { background: #3b82f6; }
+        .method-put { background: #f59e0b; }
+        .method-patch { background: #8b5cf6; }
+        .method-delete { background: #ef4444; }
+
+        .api-path {
+            background: hsl(var(--muted));
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+        }
+
+        .api-summary {
+            color: hsl(var(--muted-foreground));
+            font-weight: 400;
+        }
+
+        .description {
+            color: hsl(var(--muted-foreground));
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                margin-bottom: 2rem;
+            }
+
+            .api-doc h2 {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .tab-list {
+                flex-wrap: wrap;
+            }
+
+            .param-table {
+                font-size: 0.875rem;
+            }
+
+            .param-table th,
+            .param-table td {
+                padding: 0.5rem;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: hsl(var(--muted-foreground));
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid hsl(var(--border));
+            border-radius: 50%;
+            border-top-color: hsl(var(--primary));
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error State */
+        .error {
+            text-align: center;
+            padding: 2rem;
+            color: hsl(var(--destructive));
+            background: hsl(var(--destructive) / 0.1);
+            border: 1px solid hsl(var(--destructive));
+            border-radius: var(--radius);
+        }
+
+        /* Copy Button */
+        .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: hsl(var(--muted));
+            border: 1px solid hsl(var(--border));
+            color: hsl(var(--muted-foreground));
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-button:hover {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        .copy-button.copied {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
     </style>
 </head>
 
@@ -659,13 +1003,27 @@
                     `<button class="tab-button ${index === 0 ? 'active' : ''}" data-tab="code-${api.id}-${lang}">${lang.charAt(0).toUpperCase() + lang.slice(1)}</button>`
                 ).join('')}
                             </div>
-                            ${Object.entries(api.codeSamples).map(([lang, code], index) =>
-                    `<div class="tab-content ${index === 0 ? 'active' : ''}" data-tab="code-${api.id}-${lang}">
-                                    <div class="code-block">
-                                        <pre><code class="language-${lang}">${code}</code></pre>
+                            ${Object.entries(api.codeSamples).map(([lang, frameworks], index) => {
+                                const frameworkEntries = Object.entries(frameworks);
+                                const firstFramework = frameworkEntries[0];
+                                return `
+                                    <div class="tab-content ${index === 0 ? 'active' : ''}" data-tab="code-${api.id}-${lang}">
+                                        <div class="framework-dropdown">
+                                            <select id="framework-${api.id}-${lang}" data-api-id="${api.id}" data-lang="${lang}">
+                                                ${frameworkEntries.map(([framework, code]) => 
+                                                    `<option value="${framework}" ${framework === firstFramework[0] ? 'selected' : ''}>${framework.charAt(0).toUpperCase() + framework.slice(1)}</option>`
+                                                ).join('')}
+                                            </select>
+                                        </div>
+                                        <div class="code-container">
+                                            <button class="copy-button" data-code="${api.id}-${lang}-${firstFramework[0]}">复制</button>
+                                            <div class="code-block">
+                                                <pre><code class="language-${lang === 'curl' ? 'bash' : lang}" id="code-${api.id}-${lang}-${firstFramework[0]}">${firstFramework[1]}</code></pre>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>`
-                ).join('')}
+                                `;
+                            }).join('')}
                         </div>
                     </div>
                 `;
@@ -776,7 +1134,118 @@
                 e.preventDefault();
                 handleTabClick(e);
             }
+            
+            // Handle copy button clicks
+            if (e.target.classList.contains('copy-button')) {
+                e.preventDefault();
+                handleCopyClick(e);
+            }
         });
+
+        // Handle framework dropdown changes
+        document.addEventListener('change', function(e) {
+            if (e.target.matches('select[id^="framework-"]')) {
+                handleFrameworkChange(e);
+            }
+        });
+
+        // Framework change handler
+        function handleFrameworkChange(e) {
+            const select = e.target;
+            const apiId = select.dataset.apiId;
+            const lang = select.dataset.lang;
+            const selectedFramework = select.value;
+            
+            const api = apiDefinitions.find(api => api.id === apiId);
+            if (!api || !api.codeSamples || !api.codeSamples[lang]) {
+                return;
+            }
+            
+            const code = api.codeSamples[lang][selectedFramework];
+            if (typeof code === 'undefined') {
+                return;
+            }
+
+            const codeBlock = select.closest('.tab-content').querySelector('.code-block pre code');
+            if (codeBlock) {
+                // 1. 移除 class 和 highlight.js 添加的 data-* 属性
+                codeBlock.className = '';
+                codeBlock.removeAttribute('data-highlighted');
+
+                // 2. 设置语言 class
+                const languageClass = lang === 'curl' ? 'language-bash' : `language-${lang}`;
+                codeBlock.classList.add(languageClass);
+                
+                // 3. 设置代码内容
+                codeBlock.textContent = code;
+                
+                // 4. 重新高亮
+                hljs.highlightElement(codeBlock);
+            }
+            
+            // Update copy button data attribute
+            const copyButton = select.closest('.tab-content').querySelector('.copy-button');
+            if (copyButton) {
+                copyButton.dataset.code = `${apiId}-${lang}-${selectedFramework}`;
+            }
+        }
+
+        // Copy button handler
+        function handleCopyClick(e) {
+            const button = e.target;
+            const codeId = button.dataset.code;
+            const codeElement = document.getElementById(`code-${codeId}`);
+            
+            if (codeElement) {
+                const textToCopy = codeElement.textContent;
+                
+                // Use the Clipboard API if available
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        showCopySuccess(button);
+                    }).catch(() => {
+                        fallbackCopyTextToClipboard(textToCopy, button);
+                    });
+                } else {
+                    fallbackCopyTextToClipboard(textToCopy, button);
+                }
+            }
+        }
+
+        // Fallback copy method for older browsers
+        function fallbackCopyTextToClipboard(text, button) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopySuccess(button);
+                }
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // Show copy success feedback
+        function showCopySuccess(button) {
+            const originalText = button.textContent;
+            button.textContent = '已复制!';
+            button.classList.add('copied');
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.classList.remove('copied');
+            }, 2000);
+        }
 
         // Navigation
         document.addEventListener('click', function (e) {
