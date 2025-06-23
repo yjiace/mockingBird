@@ -155,6 +155,7 @@
             position: relative;
             display: flex;
             flex-direction: column;
+            overflow-y: auto;
         }
 
         body::before {
@@ -181,6 +182,7 @@
             margin: 0 auto;
             padding: 2rem;
             width: 100%;
+            overflow: auto;
         }
 
         .page-title {
@@ -212,6 +214,8 @@
             border-radius: var(--radius);
             padding: 1.5rem;
             border: 1px solid hsl(var(--border));
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
         .panel-title {
@@ -350,6 +354,8 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            max-height: 70vh;
+            overflow-y: auto;
         }
 
         .response-header {
@@ -449,10 +455,10 @@
 
     <!-- Main Content -->
     <div class="main-container">
-        <header>
+        <!-- <header>
             <h1 class="page-title">在线测试</h1>
             <p class="page-description">在线测试 API 接口功能，支持 HTTP 请求、SSE 实时数据流。</p>
-        </header>
+        </header> -->
 
         <div class="tester-container">
             <!-- Request Panel -->
@@ -698,6 +704,11 @@
 
         function connectSSE() {
             try {
+                // 连接前如有旧连接先关闭
+                if (eventSource) {
+                    eventSource.close();
+                    eventSource = null;
+                }
                 let url = buildRequestURL();
                 url += (url.includes('?') ? '&' : '?') + 'stream=true';
                 eventSource = new EventSource(url);
@@ -718,6 +729,10 @@
                     addSSEMessage('连接错误');
                     setLoading(false);
                     updateUI(); // 切换按钮
+                    if (eventSource) {
+                        eventSource.close();
+                        eventSource = null;
+                    }
                 };
             } catch (error) {
                 updateResponseStatus('Error', 'error');
