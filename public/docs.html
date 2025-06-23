@@ -995,41 +995,41 @@
             }
 
             let codeSamplesHtml = '';
-            if (api.codeSamples) {
-                codeSamplesHtml = `
-                    <div class="section">
-                        <h3>代码示例</h3>
-                        <div class="tabs" data-api-id="${api.id}">
-                            <div class="tab-list">
-                                ${Object.keys(api.codeSamples).map((lang, index) =>
-                    `<button class="tab-button ${index === 0 ? 'active' : ''}" data-tab="code-${api.id}-${lang}">${lang.charAt(0).toUpperCase() + lang.slice(1)}</button>`
-                ).join('')}
-                            </div>
-                            ${Object.entries(api.codeSamples).map(([lang, frameworks], index) => {
-                                const frameworkEntries = Object.entries(frameworks);
-                                const firstFramework = frameworkEntries[0];
-                                return `
-                                    <div class="tab-content ${index === 0 ? 'active' : ''}" data-tab="code-${api.id}-${lang}">
-                                        <div class="framework-dropdown">
-                                            <select id="framework-${api.id}-${lang}" data-api-id="${api.id}" data-lang="${lang}">
-                                                ${frameworkEntries.map(([framework, code]) => 
-                                                    `<option value="${framework}" ${framework === firstFramework[0] ? 'selected' : ''}>${framework.charAt(0).toUpperCase() + framework.slice(1)}</option>`
-                                                ).join('')}
-                                            </select>
-                                        </div>
-                                        <div class="code-container">
-                                            <button class="copy-button" data-code="${api.id}-${lang}-${firstFramework[0]}">复制</button>
-                                            <div class="code-block">
-                                                <pre><code class="language-${lang === 'curl' ? 'bash' : lang}" id="code-${api.id}-${lang}-${firstFramework[0]}">${firstFramework[1]}</code></pre>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
-                    </div>
-                `;
-            }
+            // if (api.codeSamples) {
+            //     codeSamplesHtml = `
+            //         <div class="section">
+            //             <h3>代码示例</h3>
+            //             <div class="tabs" data-api-id="${api.id}">
+            //                 <div class="tab-list">
+            //                     ${Object.keys(api.codeSamples).map((lang, index) =>
+            //         `<button class="tab-button ${index === 0 ? 'active' : ''}" data-tab="code-${api.id}-${lang}">${lang.charAt(0).toUpperCase() + lang.slice(1)}</button>`
+            //     ).join('')}
+            //                 </div>
+            //                 ${Object.entries(api.codeSamples).map(([lang, frameworks], index) => {
+            //                     const frameworkEntries = Object.entries(frameworks);
+            //                     const firstFramework = frameworkEntries[0];
+            //                     return `
+            //                         <div class="tab-content ${index === 0 ? 'active' : ''}" data-tab="code-${api.id}-${lang}">
+            //                             <div class="framework-dropdown">
+            //                                 <select id="framework-${api.id}-${lang}" data-api-id="${api.id}" data-lang="${lang}">
+            //                                     ${frameworkEntries.map(([framework, code]) =>
+            //                                         `<option value="${framework}" ${framework === firstFramework[0] ? 'selected' : ''}>${framework.charAt(0).toUpperCase() + framework.slice(1)}</option>`
+            //                                     ).join('')}
+            //                                 </select>
+            //                             </div>
+            //                             <div class="code-container">
+            //                                 <button class="copy-button" data-code="${api.id}-${lang}-${firstFramework[0]}">复制</button>
+            //                                 <div class="code-block">
+            //                                     <pre><code class="language-${lang === 'curl' ? 'bash' : lang}" id="code-${api.id}-${lang}-${firstFramework[0]}">${firstFramework[1]}</code></pre>
+            //                                 </div>
+            //                             </div>
+            //                         </div>
+            //                     `;
+            //                 }).join('')}
+            //             </div>
+            //         </div>
+            //     `;
+            // }
 
             doc.innerHTML = `
                 <h2>
