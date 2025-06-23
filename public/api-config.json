@@ -8,14 +8,14 @@
       "description": "获取系统中所有用户的列表信息，支持分页和筛选。",
       "parameters": {
         "query": [
-          { "name": "page", "type": "integer", "required": false, "description": "页码，默认为1" },
-          { "name": "size", "type": "integer", "required": false, "description": "每页数量，默认为10" },
+          { "name": "page", "type": "integer", "required": false, "value": "1", "description": "页码，默认为1" },
+          { "name": "size", "type": "integer", "required": false, "value": "10", "description": "每页数量，默认为10" },
           { "name": "name", "type": "String", "required": false, "description": "姓名查询" },
           { "name": "email", "type": "String", "required": false, "description": "邮箱查询" },
           { "name": "mobile", "type": "String", "required": false, "description": "手机号查询" }
         ],
         "headers":[
-          { "name": "Accept", "type": "string", "required": false, "description": "text/event-stream，使用SSE协议" }
+          { "name": "Accept", "type": "string", "required": false, "value": "text/event-stream", "description": "text/event-stream，使用SSE协议" }
         ]
       },
       "responses": {
@@ -23,20 +23,12 @@
           "200": {
             "description": "成功返回用户列表",
             "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"results\": [],\n    \"total\": 100,\n    \"page\": 1,\n    \"size\": 10\n  }\n}"
-          },
-          "404": {
-            "description": "用户不存在",
-            "example": "{\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}"
           }
         },
         "sse": {
           "200": {
             "description": "SSE流式返回用户列表",
             "example": "event: message\ndata: {\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"results\": [],\n    \"total\": 100,\n    \"page\": 1,\n    \"size\": 10\n  }\n}\n\n"
-          },
-          "404": {
-            "description": "SSE流式返回错误信息",
-            "example": "event: message\ndata: {\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}\n\n"
           }
         }
       },
@@ -82,7 +74,7 @@
           { "name": "id", "type": "integer", "required": true, "description": "用户ID" }
         ],
         "headers":[
-          { "name": "Accept", "type": "string", "required": false, "description": "text/event-stream，使用SSE协议" }
+          { "name": "Accept", "type": "string", "required": false, "value": "text/event-stream", "description": "text/event-stream，使用SSE协议" }
         ]
       },
       "responses": {
@@ -151,7 +143,7 @@
           { "name": "email", "type": "string", "required": false, "description": "用户邮箱" }
         ],
         "headers":[
-          { "name": "Accept", "type": "string", "required": false, "description": "text/event-stream，使用SSE协议" }
+          { "name": "Accept", "type": "string", "required": false, "value": "text/event-stream", "description": "text/event-stream，使用SSE协议" }
         ]
       },
       "responses": {
@@ -215,7 +207,7 @@
           { "name": "email", "type": "string", "required": false, "description": "用户邮箱" }
         ],
         "headers":[
-          { "name": "Accept", "type": "string", "required": false, "description": "text/event-stream，使用SSE协议" }
+          { "name": "Accept", "type": "string", "required": false, "value": "text/event-stream", "description": "text/event-stream，使用SSE协议" }
         ]
       },
       "responses": {
@@ -287,7 +279,7 @@
           { "name": "email", "type": "string", "required": false, "description": "用户邮箱" }
         ],
         "headers":[
-          { "name": "Accept", "type": "string", "required": false, "description": "text/event-stream，使用SSE协议" }
+          { "name": "Accept", "type": "string", "required": false, "value": "text/event-stream", "description": "text/event-stream，使用SSE协议" }
         ]
       },
       "responses": {
@@ -354,7 +346,7 @@
           { "name": "id", "type": "integer", "required": true, "description": "用户ID" }
         ],
         "headers":[
-          { "name": "Accept", "type": "string", "required": false, "description": "text/event-stream，使用SSE协议" }
+          { "name": "Accept", "type": "string", "required": false, "value": "text/event-stream", "description": "text/event-stream，使用SSE协议" }
         ]
       },
       "responses": {
@@ -420,7 +412,7 @@
           { "name": "file", "type": "file", "required": true, "description": "要上传的文件" }
         ],
         "headers":[
-          { "name": "Accept", "type": "string", "required": false, "description": "text/event-stream，使用SSE协议" }
+          { "name": "Accept", "type": "string", "required": false, "value": "text/event-stream", "description": "text/event-stream，使用SSE协议" }
         ]
       },
       "responses": {
@@ -479,7 +471,7 @@
           { "name": "id", "type": "integer", "required": true, "description": "文件ID (1-6)" }
         ],
         "headers":[
-          { "name": "Accept", "type": "string", "required": false, "description": "text/event-stream，使用SSE协议" }
+          { "name": "Accept", "type": "string", "required": false, "value": "text/event-stream", "description": "text/event-stream，使用SSE协议" }
         ]
       },
       "responses": {

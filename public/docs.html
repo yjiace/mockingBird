@@ -371,10 +371,8 @@
         .code-block {
             background: hsl(var(--muted));
             border-radius: var(--radius);
-            padding: 1rem;
             margin: 1rem 0;
             overflow-x: auto;
-            border: 1px solid hsl(var(--border));
         }
 
         .code-block pre {
@@ -542,26 +540,6 @@
         .tab-button.active {
             background: hsl(var(--primary));
             color: hsl(var(--primary-foreground));
-        }
-
-        /* Code Block */
-        .code-block {
-            background: hsl(var(--card));
-            border: 0px solid hsl(var(--border));
-            border-radius: var(--radius);
-            overflow: hidden;
-        }
-
-        .code-block pre {
-            margin: 0;
-            /*padding: 1rem;*/
-            overflow-x: auto;
-        }
-
-        .code-block code {
-            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
-            font-size: 0.875rem;
-            line-height: 1.5;
         }
 
         /* Section */
@@ -956,7 +934,7 @@
                 if (protocols.length > 1) {
                     // 协议Tab栏
                     responsesHtml += `<div class="tabs" data-api-id="${api.id}" data-tab-type="protocol">`;
-                    responsesHtml += '<div class="tab-list" style="margin-top: 1rem; margin-bottom: 0.5rem; border-bottom: none;">';
+                    responsesHtml += '<div class="tab-list" style="margin-top: 1rem; border-bottom: none;margin-bottom: 2rem;">';
                     protocols.forEach((protocol, pIndex) => {
                         responsesHtml += `<button class="tab-button ${pIndex === 0 ? 'active' : ''}" data-tab="protocol-${api.id}-${protocol}">${protocol.toUpperCase()}</button>`;
                     });
@@ -1076,6 +1054,7 @@
                                 <th>参数名</th>
                                 <th>类型</th>
                                 <th>必需</th>
+                                <th>示例值</th>
                                 <th>描述</th>
                             </tr>
                         </thead>
@@ -1085,6 +1064,7 @@
                                     <td><code>${param.name}</code></td>
                                     <td>${param.type}</td>
                                     <td>${param.required ? '是' : '否'}</td>
+                                    <td>${param.value||''}</td>
                                     <td>${param.description}</td>
                                 </tr>
                             `).join('')}
