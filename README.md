@@ -4,11 +4,11 @@
 
 ## 项目简介
 
-Mock Flow API 是一个基于 Cloudflare Workers 构建的现代化 API 模拟服务平台，专为开发者和测试人员设计。该平台提供了完整的用户管理 API、文件上传下载功能，并支持多种协议（HTTP、SSE、WebSocket），让您能够快速构建和测试应用程序的数据交互逻辑。
+Mock Flow API 是一个基于 Cloudflare Workers 构建的现代化 API 模拟服务平台，专为开发者和测试人员设计。该平台提供了完整的用户管理 API、文件上传下载功能，并支持多种协议（HTTP、SSE），让您能够快速构建和测试应用程序的数据交互逻辑。
 
 ### 🌟 核心特性
 
-- **多协议支持**：同时支持 HTTP、Server-Sent Events (SSE) 和 WebSocket 协议
+- **多协议支持**：同时支持 HTTP、Server-Sent Events (SSE)
 - **完整的用户管理 API**：包含用户的增删改查、分页查询、条件筛选等功能
 - **文件管理系统**：支持文件上传、下载，包含 MD5 校验
 - **实时数据流**：通过 SSE 提供实时数据推送能力
@@ -150,9 +150,6 @@ GET /api/download/{id}
 #### SSE (Server-Sent Events) 协议
 通过设置请求头 `Accept: text/event-stream` 启用 SSE 模式，服务器将以事件流的形式推送数据。
 
-#### WebSocket 协议
-支持双向实时通信，适用于聊天、实时通知等场景。
-
 ## 🎯 功能页面
 
 ### 1. 主页 (`/`)
@@ -167,7 +164,7 @@ GET /api/download/{id}
 
 ### 3. 在线测试 (`/test.html`)
 - 可视化 API 测试工具
-- 支持 HTTP、SSE、WebSocket 协议切换
+- 支持 HTTP、SSE 协议切换
 - 实时查看请求和响应数据
 - 参数配置和结果展示
 
