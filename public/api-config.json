@@ -13,12 +13,31 @@
           { "name": "name", "type": "String", "required": false, "description": "姓名查询" },
           { "name": "email", "type": "String", "required": false, "description": "邮箱查询" },
           { "name": "mobile", "type": "String", "required": false, "description": "手机号查询" }
+        ],
+        "headers":[
+          { "name": "Accept", "type": "string", "required": false, "description": "text/event-stream，使用SSE协议" }
         ]
       },
       "responses": {
-        "200": {
-          "description": "成功返回用户列表",
-          "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"results\": [],\n    \"total\": 100,\n    \"page\": 1,\n    \"size\": 10\n  }\n}"
+        "http": {
+          "200": {
+            "description": "成功返回用户列表",
+            "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"results\": [],\n    \"total\": 100,\n    \"page\": 1,\n    \"size\": 10\n  }\n}"
+          },
+          "404": {
+            "description": "用户不存在",
+            "example": "{\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}"
+          }
+        },
+        "sse": {
+          "200": {
+            "description": "SSE流式返回用户列表",
+            "example": "event: message\ndata: {\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"results\": [],\n    \"total\": 100,\n    \"page\": 1,\n    \"size\": 10\n  }\n}\n\n"
+          },
+          "404": {
+            "description": "SSE流式返回错误信息",
+            "example": "event: message\ndata: {\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}\n\n"
+          }
         }
       },
       "codeSamples": {
@@ -61,16 +80,31 @@
       "parameters": {
         "path": [
           { "name": "id", "type": "integer", "required": true, "description": "用户ID" }
+        ],
+        "headers":[
+          { "name": "Accept", "type": "string", "required": false, "description": "text/event-stream，使用SSE协议" }
         ]
       },
       "responses": {
-        "200": {
-          "description": "成功返回用户信息",
-          "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"张三\",\n    \"age\": 25,\n    \"email\": \"zhangsan@example.com\"\n  }\n}"
+        "http": {
+          "200": {
+            "description": "成功返回用户信息",
+            "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"张三\",\n    \"age\": 25,\n    \"email\": \"zhangsan@example.com\"\n  }\n}"
+          },
+          "404": {
+            "description": "用户不存在",
+            "example": "{\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}"
+          }
         },
-        "404": {
-          "description": "用户不存在",
-          "example": "{\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}"
+        "sse": {
+          "200": {
+            "description": "SSE流式返回用户信息",
+            "example": "event: message\ndata: {\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"张三\",\n    \"age\": 25,\n    \"email\": \"zhangsan@example.com\"\n  }\n}\n\n"
+          },
+          "404": {
+            "description": "SSE流式返回错误信息",
+            "example": "event: message\ndata: {\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}\n\n"
+          }
         }
       },
       "codeSamples": {
@@ -115,12 +149,23 @@
           { "name": "name", "type": "string", "required": true, "description": "用户姓名" },
           { "name": "age", "type": "integer", "required": false, "description": "用户年龄" },
           { "name": "email", "type": "string", "required": false, "description": "用户邮箱" }
+        ],
+        "headers":[
+          { "name": "Accept", "type": "string", "required": false, "description": "text/event-stream，使用SSE协议" }
         ]
       },
       "responses": {
-        "200": {
-          "description": "用户创建成功",
-          "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"id\": 1703123456789,\n    \"name\": \"李四\",\n    \"age\": 28,\n    \"email\": \"lisi@example.com\"\n  }\n}"
+        "http": {
+          "200": {
+            "description": "用户创建成功",
+            "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"id\": 1703123456789,\n    \"name\": \"李四\",\n    \"age\": 28,\n    \"email\": \"lisi@example.com\"\n  }\n}"
+          }
+        },
+        "sse": {
+          "200": {
+            "description": "SSE流式返回用户创建结果",
+            "example": "event: message\ndata: {\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"id\": 1703123456789,\n    \"name\": \"李四\",\n    \"age\": 28,\n    \"email\": \"lisi@example.com\"\n  }\n}\n\n"
+          }
         }
       },
       "codeSamples": {
@@ -168,16 +213,31 @@
           { "name": "name", "type": "string", "required": false, "description": "用户姓名" },
           { "name": "age", "type": "integer", "required": false, "description": "用户年龄" },
           { "name": "email", "type": "string", "required": false, "description": "用户邮箱" }
+        ],
+        "headers":[
+          { "name": "Accept", "type": "string", "required": false, "description": "text/event-stream，使用SSE协议" }
         ]
       },
       "responses": {
-        "200": {
-          "description": "用户更新成功",
-          "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"id\": 123,\n    \"name\": \"李四\",\n    \"age\": 29,\n    \"email\": \"lisi_new@example.com\"\n  }\n}"
+        "http": {
+          "200": {
+            "description": "用户更新成功",
+            "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"id\": 123,\n    \"name\": \"李四\",\n    \"age\": 29,\n    \"email\": \"lisi_new@example.com\"\n  }\n}"
+          },
+          "404": {
+            "description": "用户不存在",
+            "example": "{\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}"
+          }
         },
-        "404": {
-          "description": "用户不存在",
-          "example": "{\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}"
+        "sse": {
+          "200": {
+            "description": "SSE流式返回用户更新结果",
+            "example": "event: message\ndata: {\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"id\": 123,\n    \"name\": \"李四\",\n    \"age\": 29,\n    \"email\": \"lisi_new@example.com\"\n  }\n}\n\n"
+          },
+          "404": {
+            "description": "SSE流式返回错误信息",
+            "example": "event: message\ndata: {\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}\n\n"
+          }
         }
       },
       "codeSamples": {
@@ -225,16 +285,31 @@
           { "name": "name", "type": "string", "required": false, "description": "用户姓名" },
           { "name": "age", "type": "integer", "required": false, "description": "用户年龄" },
           { "name": "email", "type": "string", "required": false, "description": "用户邮箱" }
+        ],
+        "headers":[
+          { "name": "Accept", "type": "string", "required": false, "description": "text/event-stream，使用SSE协议" }
         ]
       },
       "responses": {
-        "200": {
-          "description": "用户更新成功",
-          "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"id\": 123,\n    \"name\": \"李四\",\n    \"age\": 25,\n    \"email\": \"lisi@example.com\"\n  }\n}"
+        "http": {
+          "200": {
+            "description": "用户更新成功",
+            "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"id\": 123,\n    \"name\": \"李四\",\n    \"age\": 25,\n    \"email\": \"lisi@example.com\"\n  }\n}"
+          },
+          "404": {
+            "description": "用户不存在",
+            "example": "{\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}"
+          }
         },
-        "404": {
-          "description": "用户不存在",
-          "example": "{\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}"
+        "sse": {
+          "200": {
+            "description": "SSE流式返回用户更新结果",
+            "example": "event: message\ndata: {\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"id\": 123,\n    \"name\": \"李四\",\n    \"age\": 25,\n    \"email\": \"lisi@example.com\"\n  }\n}\n\n"
+          },
+          "404": {
+            "description": "SSE流式返回错误信息",
+            "example": "event: message\ndata: {\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}\n\n"
+          }
         }
       },
       "codeSamples": {
@@ -277,16 +352,31 @@
       "parameters": {
         "path": [
           { "name": "id", "type": "integer", "required": true, "description": "用户ID" }
+        ],
+        "headers":[
+          { "name": "Accept", "type": "string", "required": false, "description": "text/event-stream，使用SSE协议" }
         ]
       },
       "responses": {
-        "200": {
-          "description": "用户删除成功",
-          "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"message\": \"User 123 deleted successfully\"\n  }\n}"
+        "http": {
+          "200": {
+            "description": "用户删除成功",
+            "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"message\": \"User 123 deleted successfully\"\n  }\n}"
+          },
+          "404": {
+            "description": "用户不存在",
+            "example": "{\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}"
+          }
         },
-        "404": {
-          "description": "用户不存在",
-          "example": "{\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}"
+        "sse": {
+          "200": {
+            "description": "SSE流式返回用户删除结果",
+            "example": "event: message\ndata: {\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"message\": \"User 123 deleted successfully\"\n  }\n}\n\n"
+          },
+          "404": {
+            "description": "SSE流式返回错误信息",
+            "example": "event: message\ndata: {\n  \"code\": 404,\n  \"message\": \"User not found\",\n  \"data\": null\n}\n\n"
+          }
         }
       },
       "codeSamples": {
@@ -328,12 +418,23 @@
       "parameters": {
         "body": [
           { "name": "file", "type": "file", "required": true, "description": "要上传的文件" }
+        ],
+        "headers":[
+          { "name": "Accept", "type": "string", "required": false, "description": "text/event-stream，使用SSE协议" }
         ]
       },
       "responses": {
-        "200": {
-          "description": "文件上传成功",
-          "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"name\": \"document.pdf\",\n    \"type\": \"application/pdf\",\n    \"size\": 1024000,\n    \"md5\": \"5d41402abc4b2a76b9719d911017c592\"\n  }\n}"
+        "http": {
+          "200": {
+            "description": "文件上传成功",
+            "example": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"name\": \"document.pdf\",\n    \"type\": \"application/pdf\",\n    \"size\": 1024000,\n    \"md5\": \"5d41402abc4b2a76b9719d911017c592\"\n  }\n}"
+          }
+        },
+        "sse": {
+          "200": {
+            "description": "SSE流式返回文件上传结果",
+            "example": "event: message\ndata: {\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"name\": \"document.pdf\",\n    \"type\": \"application/pdf\",\n    \"size\": 1024000,\n    \"md5\": \"5d41402abc4b2a76b9719d911017c592\"\n  }\n}\n\n"
+          }
         }
       },
       "codeSamples": {
@@ -376,16 +477,31 @@
       "parameters": {
         "path": [
           { "name": "id", "type": "integer", "required": true, "description": "文件ID (1-6)" }
+        ],
+        "headers":[
+          { "name": "Accept", "type": "string", "required": false, "description": "text/event-stream，使用SSE协议" }
         ]
       },
       "responses": {
-        "200": {
-          "description": "文件下载成功",
-          "example": "二进制文件内容"
+        "http": {
+          "200": {
+            "description": "文件下载成功",
+            "example": "二进制文件内容"
+          },
+          "404": {
+            "description": "文件不存在",
+            "example": "{\n  \"code\": 404,\n  \"message\": \"File not found\",\n  \"data\": null\n}"
+          }
         },
-        "404": {
-          "description": "文件不存在",
-          "example": "{\n  \"code\": 404,\n  \"message\": \"File not found\",\n  \"data\": null\n}"
+        "sse": {
+          "200": {
+            "description": "SSE流式返回文件下载结果",
+            "example": "event: message\ndata: 二进制文件内容\n\n"
+          },
+          "404": {
+            "description": "SSE流式返回错误信息",
+            "example": "event: message\ndata: {\n  \"code\": 404,\n  \"message\": \"File not found\",\n  \"data\": null\n}\n\n"
+          }
         }
       },
       "codeSamples": {

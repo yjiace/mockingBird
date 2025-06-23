@@ -423,14 +423,6 @@
             display: block;
         }
 
-        .response-example {
-            background: hsl(var(--muted));
-            border-radius: var(--radius);
-            padding: 1rem;
-            margin: 1rem 0;
-            border-left: 4px solid hsl(var(--primary));
-        }
-
         .status-code {
             display: inline-block;
             padding: 0.25rem 0.5rem;
@@ -582,15 +574,6 @@
             font-weight: 600;
             margin-bottom: 1rem;
             color: hsl(var(--foreground));
-        }
-
-        /* Response Example */
-        .response-example {
-            background: hsl(var(--card));
-            /* border: 1px solid hsl(var(--border)); */
-            border-radius: var(--radius);
-            padding: 1rem;
-            margin-bottom: 1rem;
         }
 
         .status-code {
@@ -787,6 +770,31 @@
             background: hsl(var(--primary));
             color: hsl(var(--primary-foreground));
         }
+
+        /* Accordion triangle right */
+        .response-accordion summary {
+            position: relative;
+            padding-right: 2em;
+            list-style: none;
+        }
+        .response-accordion summary::-webkit-details-marker,
+        .response-accordion summary::marker {
+            display: none;
+            content: '';
+        }
+        .response-accordion summary .accordion-arrow {
+            position: absolute;
+            right: 0.5em;
+            top: 50%;
+            transform: translateY(-50%) rotate(0deg);
+            transition: transform 0.2s;
+            width: 1.1em;
+            height: 1.1em;
+            display: inline-block;
+        }
+        .response-status-accordion[open] summary .accordion-arrow {
+            transform: translateY(-50%) rotate(90deg);
+        }
     </style>
 </head>
 
@@ -944,52 +952,66 @@
             let responsesHtml = '';
             if (api.responses) {
                 responsesHtml = '<div class="section"><h3>响应示例</h3>';
-                
-                // 如果有多个响应示例，创建tab栏
-                const responseEntries = Object.entries(api.responses);
-                if (responseEntries.length > 1) {
-                    responsesHtml += `<div class="tabs" data-api-id="${api.id}">`;
-                    responsesHtml += '<div class="tab-list">';
-                    
-                    // 创建tab按钮
-                    responseEntries.forEach(([status, response], index) => {
-                        responsesHtml += `<button class="tab-button ${index === 0 ? 'active' : ''}" data-tab="response-${api.id}-${status}">状态码 ${status}</button>`;
+                const protocols = Object.keys(api.responses);
+                if (protocols.length > 1) {
+                    // 协议Tab栏
+                    responsesHtml += `<div class="tabs" data-api-id="${api.id}" data-tab-type="protocol">`;
+                    responsesHtml += '<div class="tab-list" style="margin-top: 1rem; margin-bottom: 0.5rem; border-bottom: none;">';
+                    protocols.forEach((protocol, pIndex) => {
+                        responsesHtml += `<button class="tab-button ${pIndex === 0 ? 'active' : ''}" data-tab="protocol-${api.id}-${protocol}">${protocol.toUpperCase()}</button>`;
                     });
-                    
                     responsesHtml += '</div>';
-                    
-                    // 创建tab内容
-                    responseEntries.forEach(([status, response], index) => {
+                    protocols.forEach((protocol, pIndex) => {
+                        responsesHtml += `<div class="tab-content ${pIndex === 0 ? 'active' : ''}" data-tab="protocol-${api.id}-${protocol}">`;
+                        // 协议下所有状态码的折叠列表
+                        const statusEntries = Object.entries(api.responses[protocol]);
+                        responsesHtml += '<div class="accordion response-accordion">';
+                        statusEntries.forEach(([status, details], idx) => {
+                            const defaultOpen = idx === 0 ? 'open' : '';
+                            responsesHtml += `
+                                <details class="response-status-accordion" ${defaultOpen}>
+                                    <summary>
+                                        <span class="status-code status-${status}" style="margin-right:8px;">${status}</span>
+                                        <span>${details.description || ''}</span>
+                                        <span class="accordion-arrow"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 3l6 5-6 5" stroke="#aaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                    </summary>
+                                    <div class="response-example">
+                                        <div class="code-block">
+                                            <pre><code class="language-json">${details.example}</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
+                            `;
+                        });
+                        responsesHtml += '</div>';
+                        responsesHtml += `</div>`;
+                    });
+                    responsesHtml += `</div>`;
+                } else {
+                    // 只有一个协议，直接折叠所有状态码
+                    const protocol = protocols[0];
+                    const statusEntries = Object.entries(api.responses[protocol]);
+                    responsesHtml += '<div class="accordion response-accordion">';
+                    statusEntries.forEach(([status, details], idx) => {
+                        const defaultOpen = idx === 0 ? 'open' : '';
                         responsesHtml += `
-                            <div class="tab-content ${index === 0 ? 'active' : ''}" data-tab="response-${api.id}-${status}">
-                                <div class="response-example">
-                                    <div class="status-code status-${status}">${status}</div>
-                                    <p>${response.description}</p>
+                            <details class="response-status-accordion" ${defaultOpen}>
+                                <summary style="font-weight:600; font-size:1.1em; cursor:pointer;">
+                                    <span class="status-code status-${status}" style="margin-right:8px;">${status}</span>
+                                    <span>${details.description || ''}</span>
+                                    <span class="accordion-arrow"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 3l6 5-6 5" stroke="#aaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                </summary>
+                                <div class="response-example" style="margin-top:1rem; border-top: 1px solid hsl(var(--border)); padding-top: 1rem;">
                                     <div class="code-block">
-                                        <pre><code class="language-json">${response.example}</code></pre>
+                                        <pre><code class="language-json">${details.example}</code></pre>
                                     </div>
                                 </div>
-                            </div>
+                            </details>
                         `;
                     });
-                    
                     responsesHtml += '</div>';
-                } else {
-                    // 如果只有一个响应示例，直接显示
-                    responseEntries.forEach(([status, response]) => {
-                        responsesHtml += `
-                            <div class="response-example">
-                                <div class="status-code status-${status}">${status}</div>
-                                <p>${response.description}</p>
-                                <div class="code-block">
-                                    <pre><code class="language-json">${response.example}</code></pre>
-                                </div>
-                            </div>
-                        `;
-                    });
                 }
-                
-                responsesHtml += '</div>';
+                responsesHtml += `</div>`;
             }
 
             let codeSamplesHtml = '';
@@ -1032,8 +1054,8 @@
             doc.innerHTML = `
                 <h2>
                     <span class="method-badge method-${api.method.toLowerCase()}">${api.method}</span>
-                    <code class="api-path">${api.path}</code>
                     <span class="api-summary">${api.summary}</span>
+                    <code class="api-path">${api.path}</code>
                 </h2>
                 <p class="description">${api.description}</p>
                 ${parametersHtml}
@@ -1260,6 +1282,27 @@
 
         // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', loadApiConfig);
+
+        // 新增：协议切换事件监听
+        document.addEventListener('change', function(e) {
+            if (e.target.matches('select[id^="protocol-select-"]')) {
+                const select = e.target;
+                const apiId = select.dataset.apiId;
+                const status = select.dataset.status;
+                const protocol = select.value;
+                // 找到当前api
+                const api = apiDefinitions.find(api => api.id === apiId);
+                if (!api || !api.responses || !api.responses[status] || !api.responses[status][protocol]) return;
+                // 更新描述
+                const descElem = select.closest('.response-example').querySelector('.protocol-desc');
+                descElem.textContent = api.responses[status][protocol].description || '';
+                // 更新代码
+                const codeElem = document.getElementById(`response-code-${apiId}-${status}`);
+                codeElem.textContent = api.responses[status][protocol].example || '';
+                // 重新高亮
+                hljs.highlightElement(codeElem);
+            }
+        });
     </script>
 </body>
 
